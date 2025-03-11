@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@p5-wrapper/react": "^4.4.2",
+    "p5": "^1.11.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
