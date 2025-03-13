@@ -27,6 +27,7 @@ replay_pid*
 backend/target/
 
 *.keep
+.vscode
 vs_code
 vs_code/*
 logs

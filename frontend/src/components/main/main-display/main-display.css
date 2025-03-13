@@ -1,0 +1,10 @@
+#wikiverse-main-display {
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(var(--sketch-bg));
+  box-shadow: 0 0 25px rgb(var(--black));
+  display: block;
+  overflow: hidden;
+  position: relative;
+}
