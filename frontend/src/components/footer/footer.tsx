@@ -8,21 +8,21 @@ export function Footer() {
     <footer id={ID("main")}>
       <ul id={ID("items-list")}>
         <li className={ID("item")}>
-          <h4>
+          <p>
             Find this project on{" "}
             <a href={GITHUB + "/the-wikiverse"} target="_blank">
               Github
             </a>
-          </h4>
+          </p>
         </li>
         <li className={ID("item")}>
-          <h4>
+          <p>
             ©2024 by{" "}
             <a href={GITHUB} target="_blank">
               {" "}
               @horaciovelvetine
             </a>
-          </h4>
+          </p>
         </li>
       </ul>
     </footer>

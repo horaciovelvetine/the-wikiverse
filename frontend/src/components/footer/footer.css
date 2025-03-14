@@ -7,28 +7,27 @@
 
 #footer-items-list {
   list-style: none;
+  line-height: 0.5;
 }
 
 .footer-item {
-  font-size: 1.25vh;
+  font-size: var(--sm-font);
   color: rgb(var(--white), 0.9);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: var(--def-shadow);
 }
 
 .footer-item a {
   color: rgb(var(--blue), 0.9);
   text-shadow: 1px 1px 2px rgba(var(--blue) 0.5);
-  transition:
-    font-size var(--transition-duration),
-    text-decoration var(--transition-duration);
+  transition: all var(--def-transition) ease-in-out;
 }
 
 .footer-item a:hover {
-  font-size: 1.6rem;
+  font-size: calc(var(--sm-font) * 1.05);
   text-decoration: underline;
 }
 
 .footer-item a:not(:hover) {
-  font-size: 1.4rem;
+  font-size: var(--sm-font);
   text-decoration: none;
 }
