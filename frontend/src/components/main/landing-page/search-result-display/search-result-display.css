@@ -1,0 +1,35 @@
+/* <li> item's grouped by shared class... */
+
+.initial-result-item {
+  color: rgb(var(--white));
+  padding: 0 0.75rem;
+  border: 2px solid rgba(var(--blue));
+  border-radius: 0.5rem;
+  background-color: rgba(var(--white), 0.15);
+  line-height: 1;
+  transition: all var(--def-transition) ease-in-out;
+}
+
+.initial-result-item:hover {
+  background-color: rgba(var(--white), 0.2);
+  box-shadow: 0 0 15px rgba(var(--blue), 0.5);
+}
+
+.initial-result-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.initial-result-title {
+  font-weight: bold;
+  margin-right: 10px;
+  line-height: 0;
+}
+
+.initial-result-description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1;
+}

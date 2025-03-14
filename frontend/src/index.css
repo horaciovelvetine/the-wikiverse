@@ -1,3 +1,5 @@
+@import url("./assets/styles/horizontal-shake-animation.css");
+
 :root {
   font-family: monospace;
   color-scheme: light dark;
@@ -14,8 +16,8 @@
   --sketch-bg: 1, 1, 14;
   /*  rgb(0,0,0)*/
   --black: 0, 0, 0;
-  /* rgb(2, 2, 3) */
-  --gray-100: 2, 2, 3;
+  /* rgb(22, 22, 25) */
+  --gray-100: 22, 22, 25;
   /* rgb(52, 58, 64) */
   --gray-200: 52, 58, 64;
   /* rgb(73, 80, 87) */
@@ -42,9 +44,17 @@
   /* rgb(245, 62, 61) */
   --red: 245, 62, 61;
 
-  --transition-duration: 350ms;
-  --error-transition-duration: 820ms;
-
-  color: rgb(var(--white));
-  background-color: rgb(var(--gray-100));
+  --def-transition: 350ms;
+  --err-transition: 820ms;
+  /* Font Size Constants */
+  --xxs-font: clamp(0.625rem, 0.75vw, 0.875rem);
+  --xs-font: clamp(0.75rem, 1vw, 1rem);
+  --sm-font: clamp(0.875rem, 1.5vw, 1.25rem);
+  --md-font: clamp(1rem, 2vw, 1.5rem);
+  --lg-font: clamp(1.25rem, 2.5vw, 2rem);
+  --xl-font: clamp(1.5rem, 3vw, 2.5rem);
+  --xxl-font: clamp(2rem, 4vw, 3rem);
+  --h1-font: clamp(2.5rem, 5vw, 3.5rem);
+  /* help make text a bit more readable... */
+  --def-shadow: 1px 1px 2px #000;
 }
