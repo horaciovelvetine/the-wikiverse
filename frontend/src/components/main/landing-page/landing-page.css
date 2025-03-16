@@ -47,3 +47,113 @@
   font-size: calc(var(--xxl-font) * 1.05);
   cursor: pointer;
 }
+
+
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+/*!!!!!!!!!!!!!!!!!!! FORM */
+
+#landing-page-search-form {
+  display: inline-flex;
+  justify-content: center;
+  width: 35%;
+}
+
+/* MAIN INPUT ELEMENT */
+#landing-page-input {
+  outline: none;
+  min-width: fit-content;
+  flex-grow: 1;
+  display: flex;
+  background-color: rgba(var(--white), 0.15);
+  font-size: var(--xl-font);
+  padding: 0.75rem 0.85rem;
+  border: 2px solid rgb(var(--blue));
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all var(--err-transition);
+  caret-color: rgb(var(--white));
+}
+
+#landing-page-input::placeholder {
+  color: rgba(var(--white), 0.35);
+}
+
+#landing-page-input:focus {
+  outline: none;
+  border: 2px solid rgb(var(--blue));
+  box-shadow: 1px 1px 45px rgba(var(--blue), 0.5);
+}
+
+#landing-page-input.error-animated {
+  animation: horizontal-shake var(--err-transition)
+    cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  border-color: rgb(var(--red));
+  caret-color: rgb(var(--red));
+  color: rgb(var(--red));
+  box-shadow: 0 0 15px rgba(var(--red), 0.5);
+}
+
+/* SUBMIT BUTTON ELEMENT*/
+#landing-page-search-submit {
+  margin-left: 0.5rem;
+  padding: 0.5rem;
+  border: 2px solid rgba(var(--blue));
+  border-radius: 0.5rem;
+  background-color: rgba(var(--white), 0.15);
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  transition: all var(--def-transition) ease-in-out;
+}
+
+#landing-page-search-submit:active {
+  border: 2px solid rgb(var(--blue));
+  box-shadow: 0 0 15px rgba(var(--blue), 0.5);
+}
+
+/* horizontally shimmies and changes red */
+#landing-page-search-submit.error-animated {
+  animation: horizontal-shake var(--err-transition)
+    cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  border-color: rgb(var(--red));
+  box-shadow: 0 0 5px rgba(var(--red), 0.1);
+}
+
+/* ICON IMG ELEMENT(S)  */
+#landing-page-search-icon {
+  height: 3rem;
+  transition: opacity var(--def-transition);
+  opacity: 1;
+}
+
+#landing-page-search-icon.error-animated {
+  opacity: 0;
+}
+
+#landing-page-danger-icon {
+  position: fixed;
+  opacity: 0;
+  height: 3rem;
+  transition: opacity var(--def-transition);
+}
+
+#landing-page-danger-icon .error-animated {
+  opacity: 1;
+}
