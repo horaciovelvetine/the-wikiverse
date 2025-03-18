@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import edu.velv.wikiverse_api.services.wikidata.WikidataDocumentProcessor;
 import edu.velv.wikiverse_api.services.wikidata.WikidataFetchBroker;
 
 @SpringBootApplication
@@ -19,5 +20,14 @@ public class WikiverseApiApplication {
 	@Bean
 	WikidataFetchBroker wikidataFetchBroker() {
 		return new WikidataFetchBroker();
+	}
+
+	/**
+	* Translate's Wikidata's various Document types into core objects for the Wikiverse. Core objects contain and 
+	* store relevant information for constructing the knowledge graph, and facilitate the layout process.
+	*/
+	@Bean
+	WikidataDocumentProcessor wikidataDocumentProcessor() {
+		return new WikidataDocumentProcessor();
 	}
 }
