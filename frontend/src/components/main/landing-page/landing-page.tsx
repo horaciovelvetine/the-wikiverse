@@ -6,12 +6,14 @@ import { useMutation, skipToken } from "@tanstack/react-query";
 import { Search, SearchDngr } from "../../../assets/icons";
 import { useWikiverseService } from "../../../providers/wikiverse-service-provider";
 import { useDebouncedValue } from "../../../hooks/use-debounced-value";
+import { SearchResultDisplay } from "./search-result-display/search-result-display";
 
 const WIKIDATA_HOMEPAGE = "https://www.wikidata.org/wiki/Wikidata:Main_Page";
 
 export function LandingPage() {
   const { ID } = useComponentID("landing-page");
-  const { reqURL } = useWikiverseService();
+  const { URL, setIsPending } = useWikiverseService();
+  const [showError, setShowError] = useState(false);
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebouncedValue(query);
 
@@ -21,9 +23,23 @@ export function LandingPage() {
         return skipToken;
       }
 
-      return await fetch(
-        reqURL(`search-results?${new URLSearchParams({ query }).toString()}`)
-      );
+      setIsPending(true);
+      try {
+        const response = await fetch(
+          URL(`search-results?${new URLSearchParams({ query }).toString()}`)
+        );
+        const data = await response.json();
+        console.log("search-results", data);
+        return data;
+      } finally {
+        setIsPending(false);
+      }
+    },
+    onError: () => {
+      setShowError(true);
+      setTimeout(() => {
+        setShowError(false);
+      }, 820);
     },
   });
 
@@ -53,30 +69,31 @@ export function LandingPage() {
               placeholder="Search..."
               autoFocus
               value={query}
-              className={false ? "error-animated" : ""}
+              className={showError ? "error-animated" : ""}
               onChange={e => setQuery(e.target.value)}
             />
-            <button id={ID("search-submit")} type="submit">
+            <button
+              id={ID("search-submit")}
+              type="submit"
+              className={showError ? "error-animated" : ""}
+            >
               <img
                 id={ID("danger-icon")}
                 src={SearchDngr}
-                className={false ? "error-animated" : ""}
+                className={showError ? "error-animated" : ""}
               />
               <img
                 id={ID("search-icon")}
                 src={Search}
-                className={false ? "error-animated" : ""}
+                className={showError ? "error-animated" : ""}
               />
             </button>
           </form>
         </div>
-
-        {searchMutation.isPending ? (
-          <div>Loading...</div>
-        ) : searchMutation.isError ? (
-          <div>Error: {searchMutation.error.message}</div>
-        ) : (
-          <div>Results: {JSON.stringify(searchMutation.data)}</div>
+        {searchMutation.data && (
+          <div id={ID("initial-results")}>
+            <ul id={ID("results-list")}></ul>
+          </div>
         )}
       </div>
     </div>

@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { WikiverseServiceProviderProps } from "../types";
 import { WikiverseService } from "../types";
 import { Context, createContext, useContext, useMemo, useState } from "react";
+import { LoadingBar } from "../components";
 
 /**
  * Tanstack Query client - {@link https://tanstack.com/query/latest} provide request state/data utility and management
@@ -25,28 +26,31 @@ export const WikiverseServiceProvider = ({
   useLocalDevAPI,
   children,
 }: WikiverseServiceProviderProps) => {
-  const [isLoading, setIsLoading] = useState(false);
+  // testing isPending being a sort of hybrid internal state...
+  const [isPending, setIsPending] = useState(false);
   const [serviceOnline, setServiceOnline] = useState(true);
   /**
    * Helper to provide a URL to the API based on the value provided on initialization inside the {@link Wikiverse} component.
    */
-  const reqURL = (pathTgt: string): string =>
+  const URL = (pathTgt: string): string =>
     useLocalDevAPI
       ? `http://localhost:8080/api/${pathTgt}`
       : `https://wikiverse-api-main-febfewcbf3avfffh.canadacentral-01.azurewebsites.net/api/${pathTgt}`;
 
   const contextMemo = useMemo(
     () => ({
+      setIsPending,
       serviceOnline,
       setServiceOnline,
-      reqURL,
+      URL,
     }),
-    [serviceOnline, setServiceOnline, reqURL]
+    [serviceOnline, setServiceOnline, URL]
   );
 
   return (
     <QueryClientProvider client={tanstackClient}>
       <WikiverseServiceContext.Provider value={contextMemo}>
+        <LoadingBar isLoading={isPending} />
         {children}
       </WikiverseServiceContext.Provider>
     </QueryClientProvider>
