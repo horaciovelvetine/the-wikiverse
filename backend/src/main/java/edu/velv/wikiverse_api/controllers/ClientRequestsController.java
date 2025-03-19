@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.velv.wikiverse_api.models.ClientRequest;
 import edu.velv.wikiverse_api.models.core.WikiverseRequestResponse;
+import edu.velv.wikiverse_api.models.core.WikiverseError;
 import edu.velv.wikiverse_api.services.wikidata.WikidataFetchBroker;
 import edu.velv.wikiverse_api.services.wikidata.WikidataDocumentProcessor;
 
@@ -21,7 +22,7 @@ public class ClientRequestsController {
   @Autowired
   private WikidataFetchBroker wikidataFetchBroker;
   @Autowired
-  private WikidataDocumentProcessor wikidataDocumentProcessor;
+  private WikidataDocumentProcessor wikidataDocProc;
 
   @GetMapping("api/status")
   public ResponseEntity<WikiverseRequestResponse> getClientRequestControllerState() {
@@ -30,18 +31,25 @@ public class ClientRequestsController {
 
   @GetMapping("api/search-results")
   public ResponseEntity<WikiverseRequestResponse> getSearchResults(@RequestParam(required = true) String query) {
-    String message = "request: " + query + " made @ " + System.currentTimeMillis() + " ms";
-    System.out.println(message);
-    return this.buildResponseEntFromStatus(message);
+    return new ClientRequest(wikidataFetchBroker, wikidataDocProc).getInitialSearchResults(query)
+        .fold(this::buildServiceErrorFaultResponse, this::buildResponseEnt);
   }
 
   /**
    * Helper to build the appropriate ResponseEntity to provide in response to the incoming request by checking
    * if the request encountered any error to provide the appropriate status and building the response object.
    */
-  private ResponseEntity<WikiverseRequestResponse> buildResponseEntFromRequest(ClientRequest request) {
-    return request.errored() ? ResponseEntity.status(404).body(new WikiverseRequestResponse(request))
-        : ResponseEntity.status(200).body(new WikiverseRequestResponse(request));
+  private ResponseEntity<WikiverseRequestResponse> buildResponseEnt(WikiverseRequestResponse response) {
+    return response.errored() ? ResponseEntity.status(500).body(response)
+        : ResponseEntity.status(200).body(response);
+  }
+
+  /**
+   * Provides a ServiceFault error catch with a different status (400) to indicate the fault happened @ or above the ClientRequest
+   * and is not an issue in the udnerlying services, as encountered errors are included as a part of the WikiverseRequestResponse.
+   */
+  private ResponseEntity<WikiverseRequestResponse> buildServiceErrorFaultResponse(WikiverseError error) {
+    return ResponseEntity.status(501).body(new WikiverseRequestResponse(error));
   }
 
   /**
