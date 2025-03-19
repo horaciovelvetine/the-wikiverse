@@ -4,12 +4,16 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.wikidata.wdtk.wikibaseapi.WbSearchEntitiesResult;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 
 import edu.velv.wikiverse_api.models.core.WikiverseError;
 import edu.velv.wikiverse_api.models.core.WikiverseError.WikidataServiceErr;
+import edu.velv.wikiverse_api.services.logging.ProcessLogfile;
+
 import io.vavr.CheckedFunction0;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
@@ -18,6 +22,8 @@ import io.vavr.control.Try;
  * Wraps methods to request data from the Wikimedia API using the Wikidata Toolkit - {@link https://github.com/Wikidata/Wikidata-Toolkit}
  * Request's return either's containing valid results or an Error encountered while running the underlying requests. 
  */
+
+@Service
 public class WikidataFetchBroker {
   /**
    * Provides access to methods to request data from the Wikidata API.
@@ -25,11 +31,19 @@ public class WikidataFetchBroker {
    */
   private final WikibaseDataFetcher fetcher;
 
+  /**
+   * Config values used to make requests to the Wikidata API for targeting specific 
+   */
   @Value("${edu.velv.Wikidata.en_wiki_iri}")
   String wikiIri; //==> "enwiki"
 
   @Value("${edu.velv.Wikidata.en_lang_wiki_key}")
   String wikiLangKey; //==> "en"
+
+  /**
+   * Collects details about timing of requests and logs them in the named file for manual review
+   */
+  private final ProcessLogfile logger;
 
   /**
    * Default constructor gets fetcher per Wikidata Toolkit Docs. 
@@ -43,6 +57,7 @@ public class WikidataFetchBroker {
    * @apiNote injectable constructor for non-IT testing allows mocing responses w/o sending requests to the Wikidata API.
    */
   public WikidataFetchBroker(WikibaseDataFetcher fetcher) {
+    this.logger = new ProcessLogfile("wikidata-fetch-broker.log", 10 * 1024 * 1024);
     this.fetcher = fetcher; // provides an injectable constructor for non-IT testing
   }
 
@@ -53,8 +68,14 @@ public class WikidataFetchBroker {
    * @return a list of {@link WbSearchEntitiesResult}, or an Error pertaining  
    */
   public Either<WikiverseError, List<WbSearchEntitiesResult>> fetchSearchResultsByAnyMatch(String query) {
-    return fetchWithApiUnavailableErrorHandler(() -> fetcher.searchEntities(query, wikiLangKey))
-        .flatMap(res -> this.handleSearchedEntitiesResults(res, query));
+    try {
+      return logger.log("Fetching Wikidata search results for: " + query,
+          () -> fetchWithApiUnavailableErrorHandler(() -> fetcher.searchEntities(query, wikiLangKey))
+              .flatMap(res -> this.handleSearchedEntitiesResults(res, query)));
+    } catch (Exception e) {
+      return Either.left(
+          new WikiverseError.ServiceFault(e.getMessage(), "WikidataFetchBroker.java::fetchSearchResultsByAnyMatch()"));
+    }
   }
 
   /**

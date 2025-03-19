@@ -44,5 +44,11 @@ public sealed interface WikiverseError permits WikiverseError.ServiceFault, Wiki
         return "No results found for: " + queryValue;
       }
     }
+
+    /**
+     * Unable to process a Wikidata Document into the intended core model.
+     */
+    record UnableToProcessWikidataEntity(String message, String source) implements WikidataServiceErr {
+    }
   }
 }
