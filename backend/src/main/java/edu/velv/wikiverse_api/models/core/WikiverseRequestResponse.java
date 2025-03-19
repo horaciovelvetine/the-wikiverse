@@ -9,10 +9,22 @@ public class WikiverseRequestResponse {
 
   public WikiverseRequestResponse(ClientRequest request) {
     this.data = request.graph;
+    this.error = request.error;
     this.message = "the Wikiverse API is Currently Online.";
   }
 
   public WikiverseRequestResponse(String statusMessage) {
+    this.data = new Graphset();
     this.message = statusMessage;
+  }
+
+  public WikiverseRequestResponse(WikiverseError serviceFaultError) {
+    this.data = new Graphset();
+    this.message = serviceFaultError.message();
+    this.error = serviceFaultError;
+  }
+
+  public boolean errored() {
+    return this.error != null;
   }
 }

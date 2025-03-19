@@ -1,11 +1,14 @@
 package edu.velv.wikiverse_api.models.core;
 
+import org.wikidata.wdtk.wikibaseapi.WbSearchEntitiesResult;
+
 public class Vertex {
   private String id;
   private String label;
   private String description;
   private Point3D position;
   private boolean locked;
+  private boolean fetchedEdges;
 
   public Vertex(String id, String label, String description, Point3D position, boolean locked) {
     setId(id);
@@ -13,6 +16,14 @@ public class Vertex {
     setDescription(description);
     setPosition(position);
     this.locked = locked;
+    this.fetchedEdges = false;
+  }
+
+  public Vertex(WbSearchEntitiesResult result) {
+    this.id = result.getTitle();
+    this.label = result.getLabel();
+    this.description = result.getDescription();
+    this.fetchedEdges = false;
   }
 
   public String getId() {
@@ -66,5 +77,13 @@ public class Vertex {
 
   public void unlock() {
     this.locked = false;
+  }
+
+  public boolean getFetchedEdges() {
+    return this.fetchedEdges;
+  }
+
+  public void setFetchedEdges(boolean fetched) {
+    this.fetchedEdges = fetched;
   }
 }

@@ -1,8 +1,9 @@
 package edu.velv.wikiverse_api.models;
 
-import edu.velv.wikiverse_api.models.core.Graphset;
-import edu.velv.wikiverse_api.models.core.WikiverseError;
-import edu.velv.wikiverse_api.services.wikidata.*;;
+import io.vavr.control.Either;
+
+import edu.velv.wikiverse_api.models.core.*;
+import edu.velv.wikiverse_api.services.wikidata.*;
 
 /**
  * Primary structure used to capture and act on a Request from the Client application (CX) frontend.
@@ -18,12 +19,28 @@ public class ClientRequest {
    * {@link GraphsetMetadata} - details about the Graph (dimensions, query, origin, etc...)
    */
   public Graphset graph;
-  public WikiverseError encounteredError;
+
+  /**
+   * Error if one is encountered in the process of completing the request and building the response, indicates the response will be 
+   * partial or incomplete, and include some text details as to why.
+   */
+  public WikiverseError error;
+
+  /**
+   * Access to the primary layout functionality of the application. To be performant each layout is instanced since it relies on two 
+   * 
+   */
+  private FR3DLayout layout;
 
   /**
    * Connection to Wikidata API through the Wikidata Toolkit 
    */
   private final WikidataFetchBroker wikidata;
+
+  /**
+   * Utility service to translate Wikidata entities into core entities useable in the Wikiverse
+   */
+  private final WikidataDocumentProcessor docProc;
 
   /**
    * Constructor used in initial requests to get search results from client. Client provides a (partially or complete) query,
@@ -32,15 +49,22 @@ public class ClientRequest {
    * @param fetchBroker bean and broker to fetch from the WikidataAPI
    * @param originalQuery the original query provided by the client
    */
-  public ClientRequest(WikidataFetchBroker fetchBroker, String originalQuery) {
+  public ClientRequest(WikidataFetchBroker fetchBroker, WikidataDocumentProcessor proc) {
     this.wikidata = fetchBroker;
-    this.graph = new Graphset(originalQuery);
+    this.docProc = proc;
+    this.graph = new Graphset();
   }
 
   /**
-   * @return true if this request has encountered an Error.
+   * Get initial search results based on a query
    */
-  public boolean errored() {
-    return encounteredError != null;
+  public Either<WikiverseError, WikiverseRequestResponse> getInitialSearchResults(String originalQuery) {
+    // stash the originalQuery value...
+    graph.getMetadata().setOriginalQuery(originalQuery);
+
+    return wikidata.fetchSearchResultsByAnyMatch(originalQuery).map(results -> {
+      docProc.processSearchResultEnts(results, graph);
+      return new WikiverseRequestResponse(this);
+    });
   }
 }

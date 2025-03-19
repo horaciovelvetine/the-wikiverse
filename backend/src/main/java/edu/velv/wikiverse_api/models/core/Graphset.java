@@ -1,6 +1,5 @@
 package edu.velv.wikiverse_api.models.core;
 
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -35,6 +34,13 @@ public class Graphset {
   private Set<Edge> edges;
 
   /**
+   * Default constructor to provide an empty Graphset with useable datastruct's in place but empty, and default values used anywhere applicable.
+   */
+  public Graphset() {
+    this("");
+  }
+
+  /**
    * Constructor used in initial requests to get search results from client. Client provides a (partially or complete) query,
    * results are provided in a list prior to initiating a sketch, and a subsequent request uses that ID to fill out an initial Graphset.
    */
@@ -44,6 +50,13 @@ public class Graphset {
     this.vertices = ConcurrentHashMap.newKeySet();
     this.properties = ConcurrentHashMap.newKeySet();
     this.edges = ConcurrentHashMap.newKeySet();
+  }
+
+  /**
+   * Helper to quickly make the query accessible from the graph
+   */
+  public String getQuery() {
+    return metadata.getOriginalQuery();
   }
 
   /**
