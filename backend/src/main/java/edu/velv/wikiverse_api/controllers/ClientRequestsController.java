@@ -32,14 +32,14 @@ public class ClientRequestsController {
   @GetMapping("api/search-results")
   public ResponseEntity<WikiverseRequestResponse> getSearchResults(@RequestParam(required = true) String query) {
     return new ClientRequest(wikidataFetchBroker, wikidataDocProc).getInitialSearchResults(query)
-        .fold(this::buildServiceErrorFaultResponse, this::buildResponseEnt);
+        .fold(this::buildErrorResponse, this::buildSuccessResponse);
   }
 
   /**
    * Helper to build the appropriate ResponseEntity to provide in response to the incoming request by checking
    * if the request encountered any error to provide the appropriate status and building the response object.
    */
-  private ResponseEntity<WikiverseRequestResponse> buildResponseEnt(WikiverseRequestResponse response) {
+  private ResponseEntity<WikiverseRequestResponse> buildSuccessResponse(WikiverseRequestResponse response) {
     return response.errored() ? ResponseEntity.status(500).body(response)
         : ResponseEntity.status(200).body(response);
   }
@@ -48,8 +48,8 @@ public class ClientRequestsController {
    * Provides a ServiceFault error catch with a different status (400) to indicate the fault happened @ or above the ClientRequest
    * and is not an issue in the udnerlying services, as encountered errors are included as a part of the WikiverseRequestResponse.
    */
-  private ResponseEntity<WikiverseRequestResponse> buildServiceErrorFaultResponse(WikiverseError error) {
-    return ResponseEntity.status(501).body(new WikiverseRequestResponse(error));
+  private ResponseEntity<WikiverseRequestResponse> buildErrorResponse(WikiverseError error) {
+    return ResponseEntity.status(404).body(new WikiverseRequestResponse(error));
   }
 
   /**

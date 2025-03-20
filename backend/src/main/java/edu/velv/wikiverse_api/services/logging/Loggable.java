@@ -37,7 +37,7 @@ import java.lang.StackWalker;
  * </pre>
  */
 public interface Loggable {
-  private <R> R execute(String message, Callable<R> fn) throws Exception {
+  private <R> R execute(String message, Callable<R> fn) {
     var stack = StackWalker.getInstance().walk(frames -> frames.skip(2).findFirst().orElse(null));
     var executedBy = stack != null
         ? format("%s.%s", stack.getClassName(), stack.getMethodName())
@@ -50,18 +50,18 @@ public interface Loggable {
       return output;
     } catch (Exception e) {
       out.printf("[%s] failed %s%n", executedBy, message);
-      throw e;
+      return null;
     }
   }
 
-  default void log(@NotBlank String message, @NotNull Runnable fn) throws Exception {
+  default void log(@NotBlank String message, @NotNull Runnable fn) {
     execute(message, () -> {
       fn.run();
       return null;
     });
   }
 
-  default <R> R log(@NotBlank String message, @NotNull Supplier<R> fn) throws Exception {
+  default <R> R log(@NotBlank String message, @NotNull Supplier<R> fn) {
     return execute(message, fn::get);
   }
 }

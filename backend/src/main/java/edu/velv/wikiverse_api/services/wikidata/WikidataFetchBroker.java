@@ -68,14 +68,9 @@ public class WikidataFetchBroker {
    * @return a list of {@link WbSearchEntitiesResult}, or an Error pertaining  
    */
   public Either<WikiverseError, List<WbSearchEntitiesResult>> fetchSearchResultsByAnyMatch(String query) {
-    try {
-      return logger.log("Fetching Wikidata search results for: " + query,
-          () -> fetchWithApiUnavailableErrorHandler(() -> fetcher.searchEntities(query, wikiLangKey))
-              .flatMap(res -> this.handleSearchedEntitiesResults(res, query)));
-    } catch (Exception e) {
-      return Either.left(
-          new WikiverseError.ServiceFault(e.getMessage(), "WikidataFetchBroker.java::fetchSearchResultsByAnyMatch()"));
-    }
+    return logger.log("Fetching Wikidata search results for: " + query,
+        () -> fetchWithApiUnavailableErrorHandler(() -> fetcher.searchEntities(query, wikiLangKey))
+            .flatMap(res -> this.handleSearchedEntitiesResults(res, query)));
   }
 
   /**

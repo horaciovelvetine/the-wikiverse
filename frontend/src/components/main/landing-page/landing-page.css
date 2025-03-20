@@ -18,9 +18,9 @@
   align-items: center;
   flex-direction: column;
   position: absolute;
-  top: 50%;
+  top: 45%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -55%);
 }
 
 #landing-page-container.on-screen {
@@ -173,18 +173,22 @@
 
 #landing-page-initial-results {
   position: absolute;
-  top: calc(50% + 100px);
+  top: calc(45% + 100px);
   left: 50%;
   transform: translateX(-50%);
-  width: 66%
+  width: 100%;
+  max-height: calc(100% - (45% + 100px));
+  overflow-y: auto;
 }
 
 #landing-page-results-list {
   list-style: none;
   margin: 0;
   padding: 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow-y: scroll;
 }

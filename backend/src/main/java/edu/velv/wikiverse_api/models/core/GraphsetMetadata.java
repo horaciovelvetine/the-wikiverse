@@ -15,6 +15,7 @@ public class GraphsetMetadata {
    * results are provided in a list prior to initiating a sketch, and a subsequent request uses that ID to fill out an initial Graphset.
    */
   public GraphsetMetadata(String originalQuery) {
+    this.dimensions = new Dimension();
     this.originalQuery = originalQuery;
   }
 

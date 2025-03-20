@@ -1,9 +1,12 @@
 package edu.velv.wikiverse_api.models;
 
+import java.util.List;
+
 import io.vavr.control.Either;
 
 import edu.velv.wikiverse_api.models.core.*;
 import edu.velv.wikiverse_api.services.wikidata.*;
+import org.wikidata.wdtk.wikibaseapi.WbSearchEntitiesResult;
 
 /**
  * Primary structure used to capture and act on a Request from the Client application (CX) frontend.
@@ -56,15 +59,17 @@ public class ClientRequest {
   }
 
   /**
-   * Get initial search results based on a query
+   * Get initial search results based on a provided query, responds with (always 7) search results as Vertices and an initialized Graphset.
    */
   public Either<WikiverseError, WikiverseRequestResponse> getInitialSearchResults(String originalQuery) {
     // stash the originalQuery value...
     graph.getMetadata().setOriginalQuery(originalQuery);
 
-    return wikidata.fetchSearchResultsByAnyMatch(originalQuery).map(results -> {
+    return wikidata.fetchSearchResultsByAnyMatch(originalQuery).fold((WikiverseError error) -> {
+      return Either.left(error);
+    }, (List<WbSearchEntitiesResult> results) -> {
       docProc.processSearchResultEnts(results, graph);
-      return new WikiverseRequestResponse(this);
+      return Either.right(new WikiverseRequestResponse(this));
     });
   }
 }

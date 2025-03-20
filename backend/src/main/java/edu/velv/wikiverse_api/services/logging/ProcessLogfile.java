@@ -48,7 +48,7 @@ public class ProcessLogfile implements Loggable {
     this.writer = new LogfileWriter(logFile, maxFileSize);
   }
 
-  private <R> R execute(String message, Callable<R> fn) throws Exception {
+  private <R> R execute(String message, Callable<R> fn) {
     var stack = StackWalker.getInstance().walk(frames -> frames.skip(2).findFirst().orElse(null));
     var executedBy = stack != null
         ? format("%s.%s", stack.getClassName(), stack.getMethodName())
@@ -69,12 +69,13 @@ public class ProcessLogfile implements Loggable {
     } catch (Exception e) {
       System.out.println(logMessage + " - FAILED: " + e.getMessage());
       writer.write(logMessage + " - FAILED: " + e.getMessage());
-      throw e;
+      // throw e;
+      return null;
     }
   }
 
   @Override
-  public void log(String message, Runnable fn) throws Exception {
+  public void log(String message, Runnable fn) {
     execute(message, () -> {
       fn.run();
       return null;
@@ -82,7 +83,7 @@ public class ProcessLogfile implements Loggable {
   }
 
   @Override
-  public <R> R log(String message, Supplier<R> fn) throws Exception {
+  public <R> R log(String message, Supplier<R> fn) {
     return execute(message, fn::get);
   }
 }
