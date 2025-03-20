@@ -7,6 +7,58 @@ import { Dimensions } from "../../../types/core";
 import { mainDisplayDimensions } from "../../../util/main-display-dimensions";
 import { BLUE, SKETCH_BG, WHITE } from "../../../constants/styles";
 
+interface ParticlesSketchProps {
+  // sketchData: WikiverseServiceResponse | null;
+}
+/**
+ * Credit for this sketch goes to @ Sagar Arora
+ * https://archive.p5js.org/examples/simulate-particles.html
+ *
+ * A P5 Sketch which creates an idle animation to fill the #wikiverse-app-main-display while
+ * no WikiverseSketch is currently active. The Sketch draws a number of particles on screen, moves them
+ * around the screen, and joined with nearby particles on every frame. The canvas resizes with the window.
+ */
+export const ParticlesSketch = ({}: ParticlesSketchProps) => {
+  const particles: Particle[] = [];
+
+  const sketch: Sketch = useCallback(
+    (p5: P5CanvasInstance) => {
+      // called once at the beginning
+      p5.setup = () => {
+        const { width, height } = mainDisplayDimensions();
+        // console.log(width, height)
+        p5.createCanvas(width, height);
+
+        const totalParticles = width / 10;
+        for (let n = 0; n < totalParticles; n++) {
+          const particle = new Particle(p5, { width, height });
+          particles.push(particle);
+        }
+      };
+
+      p5.draw = () => {
+        p5.background(SKETCH_BG("1.0"));
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].draw();
+          particles[i].move();
+          particles[i].joinNearby(particles.slice(i));
+        }
+      };
+
+      p5.windowResized = () => {
+        const { width, height } = mainDisplayDimensions();
+        p5.resizeCanvas(width, height);
+      };
+    },
+    [particles]
+  );
+  return (
+    <div id="particles-sketch-container" className="on-screen">
+      <ReactP5Wrapper sketch={sketch} />
+    </div>
+  );
+};
+
 /**
  * 2D Version of the Vertex used in the Background-Sketch to add visual interest to an idle screen.
  */
@@ -76,62 +128,3 @@ class Particle {
     this.yPos += this.ySpeed;
   }
 }
-
-interface ParticlesSketchProps {
-  // sketchData: WikiverseServiceResponse | null;
-}
-/**
- * Credit for this sketch goes to @ Sagar Arora
- * https://archive.p5js.org/examples/simulate-particles.html
- *
- * A P5 Sketch which creates an idle animation to fill the #wikiverse-app-main-display while
- * no WikiverseSketch is currently active. The Sketch draws a number of particles on screen, moves them
- * around the screen, and joined with nearby particles on every frame. The canvas resizes with the window.
- */
-export const ParticlesSketch = ({}: ParticlesSketchProps) => {
-  const particles: Particle[] = [];
-
-  const sketch: Sketch = useCallback(
-    (p5: P5CanvasInstance) => {
-      // called once at the beginning
-      p5.setup = () => {
-        const { width, height } = mainDisplayDimensions();
-        // console.log(width, height)
-        p5.createCanvas(width, height);
-
-        const totalParticles = width / 10;
-        for (let n = 0; n < totalParticles; n++) {
-          const particle = new Particle(p5, { width, height });
-          particles.push(particle);
-        }
-      };
-
-      p5.draw = () => {
-        p5.background(SKETCH_BG("1.0"));
-        for (let i = 0; i < particles.length; i++) {
-          particles[i].draw();
-          particles[i].move();
-          particles[i].joinNearby(particles.slice(i));
-        }
-      };
-
-      p5.windowResized = () => {
-        const { width, height } = mainDisplayDimensions();
-        p5.resizeCanvas(width, height);
-        const totalParticles = width / 10;
-        // check if we need any more particles, after the new screen
-        if (particles.length > totalParticles) return;
-        for (let n = particles.length; n < totalParticles; n++) {
-          const particle = new Particle(p5, { width, height });
-          particles.push(particle);
-        }
-      };
-    },
-    [particles]
-  );
-  return (
-    <div id="particles-sketch-container" className="on-screen">
-      <ReactP5Wrapper sketch={sketch} />
-    </div>
-  );
-};
