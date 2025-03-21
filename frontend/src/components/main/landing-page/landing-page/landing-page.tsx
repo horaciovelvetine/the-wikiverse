@@ -22,6 +22,11 @@ interface KeyedSearchResults {
 
 const WIKIDATA_HOMEPAGE = "https://www.wikidata.org/wiki/Wikidata:Main_Page";
 
+/**
+ * Primary landing component for the site which provides the user the initial search interfacing to begin a query.
+ * Responsible for firing the searchMutation which fetches an initial selection of search results for the user to select from before beginning their sketch.
+ * Primary input is debounced to prevent spamming the API for results.
+ */
 export function LandingPage() {
   const { ID } = useComponentID("landing-page");
   const { URL, setIsPending } = useWikiverseService();
@@ -44,9 +49,7 @@ export function LandingPage() {
       try {
         const result = await fetch(
           URL(`search-results?${new URLSearchParams({ query }).toString()}`)
-        );
-
-        setIsPending(false);
+        ).finally(() => setIsPending(false));
 
         if (!result.ok) {
           throw new Error(`HTTP error status: ${result.status}`);
@@ -84,6 +87,7 @@ export function LandingPage() {
     setState(prev => ({ ...prev, query: value }));
   };
 
+  // Toggle on/off the showError state which changes the className variable on a variety of components to animate them on-screen
   const handleError = (showError: boolean) => {
     setState(prev => ({ ...prev, showError }));
     if (showError) {

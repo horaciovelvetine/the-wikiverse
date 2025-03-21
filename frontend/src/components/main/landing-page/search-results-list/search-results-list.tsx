@@ -8,6 +8,15 @@ interface SearchResultsListProps {
   vertices: Vertex[];
 }
 
+/**
+ * A component that displays a list of search results.
+ * Positioned under the search-bar component inside the landing-page component.
+ * Automatically shows and hides itself based on the size of the vertices results state on the landing-page component.
+ *
+ * @param {SearchResultsListProps} props - The properties for the SearchResultsList component.
+ * @param {Vertex[]} props.vertices - An array of vertices to display as search results.
+ * @returns {JSX.Element} The rendered SearchResultsList component.
+ */
 export function SearchResultsList({ vertices }: SearchResultsListProps) {
   const { ID } = useComponentID("search-results");
 
