@@ -57,4 +57,5 @@
   --h1-font: clamp(2.5rem, 5vw, 3.5rem);
   /* help make text a bit more readable... */
   --def-shadow: 1px 1px 2px #000;
+  --border-rad: 0.5rem;
 }

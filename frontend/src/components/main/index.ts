@@ -1,1 +1,1 @@
-export { MainDisplay } from './main-display/main-display';
+export { MainDisplay } from './main/main-display';
