@@ -1,0 +1,50 @@
+#error-banner-container {
+  position: fixed;
+  top: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 60%;
+  background-color: rgb(var(--red), 0.75);
+  color: rgb(var(--white));
+  border-radius: var(--border-rad);
+  box-shadow: 0 4px 6px rgb(var(--red), 0.1);
+  transition: all var(--def-transition) ease-in-out;
+}
+
+#error-banner-container.show {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+#error-banner-container.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* funky padding size to accomodate icon padding on right side of container */
+#error-banner-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.15rem 0 0.15rem 1rem;
+}
+#error-banner-message-text {
+  font-size: var(--sm-font);
+}
+#error-banner-dismiss-button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 0;
+  margin: 0.15rem;
+  cursor: pointer;
+  border-radius: 100rem;
+  transition: background-color var(--def-transition) ease-in-out;
+}
+#error-banner-dismiss-button:hover {
+  background-color: rgb(var(--white), 0.75);
+}
+#error-banner-close-icon {
+}

@@ -6,7 +6,6 @@ interface SearchBarProps {
   value: string;
   onChange: (value: string) => void;
   showError: boolean;
-  onError: (showError: boolean) => void;
 }
 
 /**

@@ -29,7 +29,7 @@ const WIKIDATA_HOMEPAGE = "https://www.wikidata.org/wiki/Wikidata:Main_Page";
  */
 export function LandingPage() {
   const { ID } = useComponentID("landing-page");
-  const { URL, setIsPending } = useWikiverseService();
+  const { URL, setIsPending, setErrorBannerMessage } = useWikiverseService();
 
   // State Management
   const [state, setState] = useState<SearchState>({
@@ -50,12 +50,21 @@ export function LandingPage() {
         const result = await fetch(
           URL(`search-results?${new URLSearchParams({ query }).toString()}`)
         ).finally(() => setIsPending(false));
+        const response: WikiverseRequestResponse = await result.json();
 
         if (!result.ok) {
-          throw new Error(`HTTP error status: ${result.status}`);
+          const MSG = `HTTP error status: ${result.status}`;
+          if (response.error) {
+            // API online but error occurred...
+            setErrorBannerMessage(`${result.status}: ${response.message}`);
+          } else {
+            // likeley request was denied
+            setErrorBannerMessage(MSG);
+          }
+
+          handleError(true);
         }
 
-        const response: WikiverseRequestResponse = await result.json();
         setState(prev => ({
           ...prev,
           searchResults: { query, results: response.data.vertices },
@@ -65,7 +74,8 @@ export function LandingPage() {
         throw error;
       }
     },
-    onError: () => {
+    onError: e => {
+      setErrorBannerMessage(`503: ${e.message}`);
       handleError(true);
     },
   });
@@ -78,7 +88,7 @@ export function LandingPage() {
         searchResults: { query: debouncedQuery, results: [] },
       }));
     }
-
+    setErrorBannerMessage("");
     searchMutation.mutate(debouncedQuery);
   }, [debouncedQuery]);
 
@@ -118,7 +128,6 @@ export function LandingPage() {
           <SearchBar
             value={state.query}
             onChange={handleChange}
-            onError={handleError}
             showError={state.showError}
           />
         </div>

@@ -12,6 +12,10 @@ export interface WikiverseService {
   setIsPending: Dispatch<SetStateAction<boolean>>;
 
   /**
+   * Setter for the state of the message displayed inside of the ErrorBanner on-screen adjacent to the loading bar
+   */
+  setErrorBannerMessage: Dispatch<SetStateAction<string>>;
+  /**
    * Provides a target URL
    */
   URL: (tgtUrl: string) => string;

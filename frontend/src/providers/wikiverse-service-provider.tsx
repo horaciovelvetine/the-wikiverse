@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { WikiverseServiceProviderProps } from "../types";
 import { WikiverseService } from "../types";
 import { Context, createContext, useContext, useMemo, useState } from "react";
-import { LoadingBar } from "../components";
+import { ErrorBanner, LoadingBar } from "../components";
 
 /**
  * Tanstack Query client - {@link https://tanstack.com/query/latest} provide request state/data utility and management
@@ -29,6 +29,7 @@ export const WikiverseServiceProvider = ({
   // testing isPending being a sort of hybrid internal state...
   const [isPending, setIsPending] = useState(false);
   const [serviceOnline, setServiceOnline] = useState(true);
+  const [errorBannerMessage, setErrorBannerMessage] = useState("");
   /**
    * Helper to provide a URL to the API based on the value provided on initialization inside the {@link Wikiverse} component.
    */
@@ -43,14 +44,19 @@ export const WikiverseServiceProvider = ({
       serviceOnline,
       setServiceOnline,
       URL,
+      setErrorBannerMessage,
     }),
-    [serviceOnline, setServiceOnline, URL]
+    [serviceOnline, setServiceOnline, URL, setErrorBannerMessage]
   );
 
   return (
     <QueryClientProvider client={tanstackClient}>
       <WikiverseServiceContext.Provider value={contextMemo}>
         <LoadingBar isLoading={isPending} />
+        <ErrorBanner
+          message={errorBannerMessage}
+          onClose={setErrorBannerMessage}
+        />
         {children}
       </WikiverseServiceContext.Provider>
     </QueryClientProvider>
