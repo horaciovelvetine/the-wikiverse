@@ -3,13 +3,10 @@ import { P5CanvasInstance, ReactP5Wrapper, Sketch } from "@p5-wrapper/react";
 
 // import { WikiverseServiceResponse } from '../../types';
 import { useCallback } from "react";
-import { Dimensions } from "../../../types/core";
-import { mainDisplayDimensions } from "../../../util/main-display-dimensions";
-import { BLUE, SKETCH_BG, WHITE } from "../../../constants/styles";
+import { Dimensions } from "../../../../types/core";
+import { mainDisplayDimensions } from "../../../../util/main-display-dimensions";
+import { BLUE, SKETCH_BG, WHITE } from "../../../../constants/styles";
 
-interface ParticlesSketchProps {
-  // sketchData: WikiverseServiceResponse | null;
-}
 /**
  * Credit for this sketch goes to @ Sagar Arora
  * https://archive.p5js.org/examples/simulate-particles.html
@@ -18,7 +15,7 @@ interface ParticlesSketchProps {
  * no WikiverseSketch is currently active. The Sketch draws a number of particles on screen, moves them
  * around the screen, and joined with nearby particles on every frame. The canvas resizes with the window.
  */
-export const ParticlesSketch = ({}: ParticlesSketchProps) => {
+export const ParticlesSketch = () => {
   const particles: Particle[] = [];
 
   const sketch: Sketch = useCallback(

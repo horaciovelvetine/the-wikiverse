@@ -7,4 +7,7 @@ export type { Vertex } from "./interfaces/vertex";
 export type { WikiverseError } from "./interfaces/wikiverse-error";
 export type { WikiverseRequestResponse } from "./interfaces/wikverse-request-response";
 
-
+export { P5_SketchManager } from "./sketch/p5-sketch-manager";
+export { P5_Vertex } from "./sketch/p5-vertex";
+export type { SketchProps } from "./sketch/sketch-props";
+export { SketchTypes } from "./sketch/sketch-types"; //enum...
