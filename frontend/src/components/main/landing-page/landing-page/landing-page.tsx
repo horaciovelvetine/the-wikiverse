@@ -36,6 +36,15 @@ export const LandingPage = ({ sketchRef }: SketchProps) => {
   const { ID } = useComponentID("landing-page");
   const { URL, setIsPending, setErrorBannerMessage } = useWikiverseService();
 
+  const [isShown, setIsShown] = useState(true);
+
+  useEffect(() => {
+    // if (sketchRef.getType() === SketchTypes.PARTICLES) setIsShown(true);
+    // if (sketchRef.getType() !== SketchTypes.PARTICLES) setIsShown(false);
+    //TODO - this doesnt actually subscribe to state, but I think this follows similar pattern issues previously,
+    // should be able to handle this by creating a subscription to the state....
+  }, [sketchRef.getType()]);
+
   // State Management
   const [state, setState] = useState<SearchState>({
     showError: false,
@@ -113,12 +122,7 @@ export const LandingPage = ({ sketchRef }: SketchProps) => {
   };
 
   return (
-    <div
-      id={ID("main")}
-      className={
-        sketchRef.getType() === SketchTypes.PARTICLES ? "shown" : "hidden"
-      }
-    >
+    <div id={ID("main")} className={isShown ? "shown" : "hidden"}>
       <div id={ID("background-mask")}>
         {/* Search Section */}
         <div id={ID("search-section")}>
@@ -144,7 +148,10 @@ export const LandingPage = ({ sketchRef }: SketchProps) => {
 
         {/* Results Section */}
         <div id={ID("results-section")}>
-          <SearchResultsList vertices={state.searchResults.results} />
+          <SearchResultsList
+            vertices={state.searchResults.results}
+            sketchRef={sketchRef}
+          />
         </div>
       </div>
     </div>

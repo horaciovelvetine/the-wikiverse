@@ -20,7 +20,6 @@ interface SearchBarProps {
  * @param {function} props.onChange - Callback function to handle changes to the search input value.
  * @param {boolean} props.showError - Flag to indicate if there is an error, triggering error animations.
  * @param {function} props.onError - Callback function to handle error state changes.
- * @returns {JSX.Element} The rendered search bar component.
  */
 export const SearchBar = ({ value, onChange, showError }: SearchBarProps) => {
   const { ID } = useComponentID("search-bar");

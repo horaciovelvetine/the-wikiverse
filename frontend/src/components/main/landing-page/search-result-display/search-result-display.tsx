@@ -1,27 +1,25 @@
 import "./search-result-display.css";
 import { Vertex as VertexIcon } from "../../../../assets/icons";
-import { Vertex } from "../../../../types/core";
+import { P5_SketchManager, Vertex } from "../../../../types/core";
 import { useComponentID } from "../../../../hooks";
 
-interface SearchResultDisplayProps {
+interface SRDProps {
   vertResult: Vertex;
+  sketchRef: P5_SketchManager;
 }
 
 /**
  * A component that displays a single item in the search-results-list.
  * It contains a small icon, label, and description for a result from the initial search submission.
  *
- * @param {SearchResultDisplayProps} props - The properties for the SearchResultDisplay component.
+ * @param {SRDProps} props - The properties for the SearchResultDisplay component.
  * @param {Vertex} props.vertResult - The vertex result object containing the details to display.
- * @returns {JSX.Element} The rendered search result display item.
  */
-export const SearchResultDisplay = ({
-  vertResult,
-}: SearchResultDisplayProps) => {
+export const SearchResultDisplay = ({ vertResult, sketchRef }: SRDProps) => {
   const { ID } = useComponentID("search-result");
 
   const handleClick = () => {
-    console.log("clicked on result @ ", vertResult.id);
+    sketchRef.handleSearchTargetClick(vertResult);
   };
 
   return (

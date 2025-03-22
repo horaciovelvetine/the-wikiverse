@@ -1,11 +1,12 @@
 import "./search-results-list.css";
 
-import { Vertex } from "../../../../types/core";
+import { P5_SketchManager, Vertex } from "../../../../types/core";
 import { useComponentID } from "../../../../hooks";
 import { SearchResultDisplay } from "../search-result-display/search-result-display";
 
-interface SearchResultsListProps {
+interface SRLProps {
   vertices: Vertex[];
+  sketchRef: P5_SketchManager;
 }
 
 /**
@@ -13,11 +14,10 @@ interface SearchResultsListProps {
  * Positioned under the search-bar component inside the landing-page component.
  * Automatically shows and hides itself based on the size of the vertices results state on the landing-page component.
  *
- * @param {SearchResultsListProps} props - The properties for the SearchResultsList component.
+ * @param {SRLProps} props - The properties for the SearchResultsList component.
  * @param {Vertex[]} props.vertices - An array of vertices to display as search results.
- * @returns {JSX.Element} The rendered SearchResultsList component.
  */
-export const SearchResultsList = ({ vertices }: SearchResultsListProps) => {
+export const SearchResultsList = ({ vertices, sketchRef }: SRLProps) => {
   const { ID } = useComponentID("search-results");
 
   return (
@@ -27,7 +27,11 @@ export const SearchResultsList = ({ vertices }: SearchResultsListProps) => {
     >
       <ul id={ID("list")}>
         {vertices.map(vertex => (
-          <SearchResultDisplay key={vertex.id} vertResult={vertex} />
+          <SearchResultDisplay
+            key={vertex.id}
+            vertResult={vertex}
+            sketchRef={sketchRef}
+          />
         ))}
       </ul>
     </div>
