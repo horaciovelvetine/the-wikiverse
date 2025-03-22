@@ -5,9 +5,14 @@ import { useMutation, skipToken } from "@tanstack/react-query";
 import { useComponentID, useDebouncedValue } from "../../../../hooks";
 import { useWikiverseService } from "../../../../providers/wikiverse-service-provider";
 
-import { Vertex, WikiverseRequestResponse } from "../../../../types/core";
+import {
+  SketchProps,
+  Vertex,
+  WikiverseRequestResponse,
+} from "../../../../types/core";
 import { SearchBar } from "../search-bar/search-bar";
 import { SearchResultsList } from "../search-results-list/search-results-list";
+import { SketchTypes } from "../../../../types/core/sketch/sketch-types";
 
 interface SearchState {
   showError: boolean;
@@ -27,7 +32,7 @@ const WIKIDATA_HOMEPAGE = "https://www.wikidata.org/wiki/Wikidata:Main_Page";
  * Responsible for firing the searchMutation which fetches an initial selection of search results for the user to select from before beginning their sketch.
  * Primary input is debounced to prevent spamming the API for results.
  */
-export function LandingPage() {
+export const LandingPage = ({ sketchRef }: SketchProps) => {
   const { ID } = useComponentID("landing-page");
   const { URL, setIsPending, setErrorBannerMessage } = useWikiverseService();
 
@@ -108,7 +113,12 @@ export function LandingPage() {
   };
 
   return (
-    <div id={ID("main")}>
+    <div
+      id={ID("main")}
+      className={
+        sketchRef.getType() === SketchTypes.PARTICLES ? "shown" : "hidden"
+      }
+    >
       <div id={ID("background-mask")}>
         {/* Search Section */}
         <div id={ID("search-section")}>
@@ -139,4 +149,4 @@ export function LandingPage() {
       </div>
     </div>
   );
-}
+};

@@ -22,7 +22,7 @@ interface SearchBarProps {
  * @param {function} props.onError - Callback function to handle error state changes.
  * @returns {JSX.Element} The rendered search bar component.
  */
-export function SearchBar({ value, onChange, showError }: SearchBarProps) {
+export const SearchBar = ({ value, onChange, showError }: SearchBarProps) => {
   const { ID } = useComponentID("search-bar");
 
   return (
@@ -49,4 +49,4 @@ export function SearchBar({ value, onChange, showError }: SearchBarProps) {
       </button>
     </form>
   );
-}
+};

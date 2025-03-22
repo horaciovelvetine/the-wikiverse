@@ -17,7 +17,7 @@ interface SearchResultsListProps {
  * @param {Vertex[]} props.vertices - An array of vertices to display as search results.
  * @returns {JSX.Element} The rendered SearchResultsList component.
  */
-export function SearchResultsList({ vertices }: SearchResultsListProps) {
+export const SearchResultsList = ({ vertices }: SearchResultsListProps) => {
   const { ID } = useComponentID("search-results");
 
   return (
@@ -32,4 +32,4 @@ export function SearchResultsList({ vertices }: SearchResultsListProps) {
       </ul>
     </div>
   );
-}
+};

@@ -1,7 +1,7 @@
 import "./footer.css";
 import { useComponentID } from "../../hooks/use-component-id";
 
-export function Footer() {
+export const Footer = () => {
   const { ID } = useComponentID("footer");
   const GITHUB = "https://github.com/horaciovelvetine";
   return (
@@ -27,4 +27,4 @@ export function Footer() {
       </ul>
     </footer>
   );
-}
+};

@@ -8,7 +8,7 @@ interface ErrorBannerProps {
   onClose?: (val: string) => void;
 }
 
-export function ErrorBanner({ message = "", onClose }: ErrorBannerProps) {
+export const ErrorBanner = ({ message = "", onClose }: ErrorBannerProps) => {
   const [isVisible, setIsVisible] = useState<boolean>();
   const { ID } = useComponentID("error-banner");
 
@@ -38,4 +38,4 @@ export function ErrorBanner({ message = "", onClose }: ErrorBannerProps) {
       </div>
     </div>
   );
-}
+};

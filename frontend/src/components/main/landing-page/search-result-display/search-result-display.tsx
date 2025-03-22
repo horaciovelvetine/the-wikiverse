@@ -15,7 +15,9 @@ interface SearchResultDisplayProps {
  * @param {Vertex} props.vertResult - The vertex result object containing the details to display.
  * @returns {JSX.Element} The rendered search result display item.
  */
-export function SearchResultDisplay({ vertResult }: SearchResultDisplayProps) {
+export const SearchResultDisplay = ({
+  vertResult,
+}: SearchResultDisplayProps) => {
   const { ID } = useComponentID("search-result");
 
   const handleClick = () => {
@@ -31,4 +33,4 @@ export function SearchResultDisplay({ vertResult }: SearchResultDisplayProps) {
       </a>
     </li>
   );
-}
+};
