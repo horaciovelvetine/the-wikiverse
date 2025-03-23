@@ -1,14 +1,9 @@
 import { P5CanvasInstance } from "@p5-wrapper/react";
 import { P5_ManagedCamera } from "./p5-managed-camera";
 import { P5_ManagedState } from "./p5-managed-state";
-import { SketchTypes } from "./sketch-types";
+import { Vertex } from "..";
 
 export class P5_SketchManager {
-  /**
-   * The kind of Sketch of Sketch which is rendered by the {@link SketchContainer} component.
-   */
-  private type: SketchTypes = SketchTypes.PARTICLES;
-
   /**
    * Centralizes helpers and methods used to control and change the clients camera inside the sketch
    */
@@ -30,15 +25,7 @@ export class P5_SketchManager {
     this.managedState = new P5_ManagedState();
   }
 
-  public getType() {
-    return this.type;
-  }
-
-  public setType(type: SketchTypes) {
-    this.type = type;
-  }
-
-  public getCam() {
+  public cam() {
     return this.managedCam;
   }
 
@@ -46,11 +33,17 @@ export class P5_SketchManager {
     return this.managedState;
   }
 
+  public p5() {
+    return this.canvas;
+  }
+
   public setCanvas(p5: P5CanvasInstance) {
     this.canvas = p5;
   }
 
-  public getCanvas() {
-    return this.canvas;
+  public handleSearchTargetClick(vert: Vertex) {
+    //somehow needs to stash those vert details, then change the type. When the type changes it should set int action
+    console.log("handleSearchTargetClick()", vert);
+    //TODO - this is going to need to integrate managed state and alert a list of subscribers...
   }
 }
