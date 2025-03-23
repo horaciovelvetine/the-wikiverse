@@ -2,12 +2,14 @@ import "./sketch-container.css";
 import { SketchProps, SketchTypes } from "../../../../types/core";
 import { ParticlesSketch } from "../particles-sketch/particles-sketch";
 import { WikiverseSketch } from "../wikiverse-sketch/wikiverse-sketch";
+import { useState } from "react";
 
 export const SketchContainer = ({ sketchRef }: SketchProps) => {
-  // should dictate which P5Sketch is active currently on the screen
+  const [sketchType, setSketchType] = useState(sketchRef.state().getType());
+  sketchRef.state().addTypeSubscriber(setSketchType);
 
   const SketchComponent = () => {
-    switch (sketchRef.getType()) {
+    switch (sketchType) {
       case SketchTypes.WIKIVERSE:
         return <WikiverseSketch {...{ sketchRef }} />;
 

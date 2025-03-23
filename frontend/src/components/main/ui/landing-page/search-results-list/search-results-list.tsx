@@ -1,7 +1,7 @@
 import "./search-results-list.css";
 
-import { P5_SketchManager, Vertex } from "../../../../types/core";
-import { useComponentID } from "../../../../hooks";
+import { P5_SketchManager, Vertex } from "../../../../../types/core";
+import { useComponentID } from "../../../../../hooks";
 import { SearchResultDisplay } from "../search-result-display/search-result-display";
 
 interface SRLProps {

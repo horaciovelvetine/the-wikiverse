@@ -2,17 +2,17 @@ import "./landing-page.css";
 import { useEffect, useState } from "react";
 import { useMutation, skipToken } from "@tanstack/react-query";
 
-import { useComponentID, useDebouncedValue } from "../../../../hooks";
-import { useWikiverseService } from "../../../../providers/wikiverse-service-provider";
+import { useComponentID, useDebouncedValue } from "../../../../../hooks";
+import { useWikiverseService } from "../../../../../providers/wikiverse-service-provider";
 
 import {
   SketchProps,
   Vertex,
   WikiverseRequestResponse,
-} from "../../../../types/core";
+} from "../../../../../types/core";
 import { SearchBar } from "../search-bar/search-bar";
 import { SearchResultsList } from "../search-results-list/search-results-list";
-import { SketchTypes } from "../../../../types/core/sketch/sketch-types";
+import { SketchTypes } from "../../../../../types/core/sketch/sketch-types";
 
 interface SearchState {
   showError: boolean;
@@ -35,15 +35,10 @@ const WIKIDATA_HOMEPAGE = "https://www.wikidata.org/wiki/Wikidata:Main_Page";
 export const LandingPage = ({ sketchRef }: SketchProps) => {
   const { ID } = useComponentID("landing-page");
   const { URL, setIsPending, setErrorBannerMessage } = useWikiverseService();
+  const [sketchType, setSketchType] = useState(sketchRef.state().getType());
 
-  const [isShown, setIsShown] = useState(true);
-
-  useEffect(() => {
-    // if (sketchRef.getType() === SketchTypes.PARTICLES) setIsShown(true);
-    // if (sketchRef.getType() !== SketchTypes.PARTICLES) setIsShown(false);
-    //TODO - this doesnt actually subscribe to state, but I think this follows similar pattern issues previously,
-    // should be able to handle this by creating a subscription to the state....
-  }, [sketchRef.getType()]);
+  // Subscribe to sketchType updates to decide weather or not element is on-screen...
+  sketchRef.state().addTypeSubscriber(setSketchType);
 
   // State Management
   const [state, setState] = useState<SearchState>({
@@ -122,7 +117,10 @@ export const LandingPage = ({ sketchRef }: SketchProps) => {
   };
 
   return (
-    <div id={ID("main")} className={isShown ? "shown" : "hidden"}>
+    <div
+      id={ID("main")}
+      className={sketchType === SketchTypes.PARTICLES ? "shown" : "hidden"}
+    >
       <div id={ID("background-mask")}>
         {/* Search Section */}
         <div id={ID("search-section")}>

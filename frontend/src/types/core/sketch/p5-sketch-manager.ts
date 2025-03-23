@@ -1,7 +1,7 @@
 import { P5CanvasInstance } from "@p5-wrapper/react";
 import { P5_ManagedCamera } from "./p5-managed-camera";
 import { P5_ManagedState } from "./p5-managed-state";
-import { Vertex } from "..";
+import { SketchTypes, Vertex } from "..";
 
 export class P5_SketchManager {
   /**
@@ -44,6 +44,6 @@ export class P5_SketchManager {
   public handleSearchTargetClick(vert: Vertex) {
     //somehow needs to stash those vert details, then change the type. When the type changes it should set int action
     console.log("handleSearchTargetClick()", vert);
-    //TODO - this is going to need to integrate managed state and alert a list of subscribers...
+    this.state().setType(SketchTypes.WIKIVERSE);
   }
 }

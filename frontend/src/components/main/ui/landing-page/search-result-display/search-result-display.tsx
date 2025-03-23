@@ -1,7 +1,7 @@
 import "./search-result-display.css";
-import { Vertex as VertexIcon } from "../../../../assets/icons";
-import { P5_SketchManager, Vertex } from "../../../../types/core";
-import { useComponentID } from "../../../../hooks";
+import { Vertex as VertexIcon } from "../../../../../assets/icons";
+import { P5_SketchManager, Vertex } from "../../../../../types/core";
+import { useComponentID } from "../../../../../hooks";
 
 interface SRDProps {
   vertResult: Vertex;

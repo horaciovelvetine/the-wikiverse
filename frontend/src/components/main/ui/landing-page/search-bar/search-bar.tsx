@@ -1,6 +1,6 @@
 import "./search-bar.css";
-import { SearchDngr, Search } from "../../../../assets/icons";
-import { useComponentID } from "../../../../hooks";
+import { SearchDngr, Search } from "../../../../../assets/icons";
+import { useComponentID } from "../../../../../hooks";
 
 interface SearchBarProps {
   value: string;
