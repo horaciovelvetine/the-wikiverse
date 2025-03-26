@@ -7,5 +7,8 @@ import { Dispatch, SetStateAction } from "react";
  */
 export interface ManagedStateValue<T> {
   value: T;
-  subscribers: Dispatch<SetStateAction<T>>[];
+  subscribers: {
+    componentID: string;
+    setter: Dispatch<SetStateAction<T>>;
+  }[];
 }

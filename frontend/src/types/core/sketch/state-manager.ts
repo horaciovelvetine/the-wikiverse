@@ -10,7 +10,16 @@ import { ManagedStateValue } from "./managed-state-value";
  * @template T - The type of the state object.
  */
 export abstract class StateManager<T> {
-  protected state: Map<string, ManagedStateValue<any>> = new Map();
+  protected state: Map<
+    string,
+    {
+      value: any;
+      subscribers: {
+        componentID: string;
+        setter: Dispatch<SetStateAction<any>>;
+      }[];
+    }
+  > = new Map();
   /**
    * Initializes a state value with a given key and initial value.
    * @template K - The key of the state value.
@@ -34,7 +43,7 @@ export abstract class StateManager<T> {
     const state = this.state.get(key.toString());
     if (state) {
       state.value = newValue;
-      state.subscribers.forEach(subscriber => subscriber(newValue));
+      state.subscribers.forEach(subscriber => subscriber.setter(newValue));
     }
   }
 
@@ -42,15 +51,35 @@ export abstract class StateManager<T> {
    * Adds a subscriber to a state value.
    * @template K - The key of the state value.
    * @param {K} key - The key of the state value.
+   * @param {string} componentKey - A unique key identifying the subscriber.
    * @param {Dispatch<SetStateAction<T[K]>>} setter - The subscriber function to be called when the state value changes.
    */
   protected addSubscriber<K extends keyof T>(
     key: K,
+    componentID: string,
     setter: Dispatch<SetStateAction<T[K]>>
   ) {
     const state = this.state.get(key.toString());
     if (state) {
-      state.subscribers.push(setter);
+      state.subscribers.push({ componentID, setter });
+    }
+  }
+
+  /**
+   * Removes a subscriber from a state value.
+   * @template K - The key of the state value.
+   * @param {K} key - The key of the state value.
+   * @param {string} tgtComponentID - The unique key identifying the subscriber to be removed.
+   */
+  protected removeSubscriber<K extends keyof T>(
+    key: K,
+    tgtComponentID: string
+  ) {
+    const state = this.state.get(key.toString());
+    if (state) {
+      state.subscribers = state.subscribers.filter(
+        subscriber => subscriber.componentID !== tgtComponentID
+      );
     }
   }
 

@@ -2,6 +2,8 @@ import { Dispatch, SetStateAction } from "react";
 import { SketchState } from "./sketch-state";
 import { SketchTypes } from "./sketch-types";
 import { StateManager } from "./state-manager";
+import { Graphset } from "../interfaces/graphset";
+import { P5_Graphset } from "./p5-graphset";
 
 export class P5_ManagedState extends StateManager<SketchState> {
   constructor() {
@@ -9,6 +11,7 @@ export class P5_ManagedState extends StateManager<SketchState> {
     // initialize all default values for SketchState
     this.initializeState("clickToFetch", false);
     this.initializeState("displayBoundingBox", false);
+    this.initializeState("boundingBoxStrokeWeight", 5);
     this.initializeState("displayAxisOrientation", false);
     this.initializeState("displayGraphStatistics", false);
     this.initializeState("displaySettingsMenu", false);
@@ -30,8 +33,14 @@ export class P5_ManagedState extends StateManager<SketchState> {
   setClickToFetch(value: boolean) {
     this.notifySubscribers("clickToFetch", value);
   }
-  addClickToFetchSubscriber(setter: Dispatch<SetStateAction<boolean>>) {
-    this.addSubscriber("clickToFetch", setter);
+  addClickToFetchSubscriber(
+    componentID: string,
+    setter: Dispatch<SetStateAction<boolean>>
+  ) {
+    this.addSubscriber("clickToFetch", componentID, setter);
+  }
+  removeClickToFetchSubscriber(componentID: string) {
+    this.removeSubscriber("clickToFetch", componentID);
   }
 
   /**
@@ -43,8 +52,29 @@ export class P5_ManagedState extends StateManager<SketchState> {
   setDisplayBoundingBox(value: boolean) {
     this.notifySubscribers("displayBoundingBox", value);
   }
-  addDisplayBoundingBoxSubscriber(setter: Dispatch<SetStateAction<boolean>>) {
-    this.addSubscriber("displayBoundingBox", setter);
+  addDisplayBoundingBoxSubscriber(
+    componentID: string,
+    setter: Dispatch<SetStateAction<boolean>>
+  ) {
+    this.addSubscriber("displayBoundingBox", componentID, setter);
+  }
+  removeDisplayBoundingBoxSubscriber(componentID: string) {
+    this.removeSubscriber("displayBoundingBox", componentID);
+  }
+  getBoundBoxStrokeWeight() {
+    return this.getValue("boundingBoxStrokeWeight");
+  }
+  setBoundBoxStrokeWeight(value: number) {
+    this.notifySubscribers("boundingBoxStrokeWeight", value);
+  }
+  addBoundBoxStrokeWeightSubscriber(
+    componentID: string,
+    setter: Dispatch<SetStateAction<number>>
+  ) {
+    this.addSubscriber("boundingBoxStrokeWeight", componentID, setter);
+  }
+  removeBoundBoxStrokeWeightSubscriber(componentID: string) {
+    this.removeSubscriber("boundingBoxStrokeWeight", componentID);
   }
   /**
    * Display Axis Orientation: displays an X(Red) Y(Green) Z(Blue) axis orientation at the center of the Graphset
@@ -56,9 +86,13 @@ export class P5_ManagedState extends StateManager<SketchState> {
     this.notifySubscribers("displayAxisOrientation", value);
   }
   addDisplayAxisOrientationSubscriber(
+    componentID: string,
     setter: Dispatch<SetStateAction<boolean>>
   ) {
-    this.addSubscriber("displayAxisOrientation", setter);
+    this.addSubscriber("displayAxisOrientation", componentID, setter);
+  }
+  removeDisplayAxisOrientationSubscriber(componentID: string) {
+    this.removeSubscriber("displayAxisOrientation", componentID);
   }
 
   /**
@@ -71,9 +105,13 @@ export class P5_ManagedState extends StateManager<SketchState> {
     this.notifySubscribers("displayGraphStatistics", value);
   }
   addDisplayGraphStatisticsSubscriber(
+    componentID: string,
     setter: Dispatch<SetStateAction<boolean>>
   ) {
-    this.addSubscriber("displayGraphStatistics", setter);
+    this.addSubscriber("displayGraphStatistics", componentID, setter);
+  }
+  removeDisplayGraphStatisticsSubscriber(componentID: string) {
+    this.removeSubscriber("displayGraphStatistics", componentID);
   }
 
   /**
@@ -85,8 +123,14 @@ export class P5_ManagedState extends StateManager<SketchState> {
   setDisplaySettingsMenu(value: boolean) {
     this.notifySubscribers("displaySettingsMenu", value);
   }
-  addDisplaySettingsMenuSubscriber(setter: Dispatch<SetStateAction<boolean>>) {
-    this.addSubscriber("displaySettingsMenu", setter);
+  addDisplaySettingsMenuSubscriber(
+    componentID: string,
+    setter: Dispatch<SetStateAction<boolean>>
+  ) {
+    this.addSubscriber("displaySettingsMenu", componentID, setter);
+  }
+  removeDisplaySettingsMenuSubscriber(componentID: string) {
+    this.removeSubscriber("displaySettingsMenu", componentID);
   }
 
   /**
@@ -99,9 +143,16 @@ export class P5_ManagedState extends StateManager<SketchState> {
   setXSensitivity(value: number) {
     this.notifySubscribers("xSensitivity", value);
   }
-  addXSensitivitySubscriber(setter: Dispatch<SetStateAction<number>>) {
-    this.addSubscriber("xSensitivity", setter);
+  addXSensitivitySubscriber(
+    componentID: string,
+    setter: Dispatch<SetStateAction<number>>
+  ) {
+    this.addSubscriber("xSensitivity", componentID, setter);
   }
+  removeXSensitivitySubscriber(componentID: string) {
+    this.removeSubscriber("xSensitivity", componentID);
+  }
+
   //Y
   getYSensitivity() {
     return this.getValue("ySensitivity");
@@ -109,9 +160,16 @@ export class P5_ManagedState extends StateManager<SketchState> {
   setYSensitivity(value: number) {
     this.notifySubscribers("ySensitivity", value);
   }
-  addYSensitivitySubscriber(setter: Dispatch<SetStateAction<number>>) {
-    this.addSubscriber("ySensitivity", setter);
+  addYSensitivitySubscriber(
+    componentID: string,
+    setter: Dispatch<SetStateAction<number>>
+  ) {
+    this.addSubscriber("ySensitivity", componentID, setter);
   }
+  removeYSensitivitySubscriber(componentID: string) {
+    this.removeSubscriber("ySensitivity", componentID);
+  }
+
   //Z
   getZSensitivity() {
     return this.getValue("zSensitivity");
@@ -119,8 +177,14 @@ export class P5_ManagedState extends StateManager<SketchState> {
   setZSensitivity(value: number) {
     this.notifySubscribers("zSensitivity", value);
   }
-  addZSensitivitySubscriber(setter: Dispatch<SetStateAction<number>>) {
-    this.addSubscriber("zSensitivity", setter);
+  addZSensitivitySubscriber(
+    componentID: string,
+    setter: Dispatch<SetStateAction<number>>
+  ) {
+    this.addSubscriber("zSensitivity", componentID, setter);
+  }
+  removeZSensitivitySubscriber(componentID: string) {
+    this.removeSubscriber("zSensitivity", componentID);
   }
 
   /**
@@ -134,8 +198,14 @@ export class P5_ManagedState extends StateManager<SketchState> {
     this.notifySubscribers("currentlySelected", value);
   }
 
-  addCurrentlySelectedSubscriber(setter: Dispatch<SetStateAction<any>>) {
-    this.addSubscriber("currentlySelected", setter);
+  addCurrentlySelectedSubscriber(
+    componentID: string,
+    setter: Dispatch<SetStateAction<any>>
+  ) {
+    this.addSubscriber("currentlySelected", componentID, setter);
+  }
+  removeCurrentlySelectedSubscriber(componentID: string) {
+    this.removeSubscriber("currentlySelected", componentID);
   }
 
   /**
@@ -147,8 +217,14 @@ export class P5_ManagedState extends StateManager<SketchState> {
   setCurrentlyHovered(value: any) {
     this.notifySubscribers("currentlyHovered", value);
   }
-  addCurrentlyHoveredSubscriber(setter: Dispatch<SetStateAction<any>>) {
-    this.addSubscriber("currentlyHovered", setter);
+  addCurrentlyHoveredSubscriber(
+    componentID: string,
+    setter: Dispatch<SetStateAction<any>>
+  ) {
+    this.addSubscriber("currentlyHovered", componentID, setter);
+  }
+  removeCurrentlyHoveredSubscriber(componentID: string) {
+    this.removeSubscriber("currentlyHovered", componentID);
   }
 
   /**
@@ -160,7 +236,25 @@ export class P5_ManagedState extends StateManager<SketchState> {
   setType(value: SketchTypes) {
     this.notifySubscribers("type", value);
   }
-  addTypeSubscriber(setter: Dispatch<SetStateAction<SketchTypes>>) {
-    this.addSubscriber("type", setter);
+  addTypeSubscriber(
+    componentID: string,
+    setter: Dispatch<SetStateAction<SketchTypes>>
+  ) {
+    this.addSubscriber("type", componentID, setter);
+  }
+  removeTypeSubscriber(componentID: string) {
+    this.removeSubscriber("type", componentID);
+  }
+
+  /**
+   * Graph: The {@link Graphset} where all of the sketches data is stored. The Graphset doesn't have any subscribers,contrary to other pieces of state managed here.
+   */
+  getGraphset() {
+    return this.getValue("graphset");
+  }
+
+  setGraphset(value: P5_Graphset) {
+    this.initializeState("graphset", value);
+    this.notifySubscribers("graphset", value);
   }
 }
