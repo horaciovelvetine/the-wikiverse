@@ -23,7 +23,9 @@ public class Vertex {
     this.id = result.getTitle();
     this.label = result.getLabel();
     this.description = result.getDescription();
+    this.position = new Point3D();
     this.fetchedEdges = false;
+    this.locked = false;
   }
 
   public String getId() {
