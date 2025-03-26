@@ -3,10 +3,12 @@ import "./search-results-list.css";
 import { P5_SketchManager, Vertex } from "../../../../../types/core";
 import { useComponentID } from "../../../../../hooks";
 import { SearchResultDisplay } from "../search-result-display/search-result-display";
+import { LandingPageState } from "../types/landing-page-state";
 
 interface SRLProps {
   vertices: Vertex[];
   sketchRef: P5_SketchManager;
+  state: LandingPageState;
 }
 
 /**
@@ -17,7 +19,7 @@ interface SRLProps {
  * @param {SRLProps} props - The properties for the SearchResultsList component.
  * @param {Vertex[]} props.vertices - An array of vertices to display as search results.
  */
-export const SearchResultsList = ({ vertices, sketchRef }: SRLProps) => {
+export const SearchResultsList = ({ state, vertices, sketchRef }: SRLProps) => {
   const { ID } = useComponentID("search-results");
 
   return (
@@ -28,8 +30,9 @@ export const SearchResultsList = ({ vertices, sketchRef }: SRLProps) => {
       <ul id={ID("list")}>
         {vertices.map(vertex => (
           <SearchResultDisplay
+            state={state}
             key={vertex.id}
-            vertResult={vertex}
+            result={vertex}
             sketchRef={sketchRef}
           />
         ))}

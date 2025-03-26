@@ -12,7 +12,7 @@
   /* colors start */
   /* colors are formatted to allow the alpha channel to be individuall adjusted on use */
   /* ex/==> color: rgb(var(--white) 0.8) */
-  /* rgb(1,1,15) */
+  /* rgb(1,1,14) */
   --sketch-bg: 1, 1, 14;
   /*  rgb(0,0,0)*/
   --black: 0, 0, 0;
@@ -28,21 +28,20 @@
   --gray-500: 222, 226, 230;
   /* rgb(248, 249, 250) */
   --white: 248, 249, 250;
-
-  /* rgb(135,20,255) */
-  --purple: 135, 20, 255;
-  /* rgb(0,122,255) */
-  --blue: 0, 122, 255;
-  /* rgb(53, 182, 210) */
-  --bright-blue: 53, 182, 210;
-  /* rgb(82, 195, 90) */
-  --green: 82, 195, 90;
-  /* rgb(245, 193, 68) */
-  --yellow: 245, 193, 68;
-  /* rgb(241, 106, 35) */
-  --orange: 241, 106, 35;
   /* rgb(245, 62, 61) */
   --red: 245, 62, 61;
+  /* rgb(241, 106, 35) */
+  --orange: 241, 106, 35;
+  /* rgb(245, 193, 68) */
+  --yellow: 245, 193, 68;
+  /* rgb(82, 195, 90) */
+  --green: 82, 195, 90;
+  /* rgb(53, 182, 210) */
+  --bright-blue: 53, 182, 210;
+  /* rgb(0,122,255) */
+  --blue: 0, 122, 255;
+  /* rgb(135,20,255) */
+  --purple: 135, 20, 255;
 
   --def-transition: 350ms;
   --err-transition: 820ms;
