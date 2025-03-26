@@ -32,7 +32,7 @@ export class P5_ManagedCamera {
     const { x, y, z } = this.lookAtChangeVec();
     this.cam!.lookAt(x, y, z);
 
-    if (this.lookAtAnimFinished()) {
+    if (this.lookAtAnimDone()) {
       this.lookAtTgt = null;
       this.curLookAtKeyFrm = 0;
       return;
@@ -56,7 +56,7 @@ export class P5_ManagedCamera {
 
     this.cam!.lookAt(LAX, LAY, LAZ);
 
-    if (this.posAnimFinished()) {
+    if (this.posAnimDone()) {
       this.positionTgt = null;
       this.curPosKeyFrm = 0;
       return;
@@ -67,15 +67,15 @@ export class P5_ManagedCamera {
   /**
    * @method setLookAtTgt - Sets the target point for the camera to look at.
    */
-  setLookAtTgt(point: Point3D): void {
+  setLookAtTarget(point: Point3D): void {
     this.lookAtTgt = point;
     this.curLookAtKeyFrm = 0;
   }
 
   /**
-   * @method setPositionTgt - Sets the new position target point for the camera to ultimately move to
+   * @method setPositionTarget() - Sets the new position target point for the camera to ultimately move to
    */
-  setPositionTgt(point: Point3D): void {
+  setPositionTarget(point: Point3D): void {
     if (!this.cam) return;
     const sX = this.cam.eyeX;
     const sY = this.cam.eyeY;
@@ -92,6 +92,13 @@ export class P5_ManagedCamera {
   }
 
   /**
+   * @method setCurrentPosition - Sets the current position of the {@link Camera} instance from the {@link P5CanvasInstance}.
+   */
+  setCurrentPosition(x: number, y: number, z: number) {
+    this.cam.setPosition(x, y, z);
+  }
+
+  /**
    * @method setCamera - Sets the camera instance.
    */
   setCamera(cam: Camera): void {
@@ -99,16 +106,30 @@ export class P5_ManagedCamera {
   }
 
   /**
-   * @method lookAtAnimFinished() - Check if the current LookAtKeyFrm value is equivalent to the set lookAtDuration maximum
+   * @return the {@link Camera} instance from the {@link P5CanvasInstance}
    */
-  private lookAtAnimFinished(): boolean {
+  getCamera() {
+    return this.cam;
+  }
+
+  /**
+   * @method setSketch() - Sets the {@link P5CanvasInstance} the manager uses.
+   */
+  setSketch(canvas: P5CanvasInstance) {
+    this.p5 = canvas;
+  }
+
+  /**
+   * @method lookAtAnimDone() - Check if the current LookAtKeyFrm value is equivalent to the set lookAtDuration maximum
+   */
+  private lookAtAnimDone(): boolean {
     return this.curLookAtKeyFrm === this.lookAtDuration;
   }
 
   /**
-   * @method posAnimFinished() - Check if the current curPosKeyFrm value is equivalent to the set curPosDuration maximum
+   * @method posAnimDone() - Check if the current curPosKeyFrm value is equivalent to the set curPosDuration maximum
    */
-  private posAnimFinished(): boolean {
+  private posAnimDone(): boolean {
     return this.curPosKeyFrm === this.curPosDuration;
   }
 

@@ -1,4 +1,5 @@
-import { Vertex } from "../interfaces/vertex";
+import { P5_Graphset } from "./p5-graphset";
+import { P5_Vertex } from "./p5-vertex";
 import { SketchTypes } from "./sketch-types";
 
 /**
@@ -7,7 +8,10 @@ import { SketchTypes } from "./sketch-types";
 export interface SketchState {
   // React effects Sketch State
   clickToFetch: boolean;
+  
   displayBoundingBox: boolean;
+  boundingBoxStrokeWeight: number;
+  
   displayAxisOrientation: boolean;
   displayGraphStatistics: boolean;
   displaySettingsMenu: boolean;
@@ -18,7 +22,8 @@ export interface SketchState {
   zSensitivity: number;
 
   // UI Subscribeable State
-  currentlySelected: Vertex | null;
-  currentlyHovered: Vertex | null;
+  currentlySelected: P5_Vertex | null;
+  currentlyHovered: P5_Vertex | null;
   type: SketchTypes; //==> "WIKIVERSE" || "PARTICLES" || "TUTORIAL"
+  graphset: P5_Graphset;
 }
