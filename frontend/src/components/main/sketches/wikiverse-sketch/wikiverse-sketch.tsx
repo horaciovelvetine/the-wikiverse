@@ -4,42 +4,43 @@ import "./wikiverse-sketch.css";
 import { useCallback } from "react";
 
 export const WikiverseSketch = ({ sketchRef }: SketchProps) => {
-  
   const sketch: Sketch = useCallback(
     (p5: P5CanvasInstance) => {
-      
+      //? Tell the sketchManager which canvas instance is active
+      sketchRef.setCanvas(p5);
+
       //*/==> CONFIG!
-      p5.preload = () => {
-        // sketchRef.preloadFont();
-      };
+      // p5.preload = () => {
+      //   // sketchRef.preloadFont();
+      // };
       p5.setup = () => {
-        // sketchRef.createCanvas();
+        sketchRef.createCanvas();
         // sketchRef.setTextFont();
-        // sketchRef.initManagedCamera();
-        // sketchRef.initCameraPositionAtOriginVertex();
+        sketchRef.initializeManagedCamera();
+        sketchRef.setCameraLookAtOrigin();
         // sketchRef.getInitialRelatedData(makePostRequest);
       };
 
       //*/==> RESIZE!
       p5.windowResized = () => {
-        // sketchRef.handleWindowResize();
+        sketchRef.handleWindowResize();
       };
 
       //*/==> DRAW!
       p5.draw = () => {
-        // sketchRef.drawUI(); //
-        // sketchRef.drawVertices();
-        // sketchRef.drawSelectedDetails();
-        // sketchRef.drawHoveredDetails();
-        // sketchRef.advanceCanimations();
+        sketchRef.drawSketchRequiredUI(); // required first call...
+        sketchRef.drawCurrentlySelectedUI();
+        sketchRef.drawVertices();
+        sketchRef.drawCurrentlySelectedUI();
+        sketchRef.drawCurrentlyHoveredUI();
+        sketchRef.advanceCamAnimations(); // should be last call...
       };
 
       //*/==> HOVER!
       p5.mouseMoved = () => {
-        // const curMouseTarget = sketchRef.mousePositionedOnVertex();
+        const hoverTarget = sketchRef.mousePositionedOverVertex();
         // const hovIsCurSelected =
         //   sketchRef.curTgtVertMatchesCurSelectedVertex(curMouseTarget);
-
         // if (!curMouseTarget || hovIsCurSelected) {
         //   sketchRef.state.setCurHovered(null);
         // } else {
@@ -49,15 +50,13 @@ export const WikiverseSketch = ({ sketchRef }: SketchProps) => {
 
       //*/==> CLICKED (LEFT ONLY!!)
       p5.mouseClicked = () => {
-        // const clickTarget = sketchRef.mousePositionedOnVertex();
-        // if (!clickTarget) return;
-
+        const clickTarget = sketchRef.mousePositionedOverVertex();
+        if (!clickTarget) return;
         // if (sketchRef.curTgtVertMatchesCurSelectedVertex(clickTarget)) {
         //   // Deselect curSelected...
         //   sketchRef.state.setCurSelected(null);
         //   return;
         // }
-
         // sketchRef.handleNewSelectionClickTarget(clickTarget);
         // sketchRef.handleClickToFetchTarget(clickTarget, makePostRequest);
       };
@@ -81,6 +80,8 @@ export const WikiverseSketch = ({ sketchRef }: SketchProps) => {
         //     return;
         // }
       };
-    }, [sketchRef]);
+    },
+    [sketchRef]
+  );
   return <ReactP5Wrapper sketch={sketch} />;
 };
