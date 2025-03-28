@@ -2,20 +2,25 @@ import { P5CanvasInstance, ReactP5Wrapper, Sketch } from "@p5-wrapper/react";
 import { SketchProps } from "../../../../types/core";
 import "./wikiverse-sketch.css";
 import { useCallback } from "react";
+import CodeFont from "../../../../assets/fonts/CharisSIL-Regular.ttf";
+import { Font } from "p5";
 
 export const WikiverseSketch = ({ sketchRef }: SketchProps) => {
   const sketch: Sketch = useCallback(
     (p5: P5CanvasInstance) => {
       //? Tell the sketchManager which canvas instance is active
       sketchRef.setCanvas(p5);
+      let font: Font;
 
       //*/==> CONFIG!
-      // p5.preload = () => {
-      //   // sketchRef.preloadFont();
-      // };
+      p5.preload = () => {
+        font = p5.loadFont(CodeFont);
+      };
+
+      //*/==> SETUP!
       p5.setup = () => {
         sketchRef.createCanvas();
-        // sketchRef.setTextFont();
+        sketchRef.canvas().textFont(font);
         sketchRef.initializeManagedCamera();
         sketchRef.setCameraLookAtOrigin();
         // sketchRef.getInitialRelatedData(makePostRequest);
@@ -39,46 +44,51 @@ export const WikiverseSketch = ({ sketchRef }: SketchProps) => {
       //*/==> HOVER!
       p5.mouseMoved = () => {
         const hoverTarget = sketchRef.mousePositionedOverVertex();
-        // const hovIsCurSelected =
-        //   sketchRef.curTgtVertMatchesCurSelectedVertex(curMouseTarget);
-        // if (!curMouseTarget || hovIsCurSelected) {
-        //   sketchRef.state.setCurHovered(null);
-        // } else {
-        //   sketchRef.state.setCurHovered(curMouseTarget);
-        // }
+
+        const isHoverTargetValid =
+          hoverTarget && !sketchRef.targetIsAlreadySelected(hoverTarget);
+
+        sketchRef
+          .getState()
+          .setCurrentlyHovered(isHoverTargetValid ? hoverTarget : null);
       };
 
       //*/==> CLICKED (LEFT ONLY!!)
       p5.mouseClicked = () => {
         const clickTarget = sketchRef.mousePositionedOverVertex();
+        // rescue, ignores missed targets on its own by returning early
         if (!clickTarget) return;
-        // if (sketchRef.curTgtVertMatchesCurSelectedVertex(clickTarget)) {
-        //   // Deselect curSelected...
-        //   sketchRef.state.setCurSelected(null);
-        //   return;
-        // }
-        // sketchRef.handleNewSelectionClickTarget(clickTarget);
-        // sketchRef.handleClickToFetchTarget(clickTarget, makePostRequest);
+
+        if (sketchRef.targetIsAlreadySelected(clickTarget)) {
+          // de-selects the currently selected Vertex
+          sketchRef.getState().setCurrentlySelected(null);
+        } else {
+          // selects a brand new vertex
+          sketchRef.selectVertexTarget(clickTarget);
+        }
+
+        // todo ==> send request or not for clickToFetch
       };
 
       //*/==> KEYPRESS!
       p5.keyPressed = () => {
-        // switch (p5.key) {
-        //   case "?":
-        //   case "/":
-        //     console.log("SketchData@", sketchRef.graphset);
-        //     break;
-        //   case ",":
-        //   case "<":
-        //     sketchRef.state.toggleShowSketchDetailsSummary();
-        //     break;
-        //   case ".":
-        //   case ">":
-        //     sketchRef.state.toggleClickToFetch();
-        //     break;
-        //   default:
-        //     return;
-        // }
+        switch (p5.key) {
+          case "?":
+          case "/":
+            console.log("SketchType@ ", sketchRef.type());
+            console.log("SketchData@ ", sketchRef.graphset());
+            break;
+          case ",":
+          case "<":
+            sketchRef.getState().toggleDisplayGraphStatistics();
+            break;
+          case ".":
+          case ">":
+            sketchRef.getState().toggleClickToFetch();
+            break;
+          default:
+            return;
+        }
       };
     },
     [sketchRef]

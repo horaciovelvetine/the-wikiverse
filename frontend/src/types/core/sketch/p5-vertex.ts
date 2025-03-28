@@ -33,7 +33,6 @@ export class P5_Vertex implements Vertex {
     this.id = data.id;
     this.label = data.label;
     this.description = data.description;
-    
     this.position = data.position;
     this.previousPosition = null;
     this.positionKeyframe = 1;
@@ -144,9 +143,8 @@ export class P5_Vertex implements Vertex {
   private applyLabelTextSetup(p5: P5CanvasInstance) {
     p5.textSize(8);
     p5.fill("rgb(245, 245, 245)");
-    // p5.textFont(font);
     p5.textAlign(p5.CENTER, p5.CENTER);
-    p5.translate(0, -30, 0); // position over vertex (y-axis reverse in p5 by default)
+    p5.translate(0, -20, 0); // position over vertex (y-axis reverse in p5 by default)
   }
 
   /**

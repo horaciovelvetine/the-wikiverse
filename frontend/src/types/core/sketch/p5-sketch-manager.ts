@@ -134,16 +134,6 @@ export class P5_SketchManager {
    * @method drawVertices() - draw each of the vertices on screen from the {@link P5_Graphset}
    */
   public drawVertices() {
-    const graph = this.state.getGraphset();
-    if (!graph) {
-      console.log("nograph");
-      debugger;
-    }
-    if (!graph.vertices) {
-      console.log("no vertices");
-      debugger;
-    }
-
     this.state.getGraphset().vertices.forEach(vert => {
       const isCurrentSel = vert.id === this.state.getCurrentlySelected()?.id;
       const edgeCount = this.state.getGraphset().getRelatedEdges(vert).length;
@@ -190,6 +180,24 @@ export class P5_SketchManager {
       if (vert.traceRay(this.p5, this.cam.getCamera())) target = vert;
     }
     return target;
+  }
+
+  /**
+   * @return true if the provided target is present and matches an already selected {@link P5_Vertex}
+   */
+  public targetIsAlreadySelected(target: P5_Vertex | null) {
+    const selected = this.state.getCurrentlySelected();
+    return target?.id === selected?.id;
+  }
+
+  /**
+   * @method selectVertexTarget() - uses the provided {@link P5_Vertex} to set and reset needed state for currently selected.
+   */
+  public selectVertexTarget(target: P5_Vertex) {
+    // set null & doesntly allow selected to be hovered con-currently
+    this.state.setCurrentlyHovered(null);
+    this.state.setCurrentlySelected(target);
+    this.cam.setLookAtTarget(target.position);
   }
 
   /**

@@ -4,6 +4,7 @@ import { SketchTypes } from "./sketch-types";
 import { StateManager } from "./state-manager";
 import { Graphset } from "../interfaces/graphset";
 import { P5_Graphset } from "./p5-graphset";
+import { P5_Vertex } from "./p5-vertex";
 
 export class P5_ManagedState extends StateManager<SketchState> {
   constructor() {
@@ -30,8 +31,9 @@ export class P5_ManagedState extends StateManager<SketchState> {
   getClickToFetch() {
     return this.getValue("clickToFetch");
   }
-  setClickToFetch(value: boolean) {
-    this.notifySubscribers("clickToFetch", value);
+  toggleClickToFetch() {
+    const currentValue = this.getValue("clickToFetch");
+    this.notifySubscribers("clickToFetch", !currentValue);
   }
   addClickToFetchSubscriber(
     componentID: string,
@@ -101,8 +103,9 @@ export class P5_ManagedState extends StateManager<SketchState> {
   getDisplayGraphStatistics() {
     return this.getValue("displayGraphStatistics");
   }
-  setDisplayGraphStatistics(value: boolean) {
-    this.notifySubscribers("displayGraphStatistics", value);
+  toggleDisplayGraphStatistics() {
+    const currentValue = this.getValue("displayGraphStatistics");
+    this.notifySubscribers("displayGraphStatistics", !currentValue);
   }
   addDisplayGraphStatisticsSubscriber(
     componentID: string,
@@ -194,13 +197,13 @@ export class P5_ManagedState extends StateManager<SketchState> {
     return this.getValue("currentlySelected");
   }
 
-  setCurrentlySelected(value: any) {
+  setCurrentlySelected(value: P5_Vertex | null) {
     this.notifySubscribers("currentlySelected", value);
   }
 
   addCurrentlySelectedSubscriber(
     componentID: string,
-    setter: Dispatch<SetStateAction<any>>
+    setter: Dispatch<SetStateAction<P5_Vertex | null>>
   ) {
     this.addSubscriber("currentlySelected", componentID, setter);
   }
@@ -214,12 +217,12 @@ export class P5_ManagedState extends StateManager<SketchState> {
   getCurrentlyHovered() {
     return this.getValue("currentlyHovered");
   }
-  setCurrentlyHovered(value: any) {
+  setCurrentlyHovered(value: P5_Vertex | null) {
     this.notifySubscribers("currentlyHovered", value);
   }
   addCurrentlyHoveredSubscriber(
     componentID: string,
-    setter: Dispatch<SetStateAction<any>>
+    setter: Dispatch<SetStateAction<P5_Vertex | null>>
   ) {
     this.addSubscriber("currentlyHovered", componentID, setter);
   }
@@ -252,9 +255,7 @@ export class P5_ManagedState extends StateManager<SketchState> {
   getGraphset() {
     return this.getValue("graphset");
   }
-
   setGraphset(value: P5_Graphset) {
     this.initializeState("graphset", value);
-    this.notifySubscribers("graphset", value);
   }
 }
