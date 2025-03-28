@@ -5,8 +5,8 @@
  */
 //rgba(1,1,14)
 export const SKETCH_BG = (alpha: string) => `rgba(1,1,14,${alpha})`;
-// rgba(33,37,41)
-export const GRAY_100 = (alpha: string) => `rgba(33,37,41,${alpha})`;
+// rgba(22,22,25)
+export const GRAY_100 = (alpha: string) => `rgba(22,22,25,${alpha})`;
 
 // rgba(52,58,64)
 export const GRAY_200 = (alpha: string) => `rgba(52,58,64,${alpha})`;
@@ -17,8 +17,8 @@ export const GRAY_300 = (alpha: string) => `rgba(73,80,87,${alpha})`;
 // rgba(108,117,125)
 export const GRAY_400 = (alpha: string) => `rgba(108,117,125,${alpha})`;
 
-// rgba(222,226,230)
-export const GRAY_500 = (alpha: string) => `rgba(222,226,230,${alpha})`;
+// rgba(206,212,218)
+export const GRAY_500 = (alpha: string) => `rgba(206,212,218,${alpha})`;
 
 // rgba(248,249,250)
 export const WHITE = (alpha: string) => `rgba(248,249,250,${alpha})`;
