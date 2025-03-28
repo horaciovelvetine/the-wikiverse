@@ -1,7 +1,26 @@
 @import url("./horizontal-shake-animation.css");
 
+@font-face {
+  font-family: "Source Code Pro";
+  src: url("./SourceCodePro-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  src: url("./SourceCodePro-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+}
+
 :root {
-  font-family: monospace;
+  font-family: "Source Code Pro", Inter, system-ui, Avenir, Helvetica, Arial,
+    sans-serif;
+}
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   color-scheme: light dark;
 
   font-synthesis: none;
