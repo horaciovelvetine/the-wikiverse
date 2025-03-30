@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.wikidata.wdtk.datamodel.interfaces.EntityDocument;
 import org.wikidata.wdtk.wikibaseapi.WbSearchEntitiesResult;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 
@@ -65,13 +65,30 @@ public class WikidataFetchBroker {
    * Attempts to find any matching Entity which in some way matches the provided query
    * 
    * @param query - the phrase used to search for matches using the Wikidata API provided .searchEntities()
-   * @return a list of {@link WbSearchEntitiesResult}, or an Error pertaining  
+   * @return a list of {@link WbSearchEntitiesResult}, or an Error detailing an encountered issue
    */
   public Either<WikiverseError, List<WbSearchEntitiesResult>> fetchSearchResultsByAnyMatch(String query) {
     return logger.log("Fetching Wikidata search results for: " + query,
         () -> fetchWithApiUnavailableErrorHandler(() -> fetcher.searchEntities(query, wikiLangKey))
             .flatMap(res -> this.handleSearchedEntitiesResults(res, query)));
   }
+
+  /**
+   * Attempts to find an EntityDocument for the provided targetID value.
+   * 
+   * @param targetID - should be a 'QID' - which is the expected format for Wikidata Entities.
+   * @return an {@link EntityDocument}, or an Error detailing an encountered issue
+   */
+  public Either<WikiverseError, EntityDocument> fetchEntityByIDMatch(String targetID) {
+    return logger.log("Fetching Wikidata search results for: " + targetID,
+        () -> fetchWithApiUnavailableErrorHandler(() -> fetcher.getEntityDocument(targetID))
+            .flatMap(res -> this.handleNoSuchEntityResults(res, targetID)));
+  }
+
+  //? PRIVATE...
+  //=====================================================================================================================>
+  //=====================================================================================================================>
+  //=====================================================================================================================>
 
   /**
   * Validates and returns the closest matching search result if it exists, else returns the appropriately instantiated Err(or)
@@ -84,6 +101,15 @@ public class WikidataFetchBroker {
     return results.isEmpty()
         ? Either.left(new WikidataServiceErr.NoMatchingResultsFound(query))
         : Either.right(results);
+  }
+
+  /**
+   * Checks the provided result from the Wikidata API for null
+   * 
+   * @return return a result match, else returns a NoSuchEntityFoundError
+   */
+  private Either<WikiverseError, EntityDocument> handleNoSuchEntityResults(EntityDocument res, String targetID) {
+    return res == null ? Either.left(new WikidataServiceErr.NoMatchingResultsFound(targetID)) : Either.right(res);
   }
 
   /**
