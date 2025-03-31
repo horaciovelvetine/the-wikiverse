@@ -75,12 +75,13 @@ public class LogfileWriter {
   public synchronized void write(String message) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true))) {
       writer.write(message);
+      print(message);
       writer.newLine();
-
       if (new File(logFile).length() > maxFileSize) {
         rotateLogFile();
       }
     } catch (IOException e) {
+      print("Failed to write to log file! " + e.getMessage());
       logger.error("Failed to write to log file: " + e.getMessage(), e);
     }
   }
@@ -92,7 +93,15 @@ public class LogfileWriter {
     try {
       Files.move(Paths.get(logFile), Paths.get(backupFile));
     } catch (IOException e) {
+      print("Failed to rotate log file: " + e.getMessage());
       logger.error("Failed to rotate log file: " + e.getMessage(), e);
     }
+  }
+
+  /**
+   * Helper to output messages to the console in tandem with the write
+   */
+  private void print(String message) {
+    System.out.println(message);
   }
 }

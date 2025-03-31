@@ -6,6 +6,8 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 import static java.lang.String.format;
 
+import java.lang.StackWalker.StackFrame;
+
 /**
  * The ProcessLogfile class is responsible for logging the execution of methods.
  * It implements the Loggable interface and provides methods to log messages
@@ -42,15 +44,15 @@ import static java.lang.String.format;
  * 
  */
 public class ProcessLogfile implements Loggable {
-  private final LogfileWriter writer;
+  private final LogfileWriter logfile;
 
   public ProcessLogfile(String logFile, int maxFileSize) {
-    this.writer = new LogfileWriter(logFile, maxFileSize);
+    this.logfile = new LogfileWriter(logFile, maxFileSize);
   }
 
   private <R> R execute(String message, Callable<R> fn) {
-    var stack = StackWalker.getInstance().walk(frames -> frames.skip(2).findFirst().orElse(null));
-    var executedBy = stack != null
+    StackFrame stack = StackWalker.getInstance().walk(frames -> frames.skip(2).findFirst().orElse(null));
+    String executedBy = stack != null
         ? format("%s.%s", stack.getClassName(), stack.getMethodName())
         : "NO_METHOD";
 
@@ -60,15 +62,14 @@ public class ProcessLogfile implements Loggable {
         message);
 
     try {
-      System.out.println(logMessage + " - START");
-      writer.write(logMessage + " - START");
+      logfile.write(logMessage + " - START");
       R result = fn.call();
-      System.out.println(logMessage + " - COMPLETED");
-      writer.write(logMessage + " - COMPLETED");
+
+      logfile.write(logMessage + " - COMPLETED");
       return result;
     } catch (Exception e) {
-      System.out.println(logMessage + " - FAILED: " + e.getMessage());
-      writer.write(logMessage + " - FAILED: " + e.getMessage());
+
+      logfile.write(logMessage + " - FAILED: " + e.getMessage());
       // throw e;
       return null;
     }
