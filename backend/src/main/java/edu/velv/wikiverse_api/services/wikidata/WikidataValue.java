@@ -101,15 +101,19 @@ public class WikidataValue implements ValueVisitor<WikidataValue> {
     return this;
   }
 
+  @Override
+  public WikidataValue visit(MonolingualTextValue value) {
+    if (value == null)
+      return nullWikidataValue();
+
+    this.value = value.getText();
+    this.context = value.getLanguageCode();
+    return this;
+  }
   //?/==> These values return a null by default as the Values aren't useful for this application
 
   @Override
   public WikidataValue visit(GlobeCoordinatesValue value) {
-    return nullWikidataValue();
-  }
-
-  @Override
-  public WikidataValue visit(MonolingualTextValue value) {
     return nullWikidataValue();
   }
 
