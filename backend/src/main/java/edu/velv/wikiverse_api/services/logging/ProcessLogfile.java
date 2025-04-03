@@ -55,7 +55,7 @@ public class ProcessLogfile {
   private <R> R execute(String message, Callable<R> fn) {
     StackFrame stack = StackWalker.getInstance().walk(frames -> frames.skip(2).findFirst().orElse(null));
     String executedBy = stack != null
-        ? format("%s.%s", stack.getClassName(), stack.getMethodName())
+        ? format("%s", stack.getMethodName())
         : "NO_METHOD";
 
     String logMessage = String.format("[%s] %s - %s",
@@ -65,12 +65,14 @@ public class ProcessLogfile {
 
     try {
       logfile.write(logMessage + " - START");
+      long startTime = System.currentTimeMillis();
       R result = fn.call();
+      long endTime = System.currentTimeMillis();
+      long duration = endTime - startTime;
 
-      logfile.write(logMessage + " - COMPLETED");
+      logfile.write(logMessage + " - COMPLETED in " + duration + " ms");
       return result;
     } catch (Exception e) {
-
       logfile.write(logMessage + " - FAILED: " + e.getMessage());
       // throw e;
       return null;

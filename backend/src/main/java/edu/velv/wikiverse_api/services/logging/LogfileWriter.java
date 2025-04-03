@@ -75,7 +75,7 @@ public class LogfileWriter {
   public synchronized void write(String message) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true))) {
       writer.write(message);
-      print(message);
+      // print(message);
       writer.newLine();
       if (new File(logFile).length() > maxFileSize) {
         rotateLogFile();
