@@ -1,5 +1,6 @@
 package edu.velv.wikiverse_api.models.core;
 
+import org.wikidata.wdtk.datamodel.implementation.ItemDocumentImpl;
 import org.wikidata.wdtk.wikibaseapi.WbSearchEntitiesResult;
 
 public class Vertex {
@@ -7,25 +8,21 @@ public class Vertex {
   private String label;
   private String description;
   private Point3D position;
-  private boolean locked;
-  private boolean fetchedEdges;
-
-  public Vertex(String id, String label, String description, Point3D position, boolean locked) {
-    setId(id);
-    setLabel(label);
-    setDescription(description);
-    setPosition(position);
-    this.locked = locked;
-    this.fetchedEdges = false;
-  }
+  private boolean locked = false;
+  private boolean fetchedEdges = false;
 
   public Vertex(WbSearchEntitiesResult result) {
     this.id = result.getTitle();
     this.label = result.getLabel();
     this.description = result.getDescription();
     this.position = new Point3D();
-    this.fetchedEdges = false;
-    this.locked = false;
+  }
+
+  public Vertex(ItemDocumentImpl itemDoc, String enLangKey) {
+    this.id = itemDoc.getEntityId().getId();
+    this.label = itemDoc.findLabel(enLangKey);
+    this.description = itemDoc.findDescription(enLangKey);
+    this.position = new Point3D();
   }
 
   public String getId() {
