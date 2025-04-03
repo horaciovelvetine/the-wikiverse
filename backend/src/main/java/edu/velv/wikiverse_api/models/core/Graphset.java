@@ -70,10 +70,6 @@ public class Graphset {
     return metadata;
   }
 
-  public void setMetadata(GraphsetMetadata metadata) {
-    this.metadata = metadata;
-  }
-
   /**
    * object storage
    */
@@ -304,6 +300,20 @@ public class Graphset {
       coordsMap.put(coords, v);
     }
     return true;
+  }
+
+  /**
+   * Helper to setup the originalQuery value on the metadata for this graphset
+   */
+  public void setOriginalQuery(String query) {
+    this.metadata.setOriginalQuery(query);
+  }
+
+  /**
+   * Helper to setup the originID value on the metadata for this graphset
+   */
+  public void setOriginID(String ID) {
+    this.metadata.setOriginID(ID);
   }
 
   /**

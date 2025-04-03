@@ -6,6 +6,8 @@ import io.vavr.control.Either;
 
 import edu.velv.wikiverse_api.models.core.*;
 import edu.velv.wikiverse_api.services.wikidata.*;
+
+import org.wikidata.wdtk.datamodel.interfaces.EntityDocument;
 import org.wikidata.wdtk.wikibaseapi.WbSearchEntitiesResult;
 
 /**
@@ -59,17 +61,43 @@ public class ClientRequest {
   }
 
   /**
-   * Get initial search results based on a provided query, responds with (always 7) search results as Vertices and an initialized Graphset.
+   * Get initial search results based on a provided query, responds with (always 7) search results as Vertices. Vertices are provided in an initialized
+   * and complete {@link Graphset} inside a {@link WikiverseRequestResponse} in order to simplify optimistically rendering the client UI.
    */
-  public Either<WikiverseError, WikiverseRequestResponse> getInitialSearchResults(String originalQuery) {
+  public Either<WikiverseError, WikiverseRequestResponse> getSearchResults(String query) {
     // stash the originalQuery value...
-    graph.getMetadata().setOriginalQuery(originalQuery);
+    graph.setOriginalQuery(query);
 
-    return wikidata.fetchSearchResultsByAnyMatch(originalQuery).fold((WikiverseError error) -> {
-      return Either.left(error);
-    }, (List<WbSearchEntitiesResult> results) -> {
-      docProc.processSearchResultEnts(results, graph);
+    return wikidata.fetchSearchResultsByAnyMatch(query).flatMap((List<WbSearchEntitiesResult> results) -> {
+      List<Vertex> vertices = docProc.processSearchResultEnts(results);
+      graph.addVerticesResults(vertices);
       return Either.right(new WikiverseRequestResponse(this));
     });
+  }
+
+  /**
+   * Builds the initial Graphset for the client using the provided query and a targetID which is used as the origin ({@link Vertex} placed at (0,0,0) 'center' of the universe).
+   * 
+   * @param query the original query 
+   */
+  public Either<WikiverseError, WikiverseRequestResponse> buildGraphsetData(String query, String targetID) {
+    graph.setOriginalQuery(query);
+    graph.setOriginID(targetID);
+
+    //? 1 gets the first EntDoc
+    //? 2 create the origin Vertex
+    Either<WikiverseError, Vertex> origin = wikidata.fetchEntityByIDMatch(targetID)
+        .flatMap((EntityDocument fetchResult) -> {
+          return docProc.createVertexFromEntity(fetchResult);
+        });
+
+    // bail...
+    if (origin.isLeft())
+      return Either.left(origin.getLeft());
+
+    //? 3 add vertex back and response...
+    graph.addVertex(origin.get());
+
+    return Either.right(new WikiverseRequestResponse(this));
   }
 }
