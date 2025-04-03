@@ -12,13 +12,16 @@ import io.vavr.Tuple2;
 import java.util.Optional;
 import java.util.Set;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Central data store structure for vertices {@link Vertex}, properties {@link Property}, and edges {@link Edge}.
  * Provides a variety of utilities for handling and accessing data throughout the application. Configuration values,
  * and additional details about the Graphset itself can be found in the {@link GraphsetMetadata} attached.
  */
+
 public class Graphset {
 
   /**
@@ -55,6 +58,7 @@ public class Graphset {
   /**
    * Helper to quickly make the query accessible from the graph
    */
+  @JsonIgnore
   public String getQuery() {
     return metadata.getOriginalQuery();
   }
@@ -111,6 +115,7 @@ public class Graphset {
   /**
    * @apiNote - isEmpty() call for each Data model.
    */
+  @JsonIgnore
   public boolean isEmpty() {
     return properties.isEmpty() || vertices.isEmpty() || edges.isEmpty();
   }
@@ -128,6 +133,17 @@ public class Graphset {
     }
     if (vertData.isEmpty()) {
       vertices.add(v);
+    }
+  }
+
+  /**
+   * Adds initial list of search result Vertices (which are data incomplete w/ no edge data) to the Graphset for serving in the client.
+   * This method does not validate any overlap in the Entities as it (should...) be impossible to recieve overlapping entitiy results from 
+   * Wikidata...
+   */
+  public void addVerticesResults(List<Vertex> results) {
+    for (Vertex searchVert : results) {
+      vertices.add(searchVert);
     }
   }
 
@@ -233,6 +249,7 @@ public class Graphset {
   /**
    * @return the origin Vertex using it's properties, or null if none is found
    */
+  @JsonIgnore
   public Vertex getOriginVertex() {
     return vertices.stream()
         .filter(v -> v.getId().equals(metadata.getOriginID()))
