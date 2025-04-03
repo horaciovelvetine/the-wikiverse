@@ -19,8 +19,8 @@ public class WikidataValue implements ValueVisitor<WikidataValue> {
   public String value;
 
   /**
-   * Provide additionalo context to the string value stored in value. For ValueType.Quantity this is the IRI to the unit {@link ItemDocument},
-       * for ValueType.DATE_TIME this is the IRI for the ItemID correlated to this time inside the Wikidata API.
+   * Provide additional context to the string value stored in value. For ValueType.Quantity this is the IRI to the unit {@link ItemDocument},
+   * for ValueType.DATE_TIME this is the IRI for the ItemID correlated to this time inside the Wikidata API.
    */
   public String context;
   /**
@@ -52,16 +52,14 @@ public class WikidataValue implements ValueVisitor<WikidataValue> {
   }
 
   //==> Begin Value Visitor Overrides
-  //==> Begin Value Visitor Overrides
-  //==> Begin Value Visitor Overrides
 
   @Override
   public WikidataValue visit(EntityIdValue value) {
     if (value == null)
       return nullWikidataValue();
 
-    this.value = value.getId();
-    this.context = value.getSiteIri();
+    this.value = value.getId() != null ? value.getId() : "";
+    this.context = value.getSiteIri() != null ? value.getSiteIri() : "";
     this.type = ValueType.ENTITY_ID;
 
     return this;
@@ -72,8 +70,8 @@ public class WikidataValue implements ValueVisitor<WikidataValue> {
     if (value == null)
       return nullWikidataValue();
 
-    this.value = value.toString();
-    this.context = value.getPreferredCalendarModel();
+    this.value = value.toString() != null ? value.toString() : "";
+    this.context = value.getPreferredCalendarModel() != null ? value.getPreferredCalendarModel() : "";
     this.type = ValueType.DATE_TIME;
 
     return this;
@@ -84,8 +82,8 @@ public class WikidataValue implements ValueVisitor<WikidataValue> {
     if (value == null)
       return nullWikidataValue();
 
-    this.value = value.getString();
-    this.context = null;
+    this.value = value.getString() != null ? value.getString() : "";
+    this.context = "";
     this.type = ValueType.STRING;
     return this;
   }
@@ -95,8 +93,8 @@ public class WikidataValue implements ValueVisitor<WikidataValue> {
     if (value == null)
       return nullWikidataValue();
 
-    this.value = value.toString();
-    this.context = value.getUnitItemId().getIri();
+    this.value = value.toString() != null ? value.toString() : "";
+    this.context = value.getUnitItemId() != null && value.getUnitItemId().getIri() != null ? value.getUnitItemId().getIri() : "";
     this.type = ValueType.QUANTITY;
     return this;
   }
@@ -106,11 +104,10 @@ public class WikidataValue implements ValueVisitor<WikidataValue> {
     if (value == null)
       return nullWikidataValue();
 
-    this.value = value.getText();
-    this.context = value.getLanguageCode();
+    this.value = value.getText() != null ? value.getText() : "";
+    this.context = value.getLanguageCode() != null ? value.getLanguageCode() : "";
     return this;
   }
-  //?/==> These values return a null by default as the Values aren't useful for this application
 
   @Override
   public WikidataValue visit(GlobeCoordinatesValue value) {
@@ -126,9 +123,9 @@ public class WikidataValue implements ValueVisitor<WikidataValue> {
    * Helper to set the needed NULL values when data is found to be NULL from the Wikidata API. 
    */
   private WikidataValue nullWikidataValue() {
-    this.value = null;
+    this.value = "";
+    this.context = "";
     this.type = ValueType.NULL;
     return this;
   }
-
 }
