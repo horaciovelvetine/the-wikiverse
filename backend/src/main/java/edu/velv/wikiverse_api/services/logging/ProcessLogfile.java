@@ -17,6 +17,9 @@ import java.lang.StackWalker.StackFrame;
  * It logs the start, completion, and failure of method executions along with
  * timestamps and the method name that initiated the logging.
  * 
+ *  Credit to Roman Glushach for the writeup/code for this process logger which was adapted to work here
+ * <a href="https://romanglushach.medium.com/java-rest-api-logging-best-practices-and-guidelines-bf5982ee4180"/>
+ * 
  * <p>Example usage:
  * <pre>
  * {@code
@@ -39,11 +42,10 @@ import java.lang.StackWalker.StackFrame;
  * @param logFile The path to the log file.
  * @param maxFileSize The maximum size of the log file.
  * 
- * @see Loggable
  * @see LogfileWriter
  * 
  */
-public class ProcessLogfile implements Loggable {
+public class ProcessLogfile {
   private final LogfileWriter logfile;
 
   public ProcessLogfile(String logFile, int maxFileSize) {
@@ -75,7 +77,6 @@ public class ProcessLogfile implements Loggable {
     }
   }
 
-  @Override
   public void log(String message, Runnable fn) {
     execute(message, () -> {
       fn.run();
@@ -83,7 +84,6 @@ public class ProcessLogfile implements Loggable {
     });
   }
 
-  @Override
   public <R> R log(String message, Supplier<R> fn) {
     return execute(message, fn::get);
   }
