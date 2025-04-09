@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.velv.wikiverse_api.models.ClientRequest;
-import edu.velv.wikiverse_api.models.core.WikiverseRequestResponse;
+import edu.velv.wikiverse_api.models.core.RequestResponse;
 import edu.velv.wikiverse_api.models.core.WikiverseError;
 import edu.velv.wikiverse_api.services.wikidata.WikidataFetchBroker;
+import edu.velv.wikiverse_api.services.wikidata.WikidataService;
 import edu.velv.wikiverse_api.services.wikidata.WikidataDocumentProcessor;
 
 /**
@@ -24,12 +25,11 @@ import edu.velv.wikiverse_api.services.wikidata.WikidataDocumentProcessor;
 public class ClientRequestsController {
 
   /**
-  * Service field var's are autowired to use a single instance
+  * Wikidata Service provides primary access to Wikidata through the WDTK
+  * {@link https://github.com/Wikidata-Toolkit/Wikidata-Toolkit}.
   */
   @Autowired
-  private WikidataFetchBroker wikidataFetchBroker;
-  @Autowired
-  private WikidataDocumentProcessor wikidataDocProc;
+  private WikidataService wikidata;
 
   /**
    * Endpoint to check the status of the Wikiverse API.
@@ -37,7 +37,7 @@ public class ClientRequestsController {
    * @return A ResponseEntity containing a status message indicating that the API is online.
    */
   @GetMapping("api/status")
-  public ResponseEntity<WikiverseRequestResponse> getClientRequestControllerState() {
+  public ResponseEntity<RequestResponse> getClientRequestControllerState() {
     return this.buildResponseEntFromStatus("the Wikiverse API is currently online.");
   }
 
@@ -48,8 +48,8 @@ public class ClientRequestsController {
    * @return A ResponseEntity containing the search results or an error response if the request fails.
    */
   @GetMapping("api/search-results")
-  public ResponseEntity<WikiverseRequestResponse> getSearchResults(@RequestParam(required = true) String query) {
-    return new ClientRequest(wikidataFetchBroker, wikidataDocProc).getSearchResults(query)
+  public ResponseEntity<RequestResponse> getSearchResults(@RequestParam(required = true) String query) {
+    return new ClientRequest(wikidata).getEntitySearchResults(query)
         .fold(this::buildErrorResponse, this::buildSuccessResponse);
   }
 
@@ -61,9 +61,9 @@ public class ClientRequestsController {
    * @return A ResponseEntity containing the graphset data or an error response if the request fails.
    */
   @GetMapping("api/build-graphset-data")
-  public ResponseEntity<WikiverseRequestResponse> buildGraphsetData(@RequestParam(required = true) String query,
+  public ResponseEntity<RequestResponse> buildGraphsetData(@RequestParam(required = true) String query,
       @RequestParam(required = true) String targetID) {
-    return new ClientRequest(wikidataFetchBroker, wikidataDocProc).buildGraphsetData(query, targetID)
+    return new ClientRequest(wikidata).buildGraphsetFromTargetWithLayout(query, targetID)
         .fold(this::buildErrorResponse, this::buildSuccessResponse);
   }
 
@@ -73,7 +73,7 @@ public class ClientRequestsController {
    * @param response The response object to be included in the ResponseEntity.
    * @return A ResponseEntity with a 200 status if no error occurred, or a 500 status if an error is present.
    */
-  private ResponseEntity<WikiverseRequestResponse> buildSuccessResponse(WikiverseRequestResponse response) {
+  private ResponseEntity<RequestResponse> buildSuccessResponse(RequestResponse response) {
     return response.errored() ? ResponseEntity.status(500).body(response)
         : ResponseEntity.status(200).body(response);
   }
@@ -84,8 +84,8 @@ public class ClientRequestsController {
    * @param error The error object to be included in the ResponseEntity.
    * @return A ResponseEntity with a 404 status containing the error details.
    */
-  private ResponseEntity<WikiverseRequestResponse> buildErrorResponse(WikiverseError error) {
-    return ResponseEntity.status(404).body(new WikiverseRequestResponse(error));
+  private ResponseEntity<RequestResponse> buildErrorResponse(WikiverseError error) {
+    return ResponseEntity.status(404).body(new RequestResponse(error));
   }
 
   /**
@@ -94,7 +94,7 @@ public class ClientRequestsController {
    * @param statusMessage The status message to be included in the ResponseEntity.
    * @return A ResponseEntity with a 200 status containing the status message.
    */
-  private ResponseEntity<WikiverseRequestResponse> buildResponseEntFromStatus(String statusMessage) {
-    return ResponseEntity.status(200).body(new WikiverseRequestResponse(statusMessage));
+  private ResponseEntity<RequestResponse> buildResponseEntFromStatus(String statusMessage) {
+    return ResponseEntity.status(200).body(new RequestResponse(statusMessage));
   }
 }
