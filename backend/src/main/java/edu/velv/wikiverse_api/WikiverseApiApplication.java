@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 
 import edu.velv.wikiverse_api.services.wikidata.WikidataDocumentProcessor;
 import edu.velv.wikiverse_api.services.wikidata.WikidataFetchBroker;
+import edu.velv.wikiverse_api.services.wikidata.WikidataService;
 
 @SpringBootApplication
 public class WikiverseApiApplication {
@@ -29,5 +30,13 @@ public class WikiverseApiApplication {
 	@Bean
 	WikidataDocumentProcessor wikidataDocumentProcessor() {
 		return new WikidataDocumentProcessor();
+	}
+
+	/**
+	 * Wraps the above services for use and abstraction to help build complete {@link Graphset} details for layout.
+	 */
+	@Bean
+	WikidataService wikidataService() {
+		return new WikidataService();
 	}
 }
