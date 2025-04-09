@@ -32,16 +32,9 @@ public class Graphset {
   /**
    * Data storage...
    */
-  private Set<Vertex> vertices;
-  private Set<Property> properties;
-  private Set<Edge> edges;
-
-  /**
-   * Default constructor to provide an empty Graphset with useable datastruct's in place but empty, and default values used anywhere applicable.
-   */
-  public Graphset() {
-    this("");
-  }
+  private Set<Vertex> vertices = ConcurrentHashMap.newKeySet();
+  private Set<Property> properties = ConcurrentHashMap.newKeySet();
+  private Set<Edge> edges = ConcurrentHashMap.newKeySet();
 
   /**
    * Constructor used in initial requests to get search results from client. Client provides a (partially or complete) query,
@@ -50,9 +43,10 @@ public class Graphset {
   public Graphset(String originalQuery) {
     // pass originalQuery down to metadata for store...
     this.metadata = new GraphsetMetadata(originalQuery);
-    this.vertices = ConcurrentHashMap.newKeySet();
-    this.properties = ConcurrentHashMap.newKeySet();
-    this.edges = ConcurrentHashMap.newKeySet();
+  }
+
+  public Graphset() {
+    this.metadata = new GraphsetMetadata("");
   }
 
   /**
@@ -60,7 +54,7 @@ public class Graphset {
    */
   @JsonIgnore
   public String getQuery() {
-    return metadata.getOriginalQuery();
+    return metadata.getQuery();
   }
 
   /**
@@ -305,8 +299,8 @@ public class Graphset {
   /**
    * Helper to setup the originalQuery value on the metadata for this graphset
    */
-  public void setOriginalQuery(String query) {
-    this.metadata.setOriginalQuery(query);
+  public void setQuery(String query) {
+    this.metadata.setQuery(query);
   }
 
   /**

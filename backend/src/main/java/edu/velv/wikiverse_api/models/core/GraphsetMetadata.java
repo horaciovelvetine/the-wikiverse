@@ -4,8 +4,9 @@ import java.awt.Dimension;
 
 public class GraphsetMetadata {
   private Dimension dimensions;
-  private String originalQuery;
+  private String query;
   private String originID;
+  private String wikiLanguagePref = "enwiki";
   private double attractionMultiplier = 1.25;
   private double repulsionMultiplier = 0.4;
   private double layoutSize = 0.0001;
@@ -16,18 +17,18 @@ public class GraphsetMetadata {
    */
   public GraphsetMetadata(String originalQuery) {
     this.dimensions = new Dimension();
-    this.originalQuery = originalQuery;
+    this.query = originalQuery;
   }
 
   /**
    * The original query string used to generate the graphset.
    */
-  public String getOriginalQuery() {
-    return originalQuery;
+  public String getQuery() {
+    return query;
   }
 
-  public void setOriginalQuery(String originalQuery) {
-    this.originalQuery = originalQuery;
+  public void setQuery(String originalQuery) {
+    this.query = originalQuery;
   }
 
   /**
@@ -84,5 +85,16 @@ public class GraphsetMetadata {
 
   public void setDimension(Dimension dimensions) {
     this.dimensions = dimensions;
+  }
+
+  /**
+   * The preferred language for the wiki.
+   */
+  public String getWikiLanguagePref() {
+    return wikiLanguagePref;
+  }
+
+  public void setWikiLanguagePref(String wikiLanguagePref) {
+    this.wikiLanguagePref = wikiLanguagePref;
   }
 }
