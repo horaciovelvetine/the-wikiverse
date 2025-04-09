@@ -1,5 +1,6 @@
 package edu.velv.wikiverse_api.models.core;
 
+import org.wikidata.wdtk.datamodel.implementation.EntityDocumentImpl;
 import org.wikidata.wdtk.datamodel.implementation.ItemDocumentImpl;
 import org.wikidata.wdtk.wikibaseapi.WbSearchEntitiesResult;
 
@@ -7,6 +8,7 @@ public class Vertex {
   private String id;
   private String label;
   private String description;
+  private String url;
   private Point3D position;
   private boolean locked = false;
   private boolean fetchedEdges = false;
@@ -21,8 +23,17 @@ public class Vertex {
   public Vertex(ItemDocumentImpl itemDoc, String enLangKey) {
     this.id = itemDoc.getEntityId().getId();
     this.label = itemDoc.findLabel(enLangKey);
+    this.url = itemDoc.getSiteIri();
     this.description = itemDoc.findDescription(enLangKey);
     this.position = new Point3D();
+  }
+
+  public Vertex(EntityDocumentImpl entDoc) {
+    this.id = entDoc.getEntityId().getId();
+    this.label = this.id + " (no label available)";
+    this.url = entDoc.getSiteIri();
+    this.description = entDoc.getClass().getName();
+    
   }
 
   public String getId() {
@@ -47,6 +58,16 @@ public class Vertex {
     this.label = label;
   }
 
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    if (url == null || url.isEmpty()) {
+      throw new IllegalArgumentException("URL cannot be null or empty");
+    }
+    this.url = url;
+  }
   public String getDescription() {
     return description;
   }

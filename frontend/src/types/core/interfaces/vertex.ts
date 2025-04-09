@@ -33,4 +33,9 @@ export interface Vertex {
    * Weather of not the statements have been collected on this particular piece of data (indicating it is pre-fetch from Wikidata to get the full EntityDocument results)
    */
   fetchedEdges: boolean;
+
+  /**
+   * The source URL for this entity from its originating service
+   */
+  url: string;
 }
