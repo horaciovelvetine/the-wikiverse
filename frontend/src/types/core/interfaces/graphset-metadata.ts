@@ -7,12 +7,17 @@ export interface GraphsetMetadata {
   /**
    * The original query string used to generate the graphset.
    */
-  originalQuery: string;
+  query: string;
 
   /**
    * The ID of the origin node in the graphset.
    */
   originID: string;
+
+  /**
+   * Clients preferred Wikidata source language (used where applicable, defaults to "enwiki")
+   */
+  wikiLanguagePref: string;
 
   /**
    * Multiplier affecting the attraction force between nodes.
