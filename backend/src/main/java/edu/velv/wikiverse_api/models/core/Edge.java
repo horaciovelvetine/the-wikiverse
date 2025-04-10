@@ -4,6 +4,8 @@ public class Edge {
   private String sourceID;
   private String targetID;
   private String propertyID;
+  private String groupID;
+  private int groupWeight;
   private String label;
 
   /**
@@ -60,5 +62,33 @@ public class Edge {
    */
   public void setLabel(String label) {
     this.label = label;
+  }
+
+  /**
+   * Gets the group ID.
+   */
+  public String getGroupID() {
+    return groupID;
+  }
+
+  /**
+   * Sets the group ID.
+   */
+  public void setGroupID(String groupID) {
+    this.groupID = groupID;
+  }
+
+  /**
+   * Gets the group weight.
+   */
+  public int getGroupWeight() {
+    return groupWeight;
+  }
+
+  /**
+   * Sets the group weight.
+   */
+  public void setGroupWeight(int groupWeight) {
+    this.groupWeight = groupWeight;
   }
 }
