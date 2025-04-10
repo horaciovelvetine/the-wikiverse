@@ -1,25 +1,29 @@
 # Excluded Wikidata Entity Details
-
 Wikidata contains a huge amount of data which is not useful to this application. The most commonly found (and excluded) comes from the 'external-id' datatype found on any 'Claim' from an 'ItemDocument'. This kind of exclusion is not the only check made to prevent irrelevant data being included in the Graphset data, and this document contains additional details about specific exclusions (often made on a per Entity basis, using ID's).
 
-## Entity ID's
-
-- [P8687](https://www.wikidata.org/wiki/Property:P8687) - "Social Media Followers" : who cares. Get off social media. 
+## Properties
+- [P8687](https://www.wikidata.org/wiki/Property:P8687) - "Social Media Followers" : Doesnt provide any helpful information
 - [P143](https://www.wikidata.org/wiki/Property:P143) - "imported from Wikimedia project" : for references to other Wikimedia sites generically
-- [P1748](https://www.wikidata.org/wiki/Property:P1748) - "NCI Thesaurus ID" : identifier in the United States National Cancer Institute Thesaurus (external ID essentially)
 - [P11889](https://www.wikidata.org/wiki/Property:P11889) - "autosuggest value" : autocomplete not needed inside of static data
 - [P1424](https://www.wikidata.org/wiki/Property:P1424) - "topic's main tempalte" : Wikidata internal page template source
 - [P11527](https://www.wikidata.org/wiki/Property:P11527) - "applies to use with property" : qualifier property to refer to a Property entity. This may be revisatable but is otherwise mostly used to communicate "example's" internally in Wikidata and not useful for exploring data. 
 - [P5008](https://www.wikidata.org/wiki/Property:P5008) - "on focus list of Wikimedia project" : internal Wikimedia marker which "does not add notability"
 - [P1889](https://www.wikidata.org/wiki/Property:P1889) - "different from" : confusing orientationally to display in the Wikiverse, exclude for clarity
 - [P813](https://www.wikidata.org/wiki/Property:P813) - "retrieved" : referring to the date or point in time the information was pulled from a source
-- [P214](https://www.wikidata.org/wiki/Property:P214) - "VIAF cluster ID" : external ID
 - [P213](https://www.wikidata.org/wiki/Property:P213) - "ISNI" : international standard name identifier for an identity external ID
 - [P227](https://www.wikidata.org/wiki/Property:P227) - "GND ID" : identifier for an international authority file external ID
-- [P244](https://www.wikidata.org/wiki/Property:P244) - "Library of congress authority ID" : external ID
 - [P268](https://www.wikidata.org/wiki/Property:P268) - "stated in" : used in reference fields for recording external IDs
+- [P461](https://www.wikidata.org/wiki/Property:P461) - "opposite of" : confusing juxtaposition to have opposite info on-screen
 - [P1006](https://www.wikidata.org/wiki/Property:P1006) - "Nationale Thesaurus voor Auteursnamen ID" : Dutch National Thesaurus for author names
+- [P2959](https://www.wikidata.org/wiki/Property:P2959) - "permanent duplicate item" : duplicated internally for language overlap reasons
+- [P78](https://www.wikidata.org/wiki/Property:P78) - "top-level Internet domain" : Internaet domain name system top level code, and a string property
+- [P5323](https://www.wikidata.org/wiki/Property:P5323) - "attested in" : for reference materials
+- [P6104](https://www.wikidata.org/wiki/Property:P6104) - "maintained by WikiProject" : this item has item or details maintained by a WikiProject, internal and uneeded.
+
+## External IDs
 - [P1711](https://www.wikidata.org/wiki/Property:P1711) - "British Museum person or institution ID" : external ID
+- [P244](https://www.wikidata.org/wiki/Property:P244) - "Library of congress authority ID" : external ID
+- [P214](https://www.wikidata.org/wiki/Property:P214) - "VIAF cluster ID" : external ID
 - [P648](https://www.wikidata.org/wiki/Property:P648) - "Open Library ID" : external ID
 - [P1315](https://www.wikidata.org/wiki/Property:P1315) - "NLA Trove peopld ID" : external ID for Austrailian Library
 - [P2163](https://www.wikidata.org/wiki/Property:P2163) - "FAST ID" - external ID
@@ -59,25 +63,25 @@ Wikidata contains a huge amount of data which is not useful to this application.
 - [P6058](https://www.wikidata.org/wiki/Property:P6058) - "Larousse ID" : external ID
 - [P646](https://www.wikidata.org/wiki/Property:P646) - "Freebase ID" : external ID
 - [P5869](https://www.wikidata.org/wiki/Property:P5869) - "model item" : external ID
-- [P461](https://www.wikidata.org/wiki/Property:P461) - "opposite of" : confusing juxtaposition to have opposite info on-screen
 - [P4666](https://www.wikidata.org/wiki/Property:P4666) - "CineMagia person ID" : external ID
 - [P345](https://www.wikidata.org/wiki/Property:P345) - "IMDb ID" : external ID
 - [P2604](https://www.wikidata.org/wiki/Property:P2604) - "Kinopoisk person ID" : external ID
 - [P5007](https://www.wikidata.org/wiki/Property:P5007) - "Behind The Voice Actors person ID" : external ID
 - [P8042](https://www.wikidata.org/wiki/Property:P8402) - "open data portal" : external ID
-- [P2959](https://www.wikidata.org/wiki/Property:P2959) - "permanent duplicate item" : duplicated internally for language overlap reasons
-- [P78](https://www.wikidata.org/wiki/Property:P78) - "top-level Internet domain" : Internaet domain name system top level code, and a string property
-- [P5323](https://www.wikidata.org/wiki/Property:P5323) - "attested in" : for reference materials
-- [P6104](https://www.wikidata.org/wiki/Property:P6104) - "maintained by WikiProject" : this item has item or details maintained by a WikiProject, internal and uneeded.
+- [P1748](https://www.wikidata.org/wiki/Property:P1748) - "NCI Thesaurus ID" : identifier in the United States National Cancer Institute Thesaurus (external ID essentially)
 
-
-
+## Internal Wikidata Entities
 - [Q19478619](https://www.wikidata.org/wiki/Q19478619) - "metaclass" : a class which has instances that are all themselves classes, a sort of internal grouping to define metaclasses inside wikidata
 - [Q4167836](https://www.wikidata.org/wiki/Q4167836) - "Wikimedia category" : the item entity page for the also excluded P31, meta structure inclusion would just confuse
 - [Q17442446](https://www.wikidata.org/wiki/Q17442446) - "Wikimedia internal item" : internal Wikimedia stuff omitted for clarity
 - [Q11266439](https://www.wikidata.org/wiki/Q11266439) - "Wikimedia template" : internal Wikimedia template, not useful info here.
 
-### Revisiting Previously Excluded Values
+### Still in Progress
+
+The below headings contain special cases which are subject to change w/ devlopments to the new algo & will be revistited.
+
+### Previous Values which May Be Subject to Planned Process Changes:
+
 P1343 ==> described by source
 P935 ==> commons gallery pages name related to item
 P3744 ==> number of subscribers
@@ -93,8 +97,7 @@ P1151 ==> topics main wikimedia portal
 [Q64358054](https://www.wikidata.org/wiki/Q64358054) ==> example disambig page
 [Q7265345](https://www.wikidata.org/wiki/Q7265345) ==> ditto ambig page
       
-      
-### Original List Remaining Checks
+### Originally excluded fractional Entities
 Practice of an extreme prejudice would prevent any and all of these. If label is missing, or description, or any piece of important info means excluding the entity 
 
 Q59522350 ==> (no en link would exclude this)
@@ -106,8 +109,6 @@ Q9142221 ==> (no en link...)
 Q1333788 ==> no en link
 Q42896194 ==> no en link
 Q128893813 ==> no en link
-(All of the above could also likely work by grabbing the often null label values (using language key) to exclude information which wouldnt be readable)
-
 Q19657373 ==> no en link/en label
 Q12039615 ==> no en link/en label (but does have a description...)
 Q57385793 ==> no links whatsoever 
