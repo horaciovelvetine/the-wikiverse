@@ -10,7 +10,21 @@ import org.wikidata.wdtk.datamodel.interfaces.UnsupportedValue;
 import org.wikidata.wdtk.datamodel.interfaces.ValueVisitor;
 
 /**
- * A "Visitor" class for reading values from (mostly {@link Snak}'s) from the Wikidata API and WikidataToolkit.
+ * Represents a value from Wikidata along with its context and type.
+ * This class implements the ValueVisitor interface to handle different types of Wikidata values.
+ * 
+ * <p>The class stores three main pieces of information:
+ * <ul>
+ *   <li>value - The actual value from Wikidata (e.g. entity ID, text, etc)</li>
+ *   <li>context - Additional contextual information (e.g. language code, URL)</li>
+ *   <li>type - The type of value being stored, as defined in {@link ValueType}</li>
+ * </ul>
+ * 
+ * <p>When visiting unsupported or null values, the class will return a null WikidataValue
+ * with empty strings for value and context, and type set to {@code ValueType.NULL}.
+ *
+ * @see org.wikidata.wdtk.datamodel.interfaces.ValueVisitor
+ * @see ValueType
  */
 public class WikidataValue implements ValueVisitor<WikidataValue> {
   /**
@@ -32,7 +46,7 @@ public class WikidataValue implements ValueVisitor<WikidataValue> {
    * All the possible (known) value subtypes from Wikidata
    */
   public enum ValueType {
-    STRING, DATE_TIME, ENTITY_ID, QUANTITY, NULL
+    STRING, DATE_TIME, ENTITY_ID, QUANTITY, NULL, MONOLANG
   }
 
   public String value() {
@@ -70,7 +84,8 @@ public class WikidataValue implements ValueVisitor<WikidataValue> {
     if (value == null)
       return nullWikidataValue();
 
-    this.value = value.toString() != null ? value.toString() : "";
+    this.value = value.getYear() + "-" + value.getMonth() + "-" + value.getDay() + " (" + value.getHour() + ":"
+        + value.getMinute() + ":" + value.getSecond() + ")";
     this.context = value.getPreferredCalendarModel() != null ? value.getPreferredCalendarModel() : "";
     this.type = ValueType.DATE_TIME;
 
@@ -94,7 +109,9 @@ public class WikidataValue implements ValueVisitor<WikidataValue> {
       return nullWikidataValue();
 
     this.value = value.toString() != null ? value.toString() : "";
-    this.context = value.getUnitItemId() != null && value.getUnitItemId().getIri() != null ? value.getUnitItemId().getIri() : "";
+    this.context = value.getUnitItemId() != null && value.getUnitItemId().getIri() != null
+        ? value.getUnitItemId().getIri()
+        : "";
     this.type = ValueType.QUANTITY;
     return this;
   }
@@ -106,6 +123,7 @@ public class WikidataValue implements ValueVisitor<WikidataValue> {
 
     this.value = value.getText() != null ? value.getText() : "";
     this.context = value.getLanguageCode() != null ? value.getLanguageCode() : "";
+    this.type = ValueType.MONOLANG;
     return this;
   }
 
@@ -128,4 +146,14 @@ public class WikidataValue implements ValueVisitor<WikidataValue> {
     this.type = ValueType.NULL;
     return this;
   }
+
+  @Override
+  public String toString() {
+    return "WikidataValue{" +
+        "value='" + value + '\'' +
+        ", context='" + context + '\'' +
+        ", type=" + type +
+        '}';
+  }
+
 }
