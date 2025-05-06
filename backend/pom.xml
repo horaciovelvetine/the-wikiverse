@@ -13,8 +13,6 @@
 	<artifactId>velv</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>wikiverse-api</name>
-	<description>API Backend for the Wikiverse</description>
-	<url/>
 	<licenses>
 		<license/>
 	</licenses>
@@ -32,23 +30,22 @@
 		<wikidata.toolkit.version>0.14.7</wikidata.toolkit.version>
 	</properties>
 	<dependencies>
-
+		<!-- Spring Boot Starters -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 
+		<!-- JavaEE API -->
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
@@ -56,25 +53,24 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- Utilities -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>33.2.1-jre</version>
 		</dependency>
-
 		<dependency>
 			<groupId>io.vavr</groupId>
 			<artifactId>vavr</artifactId>
 			<version>0.10.4</version>
 		</dependency>
 
-		<!-- WIKIDATA TOOLKIT IMPORTS -->
+		<!-- Wikidata Toolkit -->
 		<dependency>
 			<groupId>org.wikidata.wdtk</groupId>
 			<artifactId>wdtk-datamodel</artifactId>
 			<version>${wikidata.toolkit.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.wikidata.wdtk</groupId>
 			<artifactId>wdtk-wikibaseapi</artifactId>
