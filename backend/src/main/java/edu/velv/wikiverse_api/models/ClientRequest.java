@@ -16,7 +16,6 @@ public class ClientRequest {
    * {@link Vertex} - vertices
    * {@link Property} - properties
    * {@link Edge} - edges
-   * {@link GraphsetMetadata} - details about the Graph (dimensions, query, origin, etc...)
    */
   public Graphset graph;
 
@@ -25,6 +24,11 @@ public class ClientRequest {
    * partial or incomplete, and include some text details as to why.
    */
   public WikiverseError error;
+
+  /**
+   * Metadata about the request, including the query, origin, and dimensions
+   */
+  public RequestMetadata metadata;
 
   /**
    * Access to the primary layout functionality of the application. To be performant each layout is instanced since it relies on two 
@@ -53,6 +57,7 @@ public class ClientRequest {
    * and complete {@link Graphset} inside a {@link RequestResponse} in order to simplify optimistically rendering the client UI.
    */
   public Either<WikiverseError, RequestResponse> getEntitySearchResults(String query) {
+    this.metadata.setQuery(query);
     return wikidata.getSearchResultsByAnyMatch(query).flatMap((Graphset data) -> {
       this.graph = data;
       return Either.right(new RequestResponse(this));
@@ -65,6 +70,9 @@ public class ClientRequest {
    * @param query the original query 
    */
   public Either<WikiverseError, RequestResponse> buildGraphsetFromTargetWithLayout(String query, String targetID) {
+    this.metadata.setQuery(query);
+    this.metadata.setOriginID(targetID);
+
     return wikidata.buildGraphsetFromTargetID(targetID, query).flatMap((data) -> {
       this.graph = data;
       // TODO - delegate and initialize layout

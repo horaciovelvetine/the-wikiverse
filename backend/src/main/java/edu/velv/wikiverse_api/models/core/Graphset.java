@@ -23,46 +23,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 
 public class Graphset {
-
-  /**
-   * Details about the Graphset including the origin, query and constants which are takent from the client to calcualte layout
-   */
-  private GraphsetMetadata metadata;
-
   /**
    * Data storage...
    */
   private Set<Vertex> vertices = ConcurrentHashMap.newKeySet();
   private Set<Property> properties = ConcurrentHashMap.newKeySet();
   private Set<Edge> edges = ConcurrentHashMap.newKeySet();
-
-  /**
-   * Constructor used in initial requests to get search results from client. Client provides a (partially or complete) query,
-   * results are provided in a list prior to initiating a sketch, and a subsequent request uses that ID to fill out an initial Graphset.
-   */
-  public Graphset(String originalQuery) {
-    // pass originalQuery down to metadata for store...
-    this.metadata = new GraphsetMetadata(originalQuery);
-  }
-
-  public Graphset() {
-    this.metadata = new GraphsetMetadata("");
-  }
-
-  /**
-   * Helper to quickly make the query accessible from the graph
-   */
-  @JsonIgnore
-  public String getQuery() {
-    return metadata.getQuery();
-  }
-
-  /**
-   * data about the graphset itself including origin, and values used to calculate the overall layout.
-   */
-  public GraphsetMetadata getMetadata() {
-    return metadata;
-  }
 
   /**
    * object storage
@@ -94,10 +60,10 @@ public class Graphset {
   /**
    * @apiNote - unlocks each vertex, excluding the origin.
    */
-  public void unlockAll() {
+  public void unlockAll(String originID) {
     for (Vertex vert : vertices) {
       // skip the origin... should always be '[0,0,0]'
-      if (vert.getId() != metadata.getOriginID())
+      if (vert.getId() != originID)
         vert.unlock();
     }
   }
@@ -240,9 +206,9 @@ public class Graphset {
    * @return the origin Vertex using it's properties, or null if none is found
    */
   @JsonIgnore
-  public Vertex getOriginVertex() {
+  public Vertex getOriginVertex(String originID) {
     return vertices.stream()
-        .filter(v -> v.getId().equals(metadata.getOriginID()))
+        .filter(v -> v.getId().equals(originID))
         .findFirst()
         .orElse(null);
   }
@@ -294,20 +260,6 @@ public class Graphset {
       coordsMap.put(coords, v);
     }
     return true;
-  }
-
-  /**
-   * Helper to setup the originalQuery value on the metadata for this graphset
-   */
-  public void setQuery(String query) {
-    this.metadata.setQuery(query);
-  }
-
-  /**
-   * Helper to setup the originID value on the metadata for this graphset
-   */
-  public void setOriginID(String ID) {
-    this.metadata.setOriginID(ID);
   }
 
   /**

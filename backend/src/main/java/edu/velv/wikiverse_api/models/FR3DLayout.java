@@ -14,7 +14,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 import edu.velv.wikiverse_api.models.core.Point3D;
-import edu.velv.wikiverse_api.models.core.GraphsetMetadata;
+import edu.velv.wikiverse_api.models.core.RequestMetadata;
 import edu.velv.wikiverse_api.models.core.Vertex;
 import edu.velv.wikiverse_api.models.core.WikiverseError;
 import edu.velv.wikiverse_api.models.core.Edge;
@@ -196,7 +196,7 @@ public class FR3DLayout {
    */
   private void initializeLayoutConstants() {
     curIteration = 0;
-    GraphsetMetadata meta = this.request.graph.getMetadata();
+    RequestMetadata meta = this.request.metadata;
     temperature = meta.getDimensions().getWidth() / tempMult;
     forceConst = Math
         .sqrt(meta.getDimensions().getHeight() * meta.getDimensions().getWidth()
@@ -214,21 +214,22 @@ public class FR3DLayout {
   */
   private void scaleDimensionsToGraphsetSize() {
     Graphset graph = this.request.graph;
+    Dimension dims = this.request.metadata.getDimensions();
 
     // starting dimensions
-    int startWidth = (int) graph.getMetadata().getDimensions().getWidth();
-    int startHeight = (int) graph.getMetadata().getDimensions().getHeight();
+    int startWidth = (int) dims.getWidth();
+    int startHeight = (int) dims.getHeight();
     int startDepth = (int) this.maxDim();
     // starting density
     int vertCount = graph.getVertices().size() > 0 ? graph.getVertices().size() : 1;
     double startVol = startDepth * startHeight * startWidth;
     double startDens = (vertCount * Math.pow(20, 3) / startVol);
-    // scaling
-    double scale = Math.cbrt(startDens / graph.getMetadata().getLayoutSize());
+    // scaling (uses metadata.layoutSize from the client to determine the size of the layout)
+    double scale = Math.cbrt(startDens / this.request.metadata.getLayoutSize());
     int scWidth = (int) Math.ceil(startWidth * scale);
     int scHeight = (int) Math.ceil(startHeight * scale);
 
-    graph.getMetadata().setDimension(new Dimension(scWidth, scHeight));
+    this.request.metadata.setDimensions(new Dimension(scWidth, scHeight));
   }
 
   /**
@@ -239,7 +240,7 @@ public class FR3DLayout {
   */
   private void initializeWithRandomLocations() {
     Function<Vertex, Point3D> randomizer = new RandomPoint3D<>(
-        this.request.graph.getMetadata().getDimensions());
+        this.request.metadata.getDimensions());
 
     Function<Vertex, Point3D> chain = Functions.<Vertex, Point3D, Point3D>compose(new Function<Point3D, Point3D>() {
       public Point3D apply(Point3D input) {
@@ -277,7 +278,7 @@ public class FR3DLayout {
    * Gets the largest of the two Dimensions (used for a depth (Z) value throghout app)
    */
   private double maxDim() {
-    Dimension dims = this.request.graph.getMetadata().getDimensions();
+    Dimension dims = this.request.metadata.getDimensions();
     return Math.max(dims.getWidth(), dims.getHeight());
   }
 
@@ -400,7 +401,7 @@ public class FR3DLayout {
   * Clamps the given value to the dimensions and return a new Point inside the dimensions boundaries
   */
   private Point3D clampNewPositionsToDimensions(double newX, double newY, double newZ) {
-    Dimension dims = request.graph.getMetadata().getDimensions();
+    Dimension dims = request.metadata.getDimensions();
 
     double maxX = dims.getWidth();
     double maxY = dims.getHeight();

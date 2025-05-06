@@ -2,7 +2,7 @@ package edu.velv.wikiverse_api.models.core;
 
 import java.awt.Dimension;
 
-public class GraphsetMetadata {
+public class RequestMetadata {
   private Dimension dimensions;
   private String query;
   private String originID;
@@ -15,7 +15,7 @@ public class GraphsetMetadata {
    * Constructor used in initial requests to get search results from client. Client provides a (partially or complete) query,
    * results are provided in a list prior to initiating a sketch, and a subsequent request uses that ID to fill out an initial Graphset.
    */
-  public GraphsetMetadata(String originalQuery) {
+  public RequestMetadata(String originalQuery) {
     this.dimensions = new Dimension();
     this.query = originalQuery;
   }
@@ -83,7 +83,7 @@ public class GraphsetMetadata {
     return this.dimensions;
   }
 
-  public void setDimension(Dimension dimensions) {
+  public void setDimensions(Dimension dimensions) {
     this.dimensions = dimensions;
   }
 

@@ -49,7 +49,7 @@ public class WikidataService implements Mappable {
    */
   public Either<WikiverseError, Graphset> getSearchResultsByAnyMatch(String query) {
     // Initialize a new Graphset and set the query
-    Graphset dataset = new Graphset(query);
+    Graphset dataset = new Graphset();
 
     // Fetch search results from the API, convert to Vertices & return the graphset
     return api.fetchSearchResultsByAnyMatch(query)
@@ -64,8 +64,7 @@ public class WikidataService implements Mappable {
    */
   public Either<WikiverseError, Graphset> buildGraphsetFromTargetID(String targetID, String query) {
     // Preps graphset...
-    Graphset dataset = new Graphset(query);
-    dataset.setOriginID(targetID);
+    Graphset dataset = new Graphset();
 
     return api.fetchEntityByIDMatch(targetID).flatMap((EntityDocument entity) -> {
       // if the fetch is successful, create and add the vertex, then get it's related Entities...
