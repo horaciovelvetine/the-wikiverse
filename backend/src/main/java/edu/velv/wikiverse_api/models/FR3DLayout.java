@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.ConcurrentModificationException;
 import java.util.Optional;
 
+import io.vavr.Tuple2;
+
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.cache.CacheBuilder;
@@ -15,7 +17,6 @@ import edu.velv.wikiverse_api.models.core.Point3D;
 import edu.velv.wikiverse_api.models.core.GraphsetMetadata;
 import edu.velv.wikiverse_api.models.core.Vertex;
 import edu.velv.wikiverse_api.models.core.WikiverseError;
-import io.vavr.Tuple2;
 import edu.velv.wikiverse_api.models.core.Edge;
 import edu.velv.wikiverse_api.models.core.Graphset;
 
