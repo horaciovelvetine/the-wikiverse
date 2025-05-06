@@ -95,84 +95,54 @@ public class WikidataDocumentProcessor implements Mappable {
    * @return a queue of entity IDs that are related to the item
    */
   public UnfetchedWikidataQueue getRelatedEntityIDsFromItemDocument(ItemDocument doc,
-      List<FilteredEntityDetails> defaultExcludesList) {
+      WikidataEntityFilter defaultFilter) {
 
     //? create a queue to store the properties to fetch
     UnfetchedWikidataQueue queue = new UnfetchedWikidataQueue();
     List<StatementGroup> grouped = doc.getStatementGroups();
-    int groupWeightCounter = grouped.size();
+    
+    int totalGroups = grouped.size();
+    int groupWeightPosition = grouped.size();
 
     for (StatementGroup group : grouped) {
-      //TODO: back here tomorrow 
-      //? check if the group property is in the default excludes for early exit...
-      WikidataValue property = group.getProperty().accept(new WikidataValue());
-      for (FilteredEntityDetails excluded : defaultExcludesList) {
-        if (excluded.id().equals(property.value)) {
-          logger.log("Skipping group: " + group.getProperty().getId() + " property: " + property.value + " reason: "
-              + excluded.reason());
-          groupWeightCounter--;
-          continue;
-        }
+      //? Checks if the property is in the default filter.
+      if (!groupPropertyIsFiltered(group, defaultFilter)) {
 
-        //? add the property to the queue to fetch details.
-        queue.addValueToQueue(property);
-        unpackStatementGroup(group, queue, groupWeightCounter, defaultExcludesList);
-        groupWeightCounter--;
+        // Edge fetchableEdge = new Edge();
+        // edge would be set from previous processing...
+        //queue.add(fetchableEdge);
+
+        //? exit and decrement the counter.
+        groupWeightPosition--;
       }
-
-      ///////////////////////////////
     }
-
     return queue;
   }
 
   /**
-   * Unpacks a StatementGroup and adds the property and claims to the queue.
+   * Checks if a statement group property is present in the provided {@link WikidataEntityFilter}.
    * 
-   * @param group the StatementGroup to unpack
-   * @param queue the UnfetchedWikidataQueue to add the property and claims to
-   * @param groupWeightCounter the weight of the grouped statements
+   * @param group the statement group to check
+   * @param entityFilter the entity filter to use
+   * @return true if the property is filtered, false otherwise
    */
-  public void unpackStatementGroup(StatementGroup group, UnfetchedWikidataQueue queue, int groupWeightCounter,
-      List<FilteredEntityDetails> defaultExcludesList) {
+  private boolean groupPropertyIsFiltered(StatementGroup group, WikidataEntityFilter entityFilter) {
+    boolean isFiltered = entityFilter.isFiltered(group.getProperty().getId());
+    if (isFiltered) {
+      logger.log(
+          "Statement Group Skipped: " + group.getProperty().getId() + " value found in: " + entityFilter.label);
+    }
 
-    //? to provide a subject to group claims w/by
+    return isFiltered;
+  }
+
+  private void unpackStatementGroup(StatementGroup group, WikidataEntityFilter entityFilter, int groupWeight) {
+    WikidataValue property = group.getProperty().accept(new WikidataValue());
     WikidataValue subject = group.getSubject().accept(new WikidataValue());
-    for (Statement statement : group.getStatements()) {
-      unpackClaim(statement.getClaim(), queue, groupWeightCounter, subject);
+    List<Statement> statements = group.getStatements();
+
+    for (Statement statement : statements) {
+
     }
   }
-
-  /**
-   * Unpacks a Claim and adds the property and claims to the queue.
-   * 
-   * @param claim the Claim to unpack
-   * @param queue the UnfetchedWikidataQueue to add the property and claims to
-   * @param groupWeightCounter the weight of the grouped statements
-   */
-  public void unpackClaim(Claim claim, UnfetchedWikidataQueue queue, int groupWeightCounter, WikidataValue subject) {
-    if (claim.getMainSnak() == null) {
-      return;
-    }
-
-    WikidataSnak main = claim.getMainSnak().accept(new WikidataSnak());
-    // skip if the datatype is excluded
-    if (main.isNull() || excludedDataTypes.contains(main.datatype)) {
-      return;
-    }
-
-    // add checking for excluded entities here...
-    // TODO : back here tomorrow
-
-    if (main.value.type == ValueType.NULL) {
-      return;
-    }
-
-    if (main.value.type == ValueType.ENTITY_ID) {
-      // add the entityID to the queue to fetch details.
-      queue.addValueToQueue(main.value);
-    } else {
-      System.out.println(main.toString());
-    }
-  }
-}
+};

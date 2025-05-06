@@ -9,5 +9,5 @@ package edu.velv.wikiverse_api.services.wikidata;
  * @see edu.velv.wikiverse_api.models.core.Graphset
  */
 
-public record FilteredEntityDetails(String id, String label, String reason) {
+public record FilteredEntityRecord(String id, String label, String reason) {
 }

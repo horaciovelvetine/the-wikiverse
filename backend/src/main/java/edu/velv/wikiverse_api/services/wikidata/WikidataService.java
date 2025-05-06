@@ -2,17 +2,11 @@ package edu.velv.wikiverse_api.services.wikidata;
 
 import io.vavr.control.Either;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import org.wikidata.wdtk.datamodel.interfaces.EntityDocument;
 import org.wikidata.wdtk.datamodel.interfaces.ItemDocument;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 import edu.velv.wikiverse_api.models.core.Edge;
 import edu.velv.wikiverse_api.models.core.Graphset;
@@ -31,14 +25,17 @@ public class WikidataService implements Mappable {
   private WikidataDocumentProcessor docProc;
 
   /**
-   * The default list of Wikidata entities that should be excluded from processing.
+   * The logger for this service.
    */
-  private List<FilteredEntityDetails> defaultExcludesList;
-
   private ProcessLogfile logger;
 
+  /**
+   * The default list of Wikidata entities that should be excluded from processing.
+   */
+  private WikidataEntityFilter defaultFilter = new WikidataEntityFilter(
+      "data/default-filtered-wikidata-entities.json", logger, "Default Wikidata Filter");
+
   public WikidataService() {
-    this.defaultExcludesList = this.loadDefaultExcludesList();
     this.logger = new ProcessLogfile("wikidata-service.log", 10 * 1024 * 1024);
   }
 
@@ -74,7 +71,7 @@ public class WikidataService implements Mappable {
       // if the fetch is successful, create and add the vertex, then get it's related Entities...
       dataset.addVertex(docProc.createVertexFromEntityDocument(entity));
       ItemDocument itemDoc = (ItemDocument) entity;
-      UnfetchedWikidataQueue queue = docProc.getRelatedEntityIDsFromItemDocument(itemDoc, defaultExcludesList);
+      UnfetchedWikidataQueue queue = docProc.getRelatedEntityIDsFromItemDocument(itemDoc, defaultFilter);
 
       // TODO: rollover que until empty and build graphset info 
       // TODO: purge overflow data from graphset which is 'info incomplete'
@@ -82,36 +79,6 @@ public class WikidataService implements Mappable {
       return Either.right(dataset);
 
     });
-  }
-
-  /**
-   * Loads the default list of Wikidata entities that should be excluded from processing.
-   * This list is stored in a JSON file in the classpath.
-   *
-   * @return a list of {@link FilteredEntityDetails} objects representing the excluded entities
-     */
-  private List<FilteredEntityDetails> loadDefaultExcludesList() {
-    List<FilteredEntityDetails> excludedEntities = new ArrayList<>();
-
-    try {
-      JsonNode root = objectMapper.readTree(
-          new ClassPathResource("data/default-excluded-wikidata-entities.json").getInputStream());
-      JsonNode entitiesArray = root.get("default-excluded-wikidata-entities");
-
-      for (JsonNode entity : entitiesArray) {
-        String id = entity.get("id").asText();
-        String label = entity.get("label").asText();
-        String reason = entity.get("reason").asText();
-        excludedEntities.add(new FilteredEntityDetails(id, label, reason));
-      }
-    } catch (Exception e) {
-      // rolls this forward to the ProcessLogfile for this process...
-      logger.log("Failed to load default excluded entities list", () -> {
-        throw new RuntimeException("Error loading default excluded entities: " + e.getMessage(), e);
-      });
-    }
-
-    return excludedEntities;
   }
 
 }
