@@ -1,0 +1,5 @@
+export enum SketchTypes {
+  WIKIVERSE = "WIKIVERSE",
+  TUTORIAL = "TUTORIAL",
+  PARTICLES = "PARTICLES"
+}
