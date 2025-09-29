@@ -22,5 +22,13 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "_v1/app",
+    "_v1/constants",
+    "_v1/hooks",
+    "_v1/providers",
+    "_v1/types",
+    "_v1/util"
+  ]
 }
