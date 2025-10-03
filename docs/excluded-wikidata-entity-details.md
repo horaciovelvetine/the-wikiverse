@@ -1,12 +1,14 @@
 # Excluded Wikidata Entity Details
+
 Wikidata contains a huge amount of data which is not useful to this application. The most commonly found (and excluded) comes from the 'external-id' datatype found on any 'Claim' from an 'ItemDocument'. This kind of exclusion is not the only check made to prevent irrelevant data being included in the Graphset data, and this document contains additional details about specific exclusions (often made on a per Entity basis, using ID's).
 
 ## Properties
+
 - [P8687](https://www.wikidata.org/wiki/Property:P8687) - "Social Media Followers" : Doesnt provide any helpful information
 - [P143](https://www.wikidata.org/wiki/Property:P143) - "imported from Wikimedia project" : for references to other Wikimedia sites generically
 - [P11889](https://www.wikidata.org/wiki/Property:P11889) - "autosuggest value" : autocomplete not needed inside of static data
 - [P1424](https://www.wikidata.org/wiki/Property:P1424) - "topic's main tempalte" : Wikidata internal page template source
-- [P11527](https://www.wikidata.org/wiki/Property:P11527) - "applies to use with property" : qualifier property to refer to a Property entity. This may be revisatable but is otherwise mostly used to communicate "example's" internally in Wikidata and not useful for exploring data. 
+- [P11527](https://www.wikidata.org/wiki/Property:P11527) - "applies to use with property" : qualifier property to refer to a Property entity. This may be revisatable but is otherwise mostly used to communicate "example's" internally in Wikidata and not useful for exploring data.
 - [P5008](https://www.wikidata.org/wiki/Property:P5008) - "on focus list of Wikimedia project" : internal Wikimedia marker which "does not add notability"
 - [P1889](https://www.wikidata.org/wiki/Property:P1889) - "different from" : confusing orientationally to display in the Wikiverse, exclude for clarity
 - [P813](https://www.wikidata.org/wiki/Property:P813) - "retrieved" : referring to the date or point in time the information was pulled from a source
@@ -21,6 +23,7 @@ Wikidata contains a huge amount of data which is not useful to this application.
 - [P6104](https://www.wikidata.org/wiki/Property:P6104) - "maintained by WikiProject" : this item has item or details maintained by a WikiProject, internal and uneeded.
 
 ## External IDs
+
 - [P1711](https://www.wikidata.org/wiki/Property:P1711) - "British Museum person or institution ID" : external ID
 - [P244](https://www.wikidata.org/wiki/Property:P244) - "Library of congress authority ID" : external ID
 - [P214](https://www.wikidata.org/wiki/Property:P214) - "VIAF cluster ID" : external ID
@@ -71,6 +74,7 @@ Wikidata contains a huge amount of data which is not useful to this application.
 - [P1748](https://www.wikidata.org/wiki/Property:P1748) - "NCI Thesaurus ID" : identifier in the United States National Cancer Institute Thesaurus (external ID essentially)
 
 ## Internal Wikidata Entities
+
 - [Q19478619](https://www.wikidata.org/wiki/Q19478619) - "metaclass" : a class which has instances that are all themselves classes, a sort of internal grouping to define metaclasses inside wikidata
 - [Q4167836](https://www.wikidata.org/wiki/Q4167836) - "Wikimedia category" : the item entity page for the also excluded P31, meta structure inclusion would just confuse
 - [Q17442446](https://www.wikidata.org/wiki/Q17442446) - "Wikimedia internal item" : internal Wikimedia stuff omitted for clarity
@@ -96,9 +100,10 @@ P1011 ==> excluding (for qualifiers)
 P1151 ==> topics main wikimedia portal
 [Q64358054](https://www.wikidata.org/wiki/Q64358054) ==> example disambig page
 [Q7265345](https://www.wikidata.org/wiki/Q7265345) ==> ditto ambig page
-      
+
 ### Originally excluded fractional Entities
-Practice of an extreme prejudice would prevent any and all of these. If label is missing, or description, or any piece of important info means excluding the entity 
+
+Practice of an extreme prejudice would prevent any and all of these. If label is missing, or description, or any piece of important info means excluding the entity
 
 Q59522350 ==> (no en link would exclude this)
 Q32351192 ==> (no en link would exclude this)
@@ -111,7 +116,7 @@ Q42896194 ==> no en link
 Q128893813 ==> no en link
 Q19657373 ==> no en link/en label
 Q12039615 ==> no en link/en label (but does have a description...)
-Q57385793 ==> no links whatsoever 
+Q57385793 ==> no links whatsoever
 Q59521892 ==> no en label, wiki cateogry no en site  
 Q128900450 ==> no en label/link
-Q9579086 ==> no en label/link 
+Q9579086 ==> no en label/link
