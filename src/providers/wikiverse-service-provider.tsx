@@ -1,27 +1,15 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WikiverseError, WikiverseService } from "../types";
-import {
-  createContext,
-  Context,
-  ReactNode,
-  useState,
-  useContext,
-  useMemo,
-  useEffect,
-  useCallback,
-} from "react";
-
-const client = new QueryClient();
-
-const WikiverseServiceContext: Context<WikiverseService> =
-  createContext<WikiverseService>(undefined!);
+import { WikiverseError } from "../types";
+import { ReactNode, useState, useMemo, useEffect, useCallback } from "react";
+import { getWikiverseStatus } from "./api";
+import { getSearchResults } from "./api/get-search-results";
+import { WikiverseServiceContext } from "../hooks/use-wikiverse-service";
 
 interface WikiverseServiceProviderProps {
   useLocalAPI: boolean;
   children: ReactNode;
 }
 
-const WikiverseServiceProvider = ({
+export const WikiverseServiceProvider = ({
   useLocalAPI,
   children,
 }: WikiverseServiceProviderProps) => {
@@ -29,44 +17,68 @@ const WikiverseServiceProvider = ({
   const [requestPending, setRequestPending] = useState(false);
   const [requestError, setRequestError] = useState<WikiverseError | null>(null);
 
-  const apiUrl = useCallback(
-    (path: string): string => {
-      if (useLocalAPI) {
-        return `http://localhost:8080/api/${path}`;
-      }
-      console.log(`Request made to production @: ${path}`);
-      return path;
+  const URL = useMemo(() => {
+    return useLocalAPI
+      ? "http://localhost:8080/api"
+      : "https://your-production-api.com/api";
+  }, [useLocalAPI]);
+
+  /**
+   * Memoizes the URL of the Wikiverse API based on whether the local API should be used.
+   *
+   * If useLocalAPI is true, returns the localhost API URL; otherwise, returns the production API URL.
+   *
+   * @returns {string} The base URL to use for API requests.
+   */
+  const fetchSearchResults = useCallback(
+    (query: string, wikiLangTarget: string) => {
+      return getSearchResults({
+        setRequestPending,
+        setRequestError,
+        URL,
+        query,
+        wikiLangTarget,
+      });
     },
-    [useLocalAPI]
+    [setRequestPending, setRequestError, URL]
   );
 
-  useEffect(() => {}, []);
-
+  /**
+   * Memoized context value for the Wikiverse service.
+   *
+   * @property {boolean} serviceOnline - Indicates if the Wikiverse API service is online.
+   * @property {boolean} requestPending - Indicates if an API request is currently in progress.
+   * @property {WikiverseError | null} requestError - Holds error information for the most recent API request, or null if none.
+   * @property {(query: string, wikiLangTarget: string) => Promise<SearchRequest | null>} fetchSearchResults
+   *   - Function to fetch search results from the Wikiverse API using the provided query and language target.
+   */
   const contextMemo = useMemo(() => {
     return {
-      apiUrl,
       serviceOnline,
       requestPending,
-      setRequestError,
       requestError,
+      fetchSearchResults,
     };
-  }, [apiUrl, requestError, requestPending, serviceOnline]);
+  }, [fetchSearchResults, requestError, requestPending, serviceOnline]);
+
+  /**
+   * useEffect to check the Wikiverse service status on initial mount and whenever the API URL changes.
+   * Triggers a status request via getWikiverseStatus and updates serviceOnline, requestPending, and requestError states accordingly.
+   *
+   * Dependencies: [URL]
+   */
+  useEffect(() => {
+    getWikiverseStatus({
+      setRequestPending,
+      setRequestError,
+      setServiceOnline,
+      URL,
+    });
+  }, [URL]);
 
   return (
-    <QueryClientProvider client={client}>
-      <WikiverseServiceContext.Provider value={contextMemo}>
-        {children}
-      </WikiverseServiceContext.Provider>
-    </QueryClientProvider>
+    <WikiverseServiceContext.Provider value={contextMemo}>
+      {children}
+    </WikiverseServiceContext.Provider>
   );
-};
-
-export const useWikiverseService = (): WikiverseService => {
-  const context = useContext(WikiverseServiceContext);
-  if (!context) {
-    throw new Error(
-      "useWikiverseApi() error, must be used inside of the WikiverseApiProvider context component"
-    );
-  }
-  return context;
 };

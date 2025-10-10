@@ -8,6 +8,7 @@ export interface WikiverseError {
 }
 
 export type WikiverseErrorTypes =
+  | "API OFFLINE"
   | "NETWORK"
   | "VALIDATION"
   | "PROCESSING"
