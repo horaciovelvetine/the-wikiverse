@@ -1,0 +1,240 @@
+/*
+ * Modern Button Styles
+ * --------------------
+ * This file defines reusable button classes for consistent, modern UI buttons.
+ * 
+ * Classes:
+ *   .btn-modern   - Base button style with smooth transitions and a subtle shine effect on hover.
+ *   .btn-primary  - Primary button variant with a dark gradient background and white text.
+ *   .btn-glass    - Glassmorphic button variant using glass system variables for background and border.
+ *   .btn-secondary - Secondary button variant with light gradient and dark text.
+ * 
+ * Glassmorphic Button Classes:
+ *   .btn-glass-primary   - Dark glassmorphic button with transparency and blur effects.
+ *   .btn-glass-secondary - Light glassmorphic button with subtle transparency.
+ *   .btn-glass-accent    - Colored glassmorphic button with enhanced blur and saturation.
+ *   .btn-glass-ghost     - Ultra-transparent ghost button with minimal background.
+ */
+
+/*
+ * .btn-modern
+ * Base button style with rounded corners, bold font, and a shine animation on hover.
+ */
+.btn-modern {
+  position: relative;
+  overflow: hidden;
+  transition: all var(--def-transition) ease;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+/*
+ * .btn-modern::before
+ * Adds a subtle animated shine effect that slides across the button on hover.
+ */
+.btn-modern::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+/*
+ * .btn-modern:hover::before
+ * Triggers the shine animation by moving the gradient overlay across the button.
+ */
+.btn-modern:hover::before {
+  left: 100%;
+}
+
+/*
+ * .btn-primary
+ * Primary button variant with a dark gradient background and white text.
+ * Uses TailwindCSS gray colors for consistency.
+ */
+.btn-primary {
+  background: linear-gradient(
+    135deg,
+    #18181b 0%,
+    #334155 100%
+  ); /* tailwind gray-900 to slate-700 */
+  color: white;
+  box-shadow: var(--shadow-flat-md);
+}
+
+/*
+ * .btn-primary:hover
+ * Darkens the gradient and increases shadow on hover for a lifted effect.
+ * Uses TailwindCSS gray colors for consistency.
+ */
+.btn-primary:hover {
+  background: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #1e293b 100%
+  ); /* tailwind slate-900 to slate-800 */
+  box-shadow: var(--shadow-flat-lg);
+}
+
+/*
+ * .btn-glass
+ * Glassmorphic button variant using glass system variables for background, border, and blur.
+ */
+.btn-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-flat);
+}
+
+/*
+ * .btn-glass:hover
+ * Lightens the glass background and increases shadow on hover for subtle feedback.
+ */
+.btn-glass:hover {
+  background: var(--glass-bg-hover);
+  box-shadow: var(--shadow-flat-md);
+  transform: translateY(-1px);
+}
+
+/*
+ * .btn-secondary
+ * Secondary button variant based on .btn-primary with a lighter gradient and dark text.
+ */
+.btn-secondary {
+  background: linear-gradient(135deg, #e5e7eb 0%, #cbd5e1 100%);
+  color: #1f2937;
+  box-shadow: var(--shadow-flat-md);
+  border: none; /* Remove any border that could cause a line */
+  outline: none; /* Remove outline that could appear on focus/hover */
+}
+
+/*
+ * .btn-secondary:hover
+ * Slightly darkens the gradient and increases shadow on hover for a lifted effect.
+ */
+.btn-secondary:hover {
+  background: linear-gradient(135deg, #d1d5db 0%, #a1a1aa 100%);
+  box-shadow: var(--shadow-flat-lg);
+  transform: translateY(-1px);
+  border: none; /* Ensure no border appears on hover */
+  outline: none;
+}
+
+/*
+ * .btn-glass-primary
+ * Glassmorphic primary button with transparency and blur effects.
+ * Uses glass system variables for consistent transparency.
+ */
+.btn-glass-primary {
+  background: rgba(15, 23, 42, 0.7); /* slate-900 with 70% opacity */
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  box-shadow: var(--shadow-glass);
+  border-radius: 0.5rem;
+}
+
+/*
+ * .btn-glass-primary:hover
+ * Increases transparency and blur on hover for enhanced glass effect.
+ */
+.btn-glass-primary:hover {
+  background: rgba(15, 23, 42, 0.8); /* slate-900 with 80% opacity */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-glass-hover);
+  transform: translateY(-1px);
+}
+
+/*
+ * .btn-glass-secondary
+ * Glassmorphic secondary button with light transparency and subtle blur.
+ */
+.btn-glass-secondary {
+  background: rgba(255, 255, 255, 0.6); /* white with 60% opacity */
+  backdrop-filter: blur(var(--glass-blur-subtle));
+  -webkit-backdrop-filter: blur(var(--glass-blur-subtle));
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-flat);
+  border-radius: 0.5rem;
+}
+
+/*
+ * .btn-glass-secondary:hover
+ * Slightly increases opacity and blur on hover.
+ */
+.btn-glass-secondary:hover {
+  background: rgba(255, 255, 255, 0.8); /* white with 80% opacity */
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--shadow-flat-md);
+  transform: translateY(-1px);
+}
+
+/*
+ * .btn-glass-accent
+ * Glassmorphic accent button with grayscale transparency and enhanced blur.
+ * Uses Tailwind gray colors for a neutral, sophisticated appearance.
+ */
+.btn-glass-accent {
+  background: rgba(75, 85, 99, 0.2); /* gray-600 with 20% opacity */
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+  color: #374151; /* gray-700 */
+  box-shadow: 0 8px 32px rgba(75, 85, 99, 0.1);
+  border-radius: 0.5rem;
+}
+
+/*
+ * .btn-glass-accent:hover
+ * Increases color intensity and blur for more vibrant glass effect.
+ */
+.btn-glass-accent:hover {
+  background: rgba(75, 85, 99, 0.3); /* gray-600 with 30% opacity */
+  backdrop-filter: blur(26px) saturate(185%);
+  -webkit-backdrop-filter: blur(26px) saturate(185%);
+  box-shadow: 0 12px 40px rgba(75, 85, 99, 0.15);
+  transform: translateY(-1px);
+}
+
+/*
+ * .btn-glass-ghost
+ * Ultra-transparent ghost button with minimal background and strong blur.
+ */
+.btn-glass-ghost {
+  background: rgba(255, 255, 255, 0.05); /* very transparent white */
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-flat);
+  border-radius: 0.5rem;
+}
+
+/*
+ * .btn-glass-ghost:hover
+ * Slightly increases background opacity and blur for subtle feedback.
+ */
+.btn-glass-ghost:hover {
+  background: rgba(255, 255, 255, 0.1); /* slightly more opaque */
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  box-shadow: var(--shadow-flat-md);
+  transform: translateY(-1px);
+}

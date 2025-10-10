@@ -1,0 +1,25 @@
+/*
+ * Card Styles
+ * -----------
+ * This file contains custom styles for card components, focusing on modern UI patterns
+ * and smooth transitions. The styles here are designed to be used alongside the glass morphism
+ * system for a cohesive look and feel.
+ *
+ * .card-modern
+ *   - Applies a smooth transition and rounded corners to card elements.
+ *   - On hover, cards are slightly elevated and a stronger shadow is applied for depth.
+ *
+ * Usage:
+ *   Add the "card-modern" class to any container to give it a modern card appearance.
+ *   Combine with "glass-card" for glassmorphic effects.
+ */
+
+.card-modern {
+  transition: all var(--def-transition) cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0.35rem;
+}
+
+.card-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glass-hover);
+}

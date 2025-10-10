@@ -1,0 +1,244 @@
+/*
+ * Toggle Switch Styles
+ * -------------------
+ * This file defines reusable toggle switch classes for consistent, modern UI toggles.
+ * The styles follow the same design patterns as the button and card styles for consistency.
+ * 
+ * Classes:
+ *   .toggle-modern     - Base toggle switch style with smooth transitions and glassmorphic effects.
+ *   .toggle-primary    - Primary toggle variant with monochromatic colors and enhanced shadows.
+ *   .toggle-glass      - Glassmorphic toggle variant using glass system variables.
+ *   .toggle-ghost      - Ultra-transparent ghost toggle with minimal background.
+ */
+
+/*
+ * .toggle-modern
+ * Base toggle switch style with rounded corners, smooth transitions, and glassmorphic effects.
+ */
+.toggle-modern {
+  position: relative;
+  display: inline-flex;
+  height: 1.5rem; /* 24px */
+  width: 2.75rem; /* 44px */
+  align-items: center;
+  border-radius: 9999px;
+  transition: all var(--def-transition) ease;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  overflow: hidden;
+}
+
+/*
+ * .toggle-modern::before
+ * Adds a subtle animated shine effect that slides across the toggle on hover.
+ */
+.toggle-modern::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+/*
+ * .toggle-modern:hover::before
+ * Triggers the shine animation by moving the gradient overlay across the toggle.
+ */
+.toggle-modern:hover::before {
+  left: 100%;
+}
+
+/*
+ * .toggle-modern:focus
+ * Adds focus ring for accessibility.
+ */
+.toggle-modern:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(75, 85, 99, 0.5); /* gray-600 with 50% opacity */
+}
+
+/*
+ * .toggle-modern .toggle-thumb
+ * The sliding thumb element with smooth transitions and glassmorphic effects.
+ */
+.toggle-modern .toggle-thumb {
+  position: relative;
+  display: inline-block;
+  height: 1rem; /* 16px */
+  width: 1rem; /* 16px */
+  border-radius: 50%;
+  background: #6b7280; /* gray-500 - mild gray that works on both light and dark backgrounds */
+  transition: transform var(--def-transition) ease;
+  box-shadow: var(--shadow-flat-md);
+  z-index: 1;
+}
+
+/*
+ * .toggle-primary
+ * Primary toggle variant with monochromatic gradient background and enhanced shadows.
+ */
+.toggle-primary {
+  background: linear-gradient(
+    135deg,
+    #374151 0%,
+    /* gray-700 */ #1f2937 100% /* gray-800 */
+  );
+  box-shadow: var(--shadow-flat-md);
+}
+
+.toggle-primary:hover {
+  background: linear-gradient(
+    135deg,
+    #1f2937 0%,
+    /* gray-800 */ #111827 100% /* gray-900 */
+  );
+  box-shadow: var(--shadow-flat-lg);
+  transform: translateY(-1px);
+}
+
+.toggle-primary .toggle-thumb {
+  transform: translateX(1.25rem); /* 20px - moves to the right when on */
+}
+
+/*
+ * .toggle-primary:not(.toggle-on)
+ * Off state for primary toggle.
+ */
+.toggle-primary:not(.toggle-on) {
+  background: linear-gradient(
+    135deg,
+    #e5e7eb 0%,
+    /* gray-200 */ #d1d5db 100% /* gray-300 */
+  );
+  box-shadow: var(--shadow-flat);
+}
+
+.toggle-primary:not(.toggle-on):hover {
+  background: linear-gradient(
+    135deg,
+    #d1d5db 0%,
+    /* gray-300 */ #9ca3af 100% /* gray-400 */
+  );
+  box-shadow: var(--shadow-flat-md);
+}
+
+.toggle-primary:not(.toggle-on) .toggle-thumb {
+  transform: translateX(0.25rem); /* 4px - moves to the left when off */
+}
+
+/*
+ * .toggle-glass
+ * Glassmorphic toggle variant using glass system variables for background and blur.
+ */
+.toggle-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-flat);
+}
+
+.toggle-glass:hover {
+  background: var(--glass-bg-hover);
+  box-shadow: var(--shadow-flat-md);
+  transform: translateY(-1px);
+}
+
+.toggle-glass .toggle-thumb {
+  background: rgba(
+    107,
+    114,
+    128,
+    0.9
+  ); /* gray-500 with 90% opacity - mild gray for both backgrounds */
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: var(--shadow-glass);
+}
+
+.toggle-glass.toggle-on {
+  background: rgba(75, 85, 99, 0.3); /* gray-600 with 30% opacity */
+  border-color: rgba(75, 85, 99, 0.4);
+}
+
+.toggle-glass.toggle-on .toggle-thumb {
+  transform: translateX(1.25rem);
+  background: rgba(75, 85, 99, 0.9);
+}
+
+/*
+ * .toggle-ghost
+ * Ultra-transparent ghost toggle with minimal background and strong blur.
+ */
+.toggle-ghost {
+  background: rgba(255, 255, 255, 0.05); /* very transparent white */
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-flat);
+}
+
+.toggle-ghost:hover {
+  background: rgba(255, 255, 255, 0.1); /* slightly more opaque */
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  box-shadow: var(--shadow-flat-md);
+  transform: translateY(-1px);
+}
+
+.toggle-ghost .toggle-thumb {
+  background: rgba(
+    107,
+    114,
+    128,
+    0.8
+  ); /* gray-500 with 80% opacity - mild gray for both backgrounds */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-glass);
+}
+
+.toggle-ghost.toggle-on {
+  background: rgba(75, 85, 99, 0.2); /* gray-600 with 20% opacity */
+  border-color: rgba(75, 85, 99, 0.3);
+}
+
+.toggle-ghost.toggle-on .toggle-thumb {
+  transform: translateX(1.25rem);
+  background: rgba(75, 85, 99, 0.9);
+}
+
+/*
+ * .toggle-label
+ * Label styling for toggle switches to match the design system.
+ */
+.toggle-label {
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500; /* font-medium */
+  color: var(--text-primary);
+  user-select: none;
+  transition: color var(--def-transition) ease;
+}
+
+.toggle-label:hover {
+  color: var(--text-secondary);
+}
+
+/*
+ * .toggle-container
+ * Container for toggle switch and label with proper spacing.
+ */
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* gap-2 */
+}

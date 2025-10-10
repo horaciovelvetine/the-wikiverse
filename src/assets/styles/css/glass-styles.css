@@ -1,0 +1,222 @@
+/*
+ * Glass Morphism Styles
+ * ---------------------
+ * This file defines reusable glassmorphic utility classes for consistent, modern UI surfaces.
+ *
+ * Classes:
+ *   .glass         - Base glassmorphic surface with blur, border, and shadow. Subtle lift on hover.
+ *   .glass-subtle  - Lighter, more transparent glass surface for backgrounds and overlays.
+ *   .glass-card    - Glassmorphic card with smooth transitions and stronger hover elevation.
+ *   .focus-glass   - Focus ring utility for glass elements.
+ *   .glass-padding-lg - Utility for large, consistent padding on glass surfaces.
+ *
+ * Responsive:
+ *   Adjusts border-radius and padding for small screens.
+ */
+
+/*
+ * .glass
+ * Base glassmorphic surface with blur, border, and shadow.
+ * On hover, background brightens and shadow deepens for subtle lift.
+ */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 0.35rem;
+  box-shadow: var(--shadow-glass);
+  transition: all var(--def-transition) ease;
+}
+
+/*
+ * .glass:hover
+ * Brightens background and increases shadow for feedback.
+ */
+.glass:hover {
+  background: var(--glass-bg-hover);
+  box-shadow: var(--shadow-glass-hover);
+  transform: translateY(-1px);
+}
+
+/*
+ * .glass-subtle
+ * Lighter, more transparent glass surface for subtle overlays.
+ */
+.glass-subtle {
+  background: var(--glass-bg-subtle);
+  backdrop-filter: blur(var(--glass-blur-subtle));
+  -webkit-backdrop-filter: blur(var(--glass-blur-subtle));
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: 0.35rem;
+  box-shadow: var(--shadow-flat);
+  opacity: 75%;
+}
+
+/*
+ * .glass-subtle:hover
+ * Slightly brightens background and increases shadow.
+ */
+.glass-subtle:hover {
+  background: var(--glass-bg);
+  box-shadow: var(--shadow-flat-md);
+  opacity: 100%;
+}
+
+/*
+ * .glass-card
+ * Ultra-transparent, realistic glassmorphic card with strong blur and minimal border.
+ * Maximizes background blur and transparency for a "looking through glass" effect.
+ */
+.glass-card {
+  background: rgba(255, 255, 255, 0.08); /* even more transparent */
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  border: 1.5px solid rgba(255, 255, 255, 0.18); /* very subtle border */
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.14);
+  transition: all var(--def-transition) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/*
+ * .glass-card:hover
+ * Increases blur and transparency, slightly brightens, and deepens shadow for more "lift".
+ */
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.13);
+  backdrop-filter: blur(26px) saturate(185%);
+  -webkit-backdrop-filter: blur(26px) saturate(185%);
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.19);
+}
+
+/*
+ * .glass-card parent hover when child is active or focused
+ * Applies hover styles when any child element inside the parent is active or focused.
+ * Uses class-based approach to avoid interfering with HeadlessUI animations.
+ */
+.glass-card-parent:hover .glass-card {
+  background: rgba(255, 255, 255, 0.13);
+  backdrop-filter: blur(26px) saturate(185%);
+  -webkit-backdrop-filter: blur(26px) saturate(185%);
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.19);
+}
+
+/*
+ * .focus-glass:focus
+ * Focus ring utility for glass elements.
+ */
+.focus-glass:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--glass-border);
+}
+
+/*
+ * .glass-padding-lg
+ * Utility for large, consistent padding on glass surfaces.
+ */
+.glass-padding-lg {
+  padding: 2rem;
+}
+
+/*
+ * Override HeadlessUI default animations for glass-card menus
+ * Prevents off-screen animations on initial render
+ */
+[data-headlessui-state] {
+  transform: none !important;
+}
+
+/* More aggressive overrides for HeadlessUI MenuItems */
+[role="menu"] {
+  transform: none !important;
+  animation: none !important;
+  transition: opacity 200ms ease !important;
+}
+
+[data-headlessui-state="open"] {
+  transform: none !important;
+  animation: none !important;
+}
+
+[data-headlessui-state="closed"] {
+  transform: none !important;
+  animation: none !important;
+}
+
+/* Specific class for menu with no animation */
+.menu-no-animation {
+  transform: none !important;
+  animation: none !important;
+  transition: opacity 200ms ease !important;
+}
+
+.menu-no-animation[data-headlessui-state="open"] {
+  opacity: 1 !important;
+}
+
+.menu-no-animation[data-headlessui-state="closed"] {
+  opacity: 0 !important;
+}
+
+/*
+ * Responsive glass adjustments
+ * Reduces border-radius and padding on small screens for better fit.
+ */
+@media (max-width: 640px) {
+  .glass {
+    border-radius: 0.35rem;
+  }
+
+  .glass-card {
+    border-radius: 0.35rem;
+  }
+
+  .glass-padding-lg {
+    padding: 1.5rem;
+  }
+}
+
+/*
+ * .search-results-dropdown
+ * Opaque background for search results dropdown for better readability.
+ * Matches the dark theme of the main card with custom scrollbar styling.
+ */
+.search-results-dropdown {
+  background: rgba(15, 23, 42, 1); /* slate-900 */
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.14);
+  transition: all var(--def-transition) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom scrollbar styling for search results dropdown */
+.search-results-dropdown::-webkit-scrollbar {
+  width: 8px;
+}
+
+.search-results-dropdown::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.3); /* slate-900 with low opacity */
+  border-radius: 4px;
+}
+
+.search-results-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.6); /* slate-600 with medium opacity */
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-results-dropdown::-webkit-scrollbar-thumb:hover {
+  background: rgba(
+    71,
+    85,
+    105,
+    0.8
+  ); /* slate-600 with higher opacity on hover */
+}
+
+/* Firefox scrollbar styling */
+.search-results-dropdown {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(71, 85, 105, 0.6) rgba(15, 23, 42, 0.3);
+}

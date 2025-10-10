@@ -1,43 +1,64 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/*  All Site Component Styling */
+@import "./css/button-styles.css";
+@import "./css/glass-styles.css";
+@import "./css/card-styles.css";
+@import "./css/toggle-styles.css";
+@import "./css/main-body-styles.css";
+@import "./css/link-styles.css";
+/* Font imports */
 @font-face {
-  font-family: "Source Code Pro";
-  src: url("./SourceCodePro-VariableFont_wght.ttf") format("truetype");
+  font-family: "InterTight";
+  src: url("fonts/InterTight-VariableFont_wght.ttf") format("truetype");
   font-weight: 100 900;
+  font-stretch: 75% 100%;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: "Source Code Pro";
-  src: url("./SourceCodePro-Italic-VariableFont_wght.ttf") format("truetype");
+  font-family: "InterTight";
+  src: url("fonts/InterTight-Italic-VariableFont_wght.ttf") format("truetype");
   font-weight: 100 900;
+  font-stretch: 75% 100%;
   font-style: italic;
+  font-display: swap;
 }
 
 :root {
-  font-family: "Source Code Pro", Inter, system-ui, Avenir, Helvetica, Arial,
-    sans-serif;
-}
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
 
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  color-scheme: light dark;
+  /* Text colors - using Tailwind gray scale */
+  --text-primary: theme("colors.gray.900");
+  --text-secondary: theme("colors.gray.600");
+  --text-tertiary: theme("colors.gray.400");
+
+  /* Glass morphism system - using Tailwind gray with opacity */
+  --glass-bg: theme("colors.gray.100 / 70%");
+  --glass-card-bg: theme("colors.gray.200 / 30%");
+  --glass-bg-hover: theme("colors.gray.100 / 90%");
+  --glass-bg-subtle: theme("colors.gray.100 / 40%");
+  --glass-border: theme("colors.gray.200 / 20%");
+  --glass-border-subtle: theme("colors.gray.200 / 10%");
+
+  --glass-blur: 12px;
+  --glass-blur-subtle: 8px;
+
+  /* Shadow system - using Tailwind black with opacity */
+  --shadow-glass: 0 8px 32px theme("colors.black / 10%");
+  --shadow-glass-hover: 0 12px 40px theme("colors.black / 15%");
+  --shadow-flat: 0 1px 3px theme("colors.black / 10%");
+  --shadow-flat-md: 0 4px 6px theme("colors.black / 10%");
+  --shadow-flat-lg: 0 10px 15px theme("colors.black / 10%");
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --def-transition: 350ms;
-  --err-transition: 820ms;
-  /* Font Size Constants */
-  --xxs-font: clamp(0.625rem, 0.75vw, 0.875rem);
-  --xs-font: clamp(0.75rem, 1vw, 1rem);
-  --sm-font: clamp(0.875rem, 1.5vw, 1.25rem);
-  --md-font: clamp(1rem, 2vw, 1.5rem);
-  --lg-font: clamp(1.25rem, 2.5vw, 2rem);
-  --xl-font: clamp(1.5rem, 3vw, 2.5rem);
-  --xxl-font: clamp(2rem, 4vw, 3rem);
-  --h1-font: clamp(2.5rem, 5vw, 3.5rem);
+  --def-transition: 300ms;
+
+  font-family: "InterTight", sans-serif;
 }

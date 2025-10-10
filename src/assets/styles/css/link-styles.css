@@ -1,0 +1,19 @@
+/**
+ * Link Styles
+ *
+ * Styles for inline links used throughout the site.
+ * - .inline-link: Applies base color, font weight, and transition for smooth hover effect.
+ * - .inline-link:hover: Darkens color, increases font weight, and slightly lifts/enlarges the link for emphasis.
+ */
+.inline-link {
+  display: inline-flex;
+  color: #3b82f6; /* Tailwind blue-500 */
+  font-weight: 700;
+  transition-property: all;
+  transition-duration: 200ms;
+}
+.inline-link:hover {
+  color: #1d4ed8; /* Tailwind blue-700 */
+  font-weight: 800;
+  transform: translateY(-0.25rem) scale(1.05); /* -translate-y-1 & scale-105 */
+}
