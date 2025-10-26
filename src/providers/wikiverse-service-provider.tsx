@@ -1,8 +1,12 @@
 import { WikiverseError } from "../types";
 import { ReactNode, useState, useMemo, useEffect, useCallback } from "react";
-import { getWikiverseStatus } from "./api";
-import { getSearchResults } from "./api/get-search-results";
+import {
+  getWikiverseStatus,
+  getSearchResults,
+  getInitialGraphsetData,
+} from "./api";
 import { WikiverseServiceContext } from "../hooks/use-wikiverse-service";
+import { PendingRequestIndicator } from "../features";
 
 interface WikiverseServiceProviderProps {
   useLocalAPI: boolean;
@@ -17,18 +21,30 @@ export const WikiverseServiceProvider = ({
   const [requestPending, setRequestPending] = useState(false);
   const [requestError, setRequestError] = useState<WikiverseError | null>(null);
 
-  const URL = useMemo(() => {
-    return useLocalAPI
-      ? "http://localhost:8080/api"
-      : "https://your-production-api.com/api";
-  }, [useLocalAPI]);
-
   /**
    * Memoizes the URL of the Wikiverse API based on whether the local API should be used.
    *
    * If useLocalAPI is true, returns the localhost API URL; otherwise, returns the production API URL.
    *
    * @returns {string} The base URL to use for API requests.
+   */
+  const URL = useMemo(() => {
+    // TODO => Fix Production API target
+    return useLocalAPI
+      ? "http://localhost:8080/api"
+      : "https://your-production-api.com/api";
+  }, [useLocalAPI]);
+
+  /**
+  /**
+   * Fetches search results from the Wikiverse API.
+   *
+   * Initiates a request to the API using the provided query and wikiLangTarget, and
+   * manages request pending and error state.
+   *
+   * @param {string} query - The search text query.
+   * @param {string} wikiLangTarget - The target Wikipedia language project.
+   * @returns {Promise<SearchRequest|null>} Resolves with the search result data or null if an error occurs.
    */
   const fetchSearchResults = useCallback(
     (query: string, wikiLangTarget: string) => {
@@ -40,7 +56,32 @@ export const WikiverseServiceProvider = ({
         wikiLangTarget,
       });
     },
-    [setRequestPending, setRequestError, URL]
+    [URL]
+  );
+
+  /**
+   * Fetches the initial graphset data from the Wikiverse API.
+   *
+   * Initiates a request to the API with the specified targetID, wikiLangTarget, and prefers3D flag,
+   * and manages request pending and error state.
+   *
+   * @param {string} targetID - The identifier for the target Wiki entity.
+   * @param {string} wikiLangTarget - The target Wikipedia language project.
+   * @param {boolean} prefers3D - Indicates whether to prefer 3D graphset layouts.
+   * @returns {Promise<GraphsetRequest|null>} Resolves to the returned GraphsetRequest object or null if there is an error.
+   */
+  const fetchInitialGraphsetData = useCallback(
+    (targetID: string, wikiLangTarget: string, prefers3D: boolean) => {
+      return getInitialGraphsetData({
+        setRequestPending,
+        setRequestError,
+        URL,
+        targetID,
+        wikiLangTarget,
+        prefers3D,
+      });
+    },
+    [URL]
   );
 
   /**
@@ -58,8 +99,15 @@ export const WikiverseServiceProvider = ({
       requestPending,
       requestError,
       fetchSearchResults,
+      fetchInitialGraphsetData,
     };
-  }, [fetchSearchResults, requestError, requestPending, serviceOnline]);
+  }, [
+    fetchInitialGraphsetData,
+    fetchSearchResults,
+    requestError,
+    requestPending,
+    serviceOnline,
+  ]);
 
   /**
    * useEffect to check the Wikiverse service status on initial mount and whenever the API URL changes.
@@ -78,6 +126,7 @@ export const WikiverseServiceProvider = ({
 
   return (
     <WikiverseServiceContext.Provider value={contextMemo}>
+      <PendingRequestIndicator requestPending={requestPending} />
       {children}
     </WikiverseServiceContext.Provider>
   );

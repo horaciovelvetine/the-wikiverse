@@ -28,7 +28,7 @@ export async function getSearchResults({
   URL,
   query,
   wikiLangTarget,
-}: SearchResultsProps) {
+}: SearchResultsProps): Promise<SearchRequest | null> {
   setRequestPending(true);
   setRequestError(null); // Clear previous errors
 
@@ -44,6 +44,7 @@ export async function getSearchResults({
         setRequestError(data.error);
         return null; // Return null when there's an error in the response
       }
+      console.log({ label: "getSearchResults", data });
       return data;
     } else {
       // Handle HTTP error responses

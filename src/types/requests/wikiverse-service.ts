@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { WikiverseError } from "../site";
+import { GraphsetRequest } from "./graphset-request";
 import { SearchRequest } from "./search-request";
 
 export interface WikiverseService {
@@ -10,4 +11,9 @@ export interface WikiverseService {
     query: string,
     wikiLangTarget: string
   ) => Promise<SearchRequest | null>;
+  fetchInitialGraphsetData: (
+    targetID: string,
+    wikiLangTarget: string,
+    prefers3D: boolean
+  ) => Promise<GraphsetRequest | null>;
 }
