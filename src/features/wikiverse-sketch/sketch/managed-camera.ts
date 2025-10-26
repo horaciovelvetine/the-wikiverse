@@ -1,11 +1,12 @@
 import { P5CanvasInstance } from "@p5-wrapper/react";
 import { Camera } from "p5";
+import { WikiverseSketchProps } from "../wikiverse-sketch-props";
 
 export class ManagedCamera {
-  private p5: P5CanvasInstance;
+  private p5: P5CanvasInstance<WikiverseSketchProps>;
   private p5cam: Camera | undefined;
 
-  constructor(p5: P5CanvasInstance) {
+  constructor(p5: P5CanvasInstance<WikiverseSketchProps>) {
     this.p5 = p5;
   }
 
