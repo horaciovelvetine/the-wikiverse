@@ -11,6 +11,19 @@ interface WikiLangSelectMenuProps {
   setWikiLangTarget: Dispatch<SetStateAction<WikidataLanguageCodes>>;
 }
 
+/**
+ * WikiLangSelectMenu component renders a dropdown menu for selecting the target Wikipedia language.
+ *
+ * - Displays the currently selected language code.
+ * - Provides a list of all available Wikidata language codes for selection.
+ * - When a language is selected, updates the wikiLangTarget state using setWikiLangTarget.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {WikidataLanguageCodes} props.wikiLangTarget - The currently selected Wikipedia language code.
+ * @param {Dispatch<SetStateAction<WikidataLanguageCodes>>} props.setWikiLangTarget - Callback to update the selected language code.
+ */
+
 export function WikiLangSelectMenu({
   wikiLangTarget,
   setWikiLangTarget,
