@@ -7,7 +7,6 @@ export type { Metadata } from "./data/metadata";
 export type { Point } from "./data/point";
 export type { Property } from "./data/property";
 export type { SearchResult } from "./data/search-result";
-export { sampleSearchResults } from "./data/sample-search-results";
 export type { Vertex } from "./data/vertex";
 export type {
   WikiverseError,
@@ -17,3 +16,5 @@ export type {
 // Util Interfaces
 export type { IconProps } from "./util/icon-props";
 export type { NavigationItem } from "./util/navigation-item";
+export type { DeviceDetails } from "./util/device-details";
+export type { ClientDeviceCompatibilityDetails } from "./util/client-device-compatibility-details";
