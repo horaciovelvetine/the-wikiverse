@@ -1,9 +1,11 @@
-import { Point3D } from "./point-3d";
+import { Claim } from "./claim";
+import { Point } from "./point";
 
 export interface Vertex {
   id: string;
   label: string;
   description: string;
   url: string;
-  position: Point3D;
+  position: Point;
+  claims: Claim[];
 }

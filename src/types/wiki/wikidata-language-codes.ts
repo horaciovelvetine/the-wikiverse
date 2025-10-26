@@ -6,9 +6,9 @@
  * - "es": Spanish
  * - "fr": French
  * - "it": Italian
- * - "und": No Language Specified
+ * - "pt": Portuguese
  */
-export type WikidataLanguageCodes = "en" | "de" | "es" | "fr" | "it" | "und";
+export type WikidataLanguageCodes = "en" | "de" | "es" | "fr" | "it" | "pt";
 
 export const AllWikidataLanguageCodes: {
   code: WikidataLanguageCodes;
@@ -19,5 +19,5 @@ export const AllWikidataLanguageCodes: {
   { code: "es", name: "Spanish" },
   { code: "fr", name: "French" },
   { code: "it", name: "Italian" },
-  { code: "und", name: "No Language Specified" },
+  { code: "pt", name: "Portuguese" },
 ];

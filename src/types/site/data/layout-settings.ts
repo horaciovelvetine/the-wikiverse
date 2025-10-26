@@ -5,6 +5,6 @@ export interface LayoutSettings {
   maxLayoutIterations: number;
   maxIterationMovement: number;
   temperatureCurveMultiplier: number;
-  forceAdjustmentMultiplierss: number;
+  forceAdjustmentMultipliers: number;
   prefers3D: boolean;
 }

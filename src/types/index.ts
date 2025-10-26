@@ -8,6 +8,8 @@ export type {
 } from "./requests";
 
 export type {
+  ClientDeviceCompatibilityDetails,
+  DeviceDetails,
   Dimensions,
   Edge,
   Graphset,
@@ -23,14 +25,21 @@ export type {
   NavigationItem,
 } from "./site";
 
-export { sampleSearchResults } from "./site";
-
 export type {
   SketchSettings,
   Velocity,
   CameraSettings,
   Settings,
+  UserInteraction,
+  GraphsetState,
 } from "./sketch";
 
 export { AllWikidataLanguageCodes } from "./wiki";
-export type { WikidataLanguageCodes } from "./wiki";
+export type {
+  WikidataLanguageCodes,
+  WikidataReference,
+  WikidataSnak,
+  WikidataSnakGroup,
+  WikidataValue,
+  WikidataValueType,
+} from "./wiki";
