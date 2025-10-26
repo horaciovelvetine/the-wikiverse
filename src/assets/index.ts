@@ -6,6 +6,8 @@ export { OutlineCubeIcon } from "./icons/outline-cube-icon";
 export { SolidCubeIcon } from "./icons/solid-cube-icon";
 export { ChevronDownIcon } from "./icons/chevron-down-icon";
 export { ToggleSwitchIcon } from "./icons/toggle-switch-icon";
+export { HyperlinkIcon } from "./icons/hyperlink-icon";
+export { SettingsIcon } from "./icons/settings-icon";
 
 // TailwindCSS Style String Const's
 export {
