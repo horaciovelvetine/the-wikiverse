@@ -1,0 +1,66 @@
+/*
+ * Pending Request Indicator Styles
+ * --------------------------------
+ * This file defines styles for the pending request indicator component.
+ * The indicator appears as a thin progress bar at the top of the viewport
+ * with an animated gradient that slides across to indicate loading state.
+ *
+ * Classes:
+ *   .pending-request-indicator - Container for the progress bar with absolute positioning
+ *   .pending-request-progress - The animated progress bar element
+ */
+
+/*
+ * .pending-request-indicator
+ * Container positioned at the top of the viewport with full width and high z-index.
+ * Uses pointer-events: none to prevent interaction with underlying content.
+ */
+.pending-request-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 8px;
+  z-index: 9999;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/*
+ * .pending-request-progress
+ * The animated progress bar with a colorful gradient that slides across.
+ * Uses a 200% width background that animates from -100% to 100% position.
+ */
+.pending-request-progress {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    #1e40af 0%,
+    #2563eb 12.5%,
+    #3b82f6 25%,
+    #60a5fa 37.5%,
+    #93c5fd 50%,
+    #7dd3fc 62.5%,
+    #0ea5e9 75%,
+    #0284c7 87.5%,
+    #0369a1 100%
+  );
+  background-size: 200% 100%;
+  animation: wikiverse-progress-bar-loading 4s linear infinite;
+}
+
+/*
+ * @keyframes wikiverse-progress-bar-loading
+ * Animation that moves the gradient background from left to right.
+ * Creates a smooth sliding effect across the progress bar.
+ */
+@keyframes wikiverse-progress-bar-loading {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}

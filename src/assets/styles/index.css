@@ -7,6 +7,8 @@
 @import "./css/toggle-styles.css";
 @import "./css/main-body-styles.css";
 @import "./css/link-styles.css";
+@import "./css/pending-request-indicator-styles.css";
+
 /* Font imports */
 @font-face {
   font-family: "InterTight";
