@@ -12,7 +12,7 @@
 /* Font imports */
 @font-face {
   font-family: "InterTight";
-  src: url("fonts/InterTight-VariableFont_wght.ttf") format("truetype");
+  src: url("../fonts/InterTight-VariableFont_wght.ttf") format("truetype");
   font-weight: 100 900;
   font-stretch: 75% 100%;
   font-style: normal;
@@ -21,7 +21,8 @@
 
 @font-face {
   font-family: "InterTight";
-  src: url("fonts/InterTight-Italic-VariableFont_wght.ttf") format("truetype");
+  src: url("../fonts/InterTight-Italic-VariableFont_wght.ttf")
+    format("truetype");
   font-weight: 100 900;
   font-stretch: 75% 100%;
   font-style: italic;
