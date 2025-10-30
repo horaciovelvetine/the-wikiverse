@@ -1,0 +1,259 @@
+/*
+ * Range Slider Styles
+ * ------------------
+ * This file defines custom styles for range input sliders to match the glassmorphic design system.
+ * The styles provide a modern, glass-like appearance with smooth transitions and proper accessibility.
+ * 
+ * Classes:
+ *   .range-glass     - Glassmorphic range slider with blur effects and subtle borders.
+ *   .range-modern    - Modern range slider with smooth transitions and hover effects.
+ */
+
+/*
+ * .range-glass
+ * Glassmorphic range slider with backdrop blur and subtle transparency.
+ */
+.range-glass {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  outline: none;
+  cursor: pointer;
+  transition: all var(--def-transition) ease;
+}
+
+.range-glass:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3); /* blue-500 with 30% opacity */
+}
+
+.range-glass:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* blue-500 with 50% opacity */
+}
+
+/*
+ * .range-glass::-webkit-slider-thumb
+ * Webkit thumb styling for glassmorphic appearance.
+ */
+.range-glass::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 2px solid rgba(59, 130, 246, 0.6); /* blue-500 with 60% opacity */
+  cursor: pointer;
+  transition: all var(--def-transition) ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.range-glass::-webkit-slider-thumb:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(59, 130, 246, 0.8);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.range-glass::-webkit-slider-thumb:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/*
+ * .range-glass::-moz-range-thumb
+ * Firefox thumb styling for glassmorphic appearance.
+ */
+.range-glass::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(59, 130, 246, 0.6);
+  cursor: pointer;
+  transition: all var(--def-transition) ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.range-glass::-moz-range-thumb:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(59, 130, 246, 0.8);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.range-glass::-moz-range-thumb:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/*
+ * .range-glass::-moz-range-track
+ * Firefox track styling.
+ */
+.range-glass::-moz-range-track {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/*
+ * .range-modern
+ * Modern range slider with smooth gradients and enhanced visual feedback.
+ */
+.range-modern {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: linear-gradient(
+    90deg,
+    rgba(59, 130, 246, 0.3) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  border-radius: 3px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: all var(--def-transition) ease;
+}
+
+.range-modern:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(59, 130, 246, 0.4) 0%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.range-modern:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+}
+
+/*
+ * .range-modern::-webkit-slider-thumb
+ * Webkit thumb styling for modern appearance.
+ */
+.range-modern::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    #3b82f6 0%,
+    #1d4ed8 100%
+  ); /* blue-500 to blue-700 */
+  cursor: pointer;
+  transition: all var(--def-transition) ease;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+}
+
+.range-modern::-webkit-slider-thumb:hover {
+  background: linear-gradient(
+    135deg,
+    #2563eb 0%,
+    #1e40af 100%
+  ); /* blue-600 to blue-800 */
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.range-modern::-webkit-slider-thumb:active {
+  transform: scale(0.9);
+  box-shadow: 0 1px 4px rgba(59, 130, 246, 0.5);
+}
+
+/*
+ * .range-modern::-moz-range-thumb
+ * Firefox thumb styling for modern appearance.
+ */
+.range-modern::-moz-range-thumb {
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  cursor: pointer;
+  transition: all var(--def-transition) ease;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+  border: none;
+}
+
+.range-modern::-moz-range-thumb:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.range-modern::-moz-range-thumb:active {
+  transform: scale(0.9);
+  box-shadow: 0 1px 4px rgba(59, 130, 246, 0.5);
+}
+
+/*
+ * .range-modern::-moz-range-track
+ * Firefox track styling.
+ */
+.range-modern::-moz-range-track {
+  height: 6px;
+  background: linear-gradient(
+    90deg,
+    rgba(59, 130, 246, 0.3) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  border-radius: 3px;
+  border: none;
+}
+
+/*
+ * .range-label
+ * Label styling for range sliders to match the design system.
+ */
+.range-label {
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500; /* font-medium */
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.range-label:hover {
+  color: var(--text-secondary);
+}
+
+/*
+ * .range-container
+ * Container for range slider and label with proper spacing.
+ */
+.range-container {
+  margin-bottom: 1.5rem;
+}
+
+/*
+ * Responsive adjustments
+ * Reduces thumb size on smaller screens for better touch interaction.
+ */
+@media (max-width: 640px) {
+  .range-glass::-webkit-slider-thumb,
+  .range-glass::-moz-range-thumb {
+    height: 24px;
+    width: 24px;
+  }
+
+  .range-modern::-webkit-slider-thumb,
+  .range-modern::-moz-range-thumb {
+    height: 22px;
+    width: 22px;
+  }
+}
