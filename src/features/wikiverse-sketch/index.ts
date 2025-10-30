@@ -1,2 +1,2 @@
 // COMPONENTS
-export { WikiverseSketch } from "./wikiverse-sketch";
+export { WikiverseSketchContainer } from "./components/wikiverse-sketch-container";
