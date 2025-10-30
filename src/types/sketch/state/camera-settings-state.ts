@@ -1,18 +1,23 @@
-import { Dispatch, SetStateAction } from "react";
+import { NumberRangeSetting } from "../data/number-range-setting";
 
+/**
+ * State used to control the camera settings in the sketch application.
+ *
+ * Each property represents a configurable camera setting,
+ * such as view frustum field of view, draw distances, and sensitivity.
+ *
+ * @property fieldOfView - The field of view of the camera.
+ * @property minDrawDistance - The minimum distance at which objects are rendered.
+ * @property maxDrawDistance - The maximum distance at which objects are rendered.
+ * @property xSensitivity - The sensitivity of camera movement along the X axis.
+ * @property ySensitivity - The sensitivity of camera movement along the Y axis.
+ * @property zSensitivity - The sensitivity of camera movement along the Z axis.
+ */
 export interface CameraSettingsState {
-  fieldOfViewHeight: number;
-  setFieldOfViewHeight: Dispatch<SetStateAction<number>>;
-  aspectRatio: number;
-  setAspectRatio: Dispatch<SetStateAction<number>>;
-  minDrawDistance: number;
-  setMinDrawDistance: Dispatch<SetStateAction<number>>;
-  maxDrawDistance: number;
-  setMaxDrawDistance: Dispatch<SetStateAction<number>>;
-  xSensitivity: number;
-  setXSensitivity: Dispatch<SetStateAction<number>>;
-  ySensitivity: number;
-  setYSensitivity: Dispatch<SetStateAction<number>>;
-  zSensitivity: number;
-  setZSensitivity: Dispatch<SetStateAction<number>>;
+  fieldOfView: NumberRangeSetting;
+  minDrawDistance: NumberRangeSetting;
+  maxDrawDistance: NumberRangeSetting;
+  xSensitivity: NumberRangeSetting;
+  ySensitivity: NumberRangeSetting;
+  zSensitivity: NumberRangeSetting;
 }

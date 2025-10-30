@@ -33,9 +33,14 @@ export type { NavigationItem } from "./site/navigation-item";
 export type { IconProps } from "./site/icon-props";
 export type { DeviceDetails } from "./site/device-details";
 export type { ClientDeviceCompatibilityDetails } from "./site/client-device-compatibility-details";
+export type { SettingsTabItem } from "./site/settings-tab-item";
+export type { SettingsTabs } from "./site/settings-tabs";
 
 //?/==> SKETCH
 export type {
+  SelectLanguageSetting,
+  ToggleItemSetting,
+  NumberRangeSetting,
   CameraSettingsState,
   LayoutSettingsState,
   SketchSettingsState,
