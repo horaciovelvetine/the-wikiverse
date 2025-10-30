@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { WikidataLanguageCodes } from "../types";
+import { SketchSettingsState, WikiverseLanguageCodes } from "../../types";
 
-export function useSketchSettings() {
+export function useSketchSettingsState(): SketchSettingsState {
   const [sketchQuery, setSketchQuery] = useState("");
   const [wikiLangTarget, setWikiLangTarget] =
-    useState<WikidataLanguageCodes>("en");
+    useState<WikiverseLanguageCodes>("en");
   const [clickToFetch, setClickToFetch] = useState(true);
 
   const [showBoundingBox, setShowBoundingBox] = useState(false);
