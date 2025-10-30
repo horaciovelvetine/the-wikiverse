@@ -1,10 +1,10 @@
 import { IconSizing, SearchIcon } from "../../../assets";
-import { SearchRequest, SearchResult } from "../../../types";
+import { SearchRequest, SearchResultData } from "../../../types";
 
 interface SearchSubmitButtonProps {
   searchRequestResponse: SearchRequest | null;
   // eslint-disable-next-line no-unused-vars
-  handleSearchResultSelected: (targetResult: SearchResult) => void;
+  handleSearchResultSelected: (targetResult: SearchResultData) => void;
   highlightedResultTargetIndex: number;
 }
 
@@ -15,7 +15,7 @@ interface SearchSubmitButtonProps {
  * @component
  * @param {Object} props - Component props.
  * @param {SearchRequest | null} props.searchRequestResponse - The current search request response containing search results.
- * @param {(targetResult: SearchResult) => void} props.handleSearchResultSelected - Callback function invoked with the selected search result.
+ * @param {(targetResult: SearchResultData) => void} props.handleSearchResultSelected - Callback function invoked with the selected search result.
  * @param {number} props.highlightedResultTargetIndex - The index of the currently highlighted search result.
  */
 export function SearchSubmitButton({

@@ -6,8 +6,8 @@ import {
   useCallback,
 } from "react";
 import {
-  WikidataLanguageCodes,
-  SearchResult,
+  WikiverseLanguageCodes,
+  SearchResultData,
   SearchRequest,
 } from "../../../types";
 import { useDebouncedValue, useWikiverseService } from "../../../hooks";
@@ -19,9 +19,9 @@ import { MainSearchInput } from "./main-search-input";
 import { SearchResultsDisplayDropdown } from "./search-results-display-dropdown/search-results-display-dropdown";
 
 interface LPSearchInputProps {
-  wikiLangTarget: WikidataLanguageCodes;
-  setWikiLangTarget: Dispatch<SetStateAction<WikidataLanguageCodes>>;
-  handleSelectSearchResultSubmit: (result: SearchResult) => void;
+  wikiLangTarget: WikiverseLanguageCodes;
+  setWikiLangTarget: Dispatch<SetStateAction<WikiverseLanguageCodes>>;
+  handleSelectSearchResultSubmit: (result: SearchResultData) => void;
 }
 
 /**
@@ -37,8 +37,8 @@ interface LPSearchInputProps {
  *
  * @component
  * @param {Object} props - Component props.
- * @param {WikidataLanguageCodes} props.wikiLangTarget - The currently selected Wikipedia language code.
- * @param {Dispatch<SetStateAction<WikidataLanguageCodes>>} props.setWikiLangTarget - Callback to update the selected language code.
+ * @param {WikiverseLanguageCodes} props.wikiLangTarget - The currently selected Wikipedia language code.
+ * @param {Dispatch<SetStateAction<WikiverseLanguageCodes>>} props.setWikiLangTarget - Callback to update the selected language code.
  */
 
 export function LandingPageSearchInput({

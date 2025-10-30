@@ -1,6 +1,6 @@
 import { Input } from "@headlessui/react";
 import { Dispatch, SetStateAction, useCallback } from "react";
-import { SearchRequest, SearchResult } from "../../../types";
+import { SearchRequest, SearchResultData } from "../../../types";
 import { H3TextSizing } from "../../../assets";
 
 interface MainSearchInputProps {
@@ -12,7 +12,7 @@ interface MainSearchInputProps {
   highlightedResultTargetIndex: number;
   setHighlightedResultTargetIndex: Dispatch<SetStateAction<number>>;
   // eslint-disable-next-line no-unused-vars
-  handleSearchResultSelected: (resultTarget: SearchResult) => void;
+  handleSearchResultSelected: (resultTarget: SearchResultData) => void;
 }
 
 /**
@@ -29,7 +29,7 @@ interface MainSearchInputProps {
  * @param {SearchRequest | null} props.searchRequestResponse - Search results data.
  * @param {number} props.highlightedResultTargetIndex - Index of the currently highlighted search result.
  * @param {Dispatch<SetStateAction<number>>} props.setHighlightedResultTargetIndex - Setter for highlighted result index.
- * @param {(resultTarget: SearchResult) => void} props.handleSearchResultSelected - Callback when a search result is selected.
+ * @param {(resultTarget: SearchResultData) => void} props.handleSearchResultSelected - Callback when a search result is selected.
  */
 export function MainSearchInput({
   searchInputValue,

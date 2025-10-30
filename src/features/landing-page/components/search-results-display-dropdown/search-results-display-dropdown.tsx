@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
-import { SearchRequest, SearchResult } from "../../../../types";
+import { SearchRequest, SearchResultData } from "../../../../types";
 import { SearchResultItem } from "./search-result-item";
 
 interface SearchResultsDisplayDropdownProps {
   showResultsDropdown: boolean;
   searchRequestResponse: SearchRequest | null;
   highlightedResultTargetIndex: number;
-  handleSearchResultSelected: (selection: SearchResult) => void;
+  handleSearchResultSelected: (selection: SearchResultData) => void;
 }
 
 const SCROLL_OFFSET_FOR_ROUNDING_ERRORS = 1;
@@ -25,7 +25,7 @@ const DROPDOWN_MAX_HEIGHT = "max-h-80";
  * @param {boolean} props.showResultsDropdown - Whether to show the dropdown.
  * @param {SearchRequest | null} props.searchRequestResponse - The search results data or null.
  * @param {number} props.highlightedResultTargetIndex - The index of the currently highlighted result.
- * @param {(selection: SearchResult) => void} props.handleSearchResultSelected - Callback when a search result is selected.
+ * @param {(selection: SearchResultData) => void} props.handleSearchResultSelected - Callback when a search result is selected.
  */
 
 export function SearchResultsDisplayDropdown({
@@ -116,7 +116,7 @@ export function SearchResultsDisplayDropdown({
       className={`absolute top-full left-0 right-0 z-50 rounded-md border-2 border-gray-900 rounded-t shadow-2xl ${DROPDOWN_MAX_HEIGHT} overflow-y-auto search-results-dropdown ${DROPDOWN_TRANSLATE_Y}`}
     >
       {searchRequestResponse!.searchResults.map(
-        (result: SearchResult, index: number) => (
+        (result: SearchResultData, index: number) => (
           <SearchResultItem
             key={`search-result-${result.entityID}-${index}`}
             result={result}

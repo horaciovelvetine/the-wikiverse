@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 
 import { Dispatch, SetStateAction, useCallback } from "react";
-import { SearchResult, WikidataLanguageCodes } from "../../types";
+import { SearchResultData, WikiverseLanguageCodes } from "../../types";
 import { H1TextSizing, H5TextSizing } from "../../assets";
 import { LandingPageSearchInput } from "./components/landing-page-search-input";
 import { ToggleSwitch } from "./components/toggle-switch";
@@ -9,8 +9,8 @@ import { useWikiverseService } from "../../hooks";
 
 interface LandingPageProps {
   setSketchQuery: Dispatch<SetStateAction<string>>;
-  wikiLangTarget: WikidataLanguageCodes;
-  setWikiLangTarget: Dispatch<SetStateAction<WikidataLanguageCodes>>;
+  wikiLangTarget: WikiverseLanguageCodes;
+  setWikiLangTarget: Dispatch<SetStateAction<WikiverseLanguageCodes>>;
   prefers3D: boolean;
   setPrefers3D: Dispatch<SetStateAction<boolean>>;
 }
@@ -21,8 +21,8 @@ interface LandingPageProps {
  * @component
  * @param {Object} props - Component props.
  * @param {Dispatch<SetStateAction<string>>} props.setSketchQuery - Function to set the sketch query.
- * @param {WikidataLanguageCodes} props.wikiLangTarget - Currently selected Wikipedia language code.
- * @param {Dispatch<SetStateAction<WikidataLanguageCodes>>} props.setWikiLangTarget - Function to update the selected Wikipedia language code.
+ * @param {WikiverseLanguageCodes} props.wikiLangTarget - Currently selected Wikipedia language code.
+ * @param {Dispatch<SetStateAction<WikiverseLanguageCodes>>} props.setWikiLangTarget - Function to update the selected Wikipedia language code.
  * @param {boolean} props.prefers3D - Whether the user prefers a 3D view.
  * @param {Dispatch<SetStateAction<boolean>>} props.setPrefers3D - Function to toggle 3D view preference.
  */
@@ -37,7 +37,7 @@ export function LandingPage({
    * Takes in the user selected result, and should send a request and get everything rolling
    */
   const handleSelectSearchResultSubmit = useCallback(
-    async (searchResult: SearchResult) => {
+    async (searchResult: SearchResultData) => {
       const results = await fetchInitialGraphsetData(
         searchResult.entityID,
         wikiLangTarget,

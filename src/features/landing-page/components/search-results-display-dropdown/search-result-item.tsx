@@ -1,13 +1,13 @@
 import { H4TextSizing } from "../../../../assets";
-import { SearchResult } from "../../../../types";
+import { SearchResultData } from "../../../../types";
 
 /**
  * Individual search result item component for better separation of concerns
  */
 interface SearchResultItemProps {
-  result: SearchResult;
+  result: SearchResultData;
   isHighlighted: boolean;
-  onSelect: (result: SearchResult) => void;
+  onSelect: (result: SearchResultData) => void;
 }
 
 /**
@@ -21,7 +21,7 @@ interface SearchResultItemProps {
  * @param {Object} props
  * @param {SearchResult} props.result - The search result data to display.
  * @param {boolean} props.isHighlighted - Whether this result is highlighted.
- * @param {(result: SearchResult) => void} props.onSelect - Callback for when the item is selected.
+ * @param {(result: SearchResultData) => void} props.onSelect - Callback for when the item is selected.
  */
 
 export function SearchResultItem({

@@ -1,14 +1,12 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "../../../assets";
-import {
-  AllWikidataLanguageCodes,
-  WikidataLanguageCodes,
-} from "../../../types";
+import { WikiverseLanguageCodes } from "../../../types";
 import { Dispatch, SetStateAction } from "react";
+import { WikiverseLanguageCodesMap } from "../../../config/wikiverse-language-codes-map";
 
 interface WikiLangSelectMenuProps {
-  wikiLangTarget: WikidataLanguageCodes;
-  setWikiLangTarget: Dispatch<SetStateAction<WikidataLanguageCodes>>;
+  wikiLangTarget: WikiverseLanguageCodes;
+  setWikiLangTarget: Dispatch<SetStateAction<WikiverseLanguageCodes>>;
 }
 
 /**
@@ -20,8 +18,8 @@ interface WikiLangSelectMenuProps {
  *
  * @component
  * @param {Object} props - Component props.
- * @param {WikidataLanguageCodes} props.wikiLangTarget - The currently selected Wikipedia language code.
- * @param {Dispatch<SetStateAction<WikidataLanguageCodes>>} props.setWikiLangTarget - Callback to update the selected language code.
+ * @param {WikiverseLanguageCodes} props.wikiLangTarget - The currently selected Wikipedia language code.
+ * @param {Dispatch<SetStateAction<>>} props.setWikiLangTarget - Callback to update the selected language code.
  */
 
 export function WikiLangSelectMenu({
@@ -61,7 +59,7 @@ export function WikiLangSelectMenu({
             opacity: 0,
           }}
         >
-          {AllWikidataLanguageCodes.map(lang => (
+          {WikiverseLanguageCodesMap.map(lang => (
             <MenuItem
               key={`wiki-lang-target-${lang.code}`}
               as="button"
