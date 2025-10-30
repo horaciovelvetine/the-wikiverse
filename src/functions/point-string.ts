@@ -7,6 +7,7 @@ import { Point } from "../types";
  * @returns {string} A string in the format "[x: value, y: value]" or "[x: value, y: value, z: value]" if z is present.
  */
 
-export function pointString(p: Point): string {
+export function pointString(p: Point | undefined): string {
+  if (p === undefined) return "";
   return p.z ? `[x: ${p.x}, y: ${p.y}, z: ${p.z}` : `[x: ${p.x}, y: ${p.y}]`;
 }

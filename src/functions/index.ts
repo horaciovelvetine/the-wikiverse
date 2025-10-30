@@ -1,4 +1,5 @@
 export { pointString } from "./point-string";
+export { getWikiverseSketchContainer } from "./get-wikiverse-sketch-container";
 
 export { detectAppleDevice } from "./client-compatability/detect-apple-device";
 export { detectMobileUserAgent } from "./client-compatability/detect-mobile-user-agent";
