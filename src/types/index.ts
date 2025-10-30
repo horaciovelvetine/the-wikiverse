@@ -1,45 +1,45 @@
+//?/==> API
 export type {
-  GraphsetRequest,
-  LayoutRequest,
-  Request,
+  ValueData,
+  ValueTypes,
+  VertexData,
+  SnakGroupData,
+  SnakData,
+  SearchResultData,
+  ReferenceData,
+  Metadata,
+  LayoutSettingsData,
+  GraphsetData,
+  EdgeData,
+  ClaimData,
+  WikiverseServiceErrors,
+  WikiverseService,
+  WikiverseRequestError,
+  WikiverseLanguageCodes,
   SearchRequest,
   StatusRequest,
-  WikiverseService,
-} from "./requests";
+  Request,
+  LayoutRequest,
+  GraphsetRequest,
+  PropertyData,
+} from "./api";
 
-export type {
-  ClientDeviceCompatibilityDetails,
-  DeviceDetails,
-  Dimensions,
-  Edge,
-  Graphset,
-  IconProps,
-  LayoutSettings,
-  Metadata,
-  Point,
-  Property,
-  SearchResult,
-  Vertex,
-  WikiverseError,
-  WikiverseErrorTypes,
-  NavigationItem,
-} from "./site";
+//?/==> MODELS
+export type { Dimensions } from "./models/dimensions";
+export type { Point } from "./models/point";
 
+//?/==> SITE
+export type { NavigationItem } from "./site/navigation-item";
+export type { IconProps } from "./site/icon-props";
+export type { DeviceDetails } from "./site/device-details";
+export type { ClientDeviceCompatibilityDetails } from "./site/client-device-compatibility-details";
+
+//?/==> SKETCH
 export type {
-  SketchSettings,
+  CameraSettingsState,
+  LayoutSettingsState,
+  SketchSettingsState,
   Velocity,
-  CameraSettings,
-  Settings,
   UserInteraction,
-  GraphsetState,
+  SketchUpdateProps,
 } from "./sketch";
-
-export { AllWikidataLanguageCodes } from "./wiki";
-export type {
-  WikidataLanguageCodes,
-  WikidataReference,
-  WikidataSnak,
-  WikidataSnakGroup,
-  WikidataValue,
-  WikidataValueType,
-} from "./wiki";
