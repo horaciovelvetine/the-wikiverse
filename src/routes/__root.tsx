@@ -20,11 +20,10 @@ const RootLayout = () => (
     <div className="relative h-full flex flex-col">
       <div className="flex w-full justify-between px-6 py-4 flex-shrink-0 bg-transparent">
         <SiteLogo />
-        <div className="flex gap-4">{/* <NavbarInput /> */}</div>
       </div>
 
       {/* MAIN CONTENT */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden" id="root-container">
         <Outlet />
       </div>
 
