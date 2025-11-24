@@ -1,7 +1,7 @@
 import { SearchResultData } from "../data/search-result-data";
-import { Request } from "./request";
+import { APIRequest } from "./api-request";
 
-export interface SearchRequest extends Request {
+export interface SearchRequest extends APIRequest {
   query: string;
   wikiLangTarget: string;
   searchResults: SearchResultData[];

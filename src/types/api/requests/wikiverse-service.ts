@@ -10,7 +10,7 @@ export interface WikiverseService {
     query: string,
     wikiLangTarget: string
   ) => Promise<SearchRequest | null>;
-  fetchInitialGraphsetData: (
+  fetchGraphsetOriginData: (
     targetID: string,
     wikiLangTarget: string,
     prefers3D: boolean

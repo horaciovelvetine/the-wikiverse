@@ -5,5 +5,5 @@ export interface EdgeData {
   sourceID: string;
   targetID: string;
   propertyID: string;
-  label: string;
+  statementID: string;
 }

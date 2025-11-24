@@ -1,8 +1,8 @@
 import { GraphsetData } from "../data/graphset-data";
 import { Metadata } from "../data/metadata";
-import { Request } from "./request";
+import { APIRequest } from "./api-request";
 
-export interface LayoutRequest extends Request {
+export interface LayoutRequest extends APIRequest {
   metadata: Metadata;
   graphset: GraphsetData;
 }

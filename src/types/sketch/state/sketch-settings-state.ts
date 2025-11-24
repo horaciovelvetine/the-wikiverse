@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from "react";
-import { WikiverseLanguageCodes } from "../../api";
 import { ToggleItemSetting } from "../data/toggle-item-setting";
 import { SelectLanguageSetting } from "../data/select-language-setting";
 

@@ -9,4 +9,7 @@ export interface GraphsetData {
   vertices: VertexData[];
   edges: EdgeData[];
   properties: PropertyData[];
+  propertyCount: number;
+  vertexCount: number;
+  edgeCount: number;
 }

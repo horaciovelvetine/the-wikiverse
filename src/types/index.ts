@@ -6,7 +6,6 @@ export type {
   SnakGroupData,
   SnakData,
   SearchResultData,
-  ReferenceData,
   Metadata,
   LayoutSettingsData,
   GraphsetData,
@@ -18,7 +17,7 @@ export type {
   WikiverseLanguageCodes,
   SearchRequest,
   StatusRequest,
-  Request,
+  APIRequest,
   LayoutRequest,
   GraphsetRequest,
   PropertyData,
@@ -35,6 +34,8 @@ export type { DeviceDetails } from "./site/device-details";
 export type { ClientDeviceCompatibilityDetails } from "./site/client-device-compatibility-details";
 export type { SettingsTabItem } from "./site/settings-tab-item";
 export type { SettingsTabs } from "./site/settings-tabs";
+export type { MinMaxSet } from "./site/min-max-set";
+export type { MinMaxValues } from "./site/min-max-values";
 
 //?/==> SKETCH
 export type {
@@ -47,4 +48,5 @@ export type {
   Velocity,
   UserInteraction,
   SketchUpdateProps,
+  WikiverseSketchContainerProps,
 } from "./sketch";

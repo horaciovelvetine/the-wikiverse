@@ -1,6 +1,6 @@
-import { Request } from "./request";
+import { APIRequest } from "./api-request";
 
-export interface StatusRequest extends Request {
+export interface StatusRequest extends APIRequest {
   wikiverseState: string;
   wikidataStatus: string;
   wikidataPingMillis: number;

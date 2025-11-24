@@ -1,4 +1,3 @@
-import { ReferenceData } from "./reference-data";
 import { SnakData } from "./snak-data";
 import { SnakGroupData } from "./snak-group-data";
 
@@ -8,5 +7,4 @@ import { SnakGroupData } from "./snak-group-data";
 export interface ClaimData {
   main: SnakData;
   qualifiers: SnakGroupData[];
-  references: ReferenceData[];
 }

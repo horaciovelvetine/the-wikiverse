@@ -1,8 +1,8 @@
-import { Metadata } from "../../site";
 import { GraphsetData } from "../data/graphset-data";
-import { Request } from "./request";
+import { Metadata } from "../data/metadata";
+import { APIRequest } from "./api-request";
 
-export interface GraphsetRequest extends Request {
+export interface GraphsetRequest extends APIRequest {
   metadata: Metadata;
   graphset: GraphsetData;
 }

@@ -1,6 +1,4 @@
-import { Point } from "../../site";
-import { ClaimData } from "./claim-data";
-
+import { Point } from "../../models/point";
 /**
  * The primary data for a Node in the Graph, describes an article on Wikipedia.
  */
@@ -10,5 +8,6 @@ export interface VertexData {
   description: string;
   url: string;
   position: Point;
-  claims: ClaimData[];
+  locked: boolean;
+  fetched: boolean;
 }
