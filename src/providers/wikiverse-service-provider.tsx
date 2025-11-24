@@ -1,17 +1,45 @@
-import { WikiverseError } from "../types";
 import { ReactNode, useState, useMemo, useEffect, useCallback } from "react";
 import {
   getWikiverseStatus,
   getSearchResults,
-  getInitialGraphsetData,
+  getGraphsetInitializeOrigin,
 } from "./api";
-import { WikiverseServiceContext } from "../hooks/use-wikiverse-service";
 import { PendingRequestIndicator } from "../features";
+import {
+  GraphsetData,
+  Metadata,
+  WikiverseRequestError,
+  WikiverseService,
+} from "../types";
+import { WikiverseServiceContext } from "../hooks/api/use-wikiverse-service";
 
 interface WikiverseServiceProviderProps {
   useLocalAPI: boolean;
   children: ReactNode;
 }
+
+/**
+ * WikiverseServiceProvider provides service-related state and actions for the Wikiverse API to its child components.
+ *
+ * This context provider manages:
+ * - Whether the Wikiverse API service is considered "online"
+ * - Whether a network request is pending
+ * - Any request error state
+ * - The base API URL (local or production, based on configuration)
+ * - Methods for triggering search and graphset requests to the API
+ *
+ * All descendant components can consume the context and leverage these capabilities for unified API access and status.
+ *
+ * @component
+ * @param {Object} props
+ * @param {boolean} props.useLocalAPI - Whether to use the local Wikiverse API instance or production endpoint
+ * @param {ReactNode} props.children - Child components which will receive the API context
+ *
+ * @example
+ * <WikiverseServiceProvider useLocalAPI={true}>
+ *   <App />
+ * </WikiverseServiceProvider>
+ */
 
 export const WikiverseServiceProvider = ({
   useLocalAPI,
@@ -19,7 +47,8 @@ export const WikiverseServiceProvider = ({
 }: WikiverseServiceProviderProps) => {
   const [serviceOnline, setServiceOnline] = useState(true);
   const [requestPending, setRequestPending] = useState(false);
-  const [requestError, setRequestError] = useState<WikiverseError | null>(null);
+  const [requestError, setRequestError] =
+    useState<WikiverseRequestError | null>(null);
 
   /**
    * Memoizes the URL of the Wikiverse API based on whether the local API should be used.
@@ -70,9 +99,9 @@ export const WikiverseServiceProvider = ({
    * @param {boolean} prefers3D - Indicates whether to prefer 3D graphset layouts.
    * @returns {Promise<GraphsetRequest|null>} Resolves to the returned GraphsetRequest object or null if there is an error.
    */
-  const fetchInitialGraphsetData = useCallback(
+  const fetchGraphsetOriginData = useCallback(
     (targetID: string, wikiLangTarget: string, prefers3D: boolean) => {
-      return getInitialGraphsetData({
+      return getGraphsetInitializeOrigin({
         setRequestPending,
         setRequestError,
         URL,
@@ -80,6 +109,17 @@ export const WikiverseServiceProvider = ({
         wikiLangTarget,
         prefers3D,
       });
+    },
+    [URL]
+  );
+
+  /**
+   * The follow up request to { @see fetchGraphsetOriginData } which fills out the mostly unfinished data
+   * TODO * Finish This Request
+   */
+  const fetchGraphsetInitialData = useCallback(
+    (graphset: GraphsetData, metadata: Metadata) => {
+      console.log({ graphset, metadata });
     },
     [URL]
   );
@@ -93,20 +133,22 @@ export const WikiverseServiceProvider = ({
    * @property {(query: string, wikiLangTarget: string) => Promise<SearchRequest | null>} fetchSearchResults
    *   - Function to fetch search results from the Wikiverse API using the provided query and language target.
    */
-  const contextMemo = useMemo(() => {
+  const contextMemo: WikiverseService = useMemo(() => {
     return {
       serviceOnline,
       requestPending,
       requestError,
       fetchSearchResults,
-      fetchInitialGraphsetData,
+      fetchGraphsetOriginData,
+      fetchGraphsetInitialData,
     };
   }, [
-    fetchInitialGraphsetData,
+    fetchGraphsetOriginData,
     fetchSearchResults,
     requestError,
     requestPending,
     serviceOnline,
+    fetchGraphsetInitialData,
   ]);
 
   /**

@@ -1,8 +1,8 @@
 import { GraphsetRequest } from "../../types";
-import { RequestProps } from "./request-props";
+import { APIRequestProps } from "./api-request-props";
 import { handleRequestError } from "./handle-request-error";
 
-interface GetInitialGraphsetDataProps extends RequestProps {
+interface GetInitialGraphsetDataProps extends APIRequestProps {
   targetID: string;
   wikiLangTarget: string;
   prefers3D: boolean;
@@ -11,7 +11,7 @@ interface GetInitialGraphsetDataProps extends RequestProps {
 /**
  * Fetches the initial graphset data from the Wikiverse API.
  *
- * Makes a request to the `/graphset/initialize` endpoint using the provided targetID, wikiLangTarget,
+ * Makes a request to the `/graphset/initialize-origin` endpoint using the provided targetID, wikiLangTarget,
  * and prefers3D parameters. Manages loading and error state through the given setters.
  *
  * @param {Object} props - Props used for the API request.
@@ -23,7 +23,7 @@ interface GetInitialGraphsetDataProps extends RequestProps {
  * @param {boolean} props.prefers3D - Whether to prefer 3D graphset layouts or not.
  * @returns {Promise<GraphsetRequest|null>} Resolves to the returned GraphsetRequest object or null if there is an error.
  */
-export async function getInitialGraphsetData({
+export async function getGraphsetInitializeOrigin({
   setRequestPending,
   setRequestError,
   URL,
@@ -33,27 +33,23 @@ export async function getInitialGraphsetData({
 }: GetInitialGraphsetDataProps): Promise<GraphsetRequest | null> {
   setRequestPending(true);
   setRequestError(null); // clear previous errors...
+  // setup url params
+  const searchParams = new URLSearchParams({
+    targetID,
+    wikiLangTarget,
+    prefers3D: prefers3D ? "True" : "False",
+  }).toString();
 
   try {
-    const searchParams = new URLSearchParams({
-      targetID,
-      wikiLangTarget,
-      prefers3D: prefers3D ? "True" : "False",
-    }).toString();
-
     const response = await fetch(`${URL}/graphset/initialize?${searchParams}`);
 
     if (response.ok) {
+      //? API Response is AOK, get json and return data.
       const data: GraphsetRequest = await response.json();
-
-      if (data.error) {
-        setRequestError(data.error);
-        return null;
-      }
-
       console.log({ label: "getInitialGraphsetData", data });
       return data;
     } else {
+      //? API Online responded w/ an Error coded status
       handleRequestError({
         setRequestError,
         error: response,
@@ -62,6 +58,7 @@ export async function getInitialGraphsetData({
       return null;
     }
   } catch (error) {
+    //? Unable to make request/API full offline
     handleRequestError({
       setRequestError,
       error,

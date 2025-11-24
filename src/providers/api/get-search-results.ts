@@ -1,8 +1,8 @@
 import { SearchRequest } from "../../types";
 import { handleRequestError } from "./handle-request-error";
-import { RequestProps } from "./request-props";
+import { APIRequestProps } from "./api-request-props";
 
-interface SearchResultsProps extends RequestProps {
+interface SearchResultsProps extends APIRequestProps {
   query: string;
   wikiLangTarget: string;
 }
@@ -38,16 +38,12 @@ export async function getSearchResults({
     );
 
     if (response.ok) {
+      //? API response is AOK, get JSON and return data
       const data: SearchRequest = await response.json();
-
-      if (data.error) {
-        setRequestError(data.error);
-        return null; // Return null when there's an error in the response
-      }
       console.log({ label: "getSearchResults", data });
       return data;
     } else {
-      // Handle HTTP error responses
+      //? API responded w/ an Error coded status
       handleRequestError({
         setRequestError,
         error: response,
@@ -56,7 +52,7 @@ export async function getSearchResults({
       return null;
     }
   } catch (error) {
-    // Handle network errors
+    //? Unable to make request/API full offline
     handleRequestError({
       setRequestError,
       error,

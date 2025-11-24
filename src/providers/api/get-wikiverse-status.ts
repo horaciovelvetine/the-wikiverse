@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from "react";
 import { StatusRequest } from "../../types";
-import { RequestProps } from "./request-props";
+import { APIRequestProps } from "./api-request-props";
 import { handleRequestError } from "./handle-request-error";
 
-interface StatusRequestProps extends RequestProps {
+interface StatusRequestProps extends APIRequestProps {
   setServiceOnline: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -34,17 +34,13 @@ export async function getWikiverseStatus({
     const response = await fetch(`${URL}/status`);
 
     if (response.ok) {
+      // ? API Online, log response and return
       const data: StatusRequest = await response.json();
-
-      if (data.error) {
-        setServiceOnline(false);
-        setRequestError(data.error);
-      } else {
-        setServiceOnline(true);
-      }
+      setServiceOnline(true);
+      console.log({ message: "getWikiverseStatus()", data: data });
       return data;
     } else {
-      // Handle HTTP error responses
+      // ? API responded w/ an Error coded status
       setServiceOnline(false);
       handleRequestError({
         setRequestError,
@@ -54,7 +50,7 @@ export async function getWikiverseStatus({
       return null;
     }
   } catch (error) {
-    // Handle network errors
+    // ? Unable to make request API or user full offline
     setServiceOnline(false);
     handleRequestError({
       setRequestError,
