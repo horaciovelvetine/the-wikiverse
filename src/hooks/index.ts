@@ -3,7 +3,6 @@ export { useWikiverseService } from "./api/use-wikiverse-service";
 
 //?/==> SITE
 export { useDebouncedValue } from "./site/use-debounced-value";
-export { useClientDeviceCompatibilityDetails } from "./site/use-client-compatibility-details";
 
 //?/==> SKETCH
 export { useSketchSettingsState } from "./sketch/use-sketch-settings-state";
