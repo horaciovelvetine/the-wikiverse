@@ -9,9 +9,6 @@ export function useLayoutSettingsState(): LayoutSettingsState {
   const [maxIterationMovement, setMaxIterationMovement] = useState(0);
   const [temperatureCurveMultiplier, setTemperatureCurveMultiplier] =
     useState(0);
-  // const [forceAdjustmentMultipliers, setForceAdjustmentMultipliers] = useState([
-  //   0, 0,
-  // ]);
   const [prefers3D, setPrefers3D] = useState(true);
 
   const updateWithLayoutSettingsDataResponse = (

@@ -1,5 +1,5 @@
 import { Context, createContext, useContext } from "react";
-import { WikiverseService } from "../types";
+import { WikiverseService } from "../../types";
 
 /**
  * Context for the Wikiverse service.
