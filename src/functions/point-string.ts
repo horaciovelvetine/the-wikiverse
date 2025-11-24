@@ -1,13 +1,28 @@
 import { Point } from "../types";
 
 /**
- * Converts a Point object into a string representation.
+ * Returns a readable string representation of a Point object.
  *
- * @param {Point} p - The point object containing x, y, and optionally z coordinates.
- * @returns {string} A string in the format "[x: value, y: value]" or "[x: value, y: value, z: value]" if z is present.
+ * Example outputs:
+ *   [x: 5, y: 10]
+ *   [x: 5, y: 10, z: 4]
+ *
+ * @param p - The point object, possibly undefined.
+ * @returns String describing the rounded coordinates, or an empty string if undefined.
  */
-
 export function pointString(p: Point | undefined): string {
-  if (p === undefined) return "";
-  return p.z ? `[x: ${p.x}, y: ${p.y}, z: ${p.z}` : `[x: ${p.x}, y: ${p.y}]`;
+  if (!p) {
+    return "";
+  }
+
+  const x = Math.round(p.x);
+  const y = Math.round(p.y);
+
+  // If the z coordinate exists, include it; otherwise, leave it out.
+  if (typeof p.z === "number") {
+    const z = Math.round(p.z);
+    return `[x: ${x}, y: ${y}, z: ${z}]`;
+  }
+
+  return `[x: ${x}, y: ${y}]`;
 }
