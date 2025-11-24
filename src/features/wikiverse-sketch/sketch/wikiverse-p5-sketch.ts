@@ -22,14 +22,15 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
   p5.draw = () => {
     SK.drawSketchUI();
     SK.drawVertices();
-    // SK.drawSelectedDetails();
-    // SK.drawHoveredDetails();
+    SK.drawSelectedVertexUI();
+    SK.drawHoveredVertexUI();
     // SK.advanceCamAnimations();
   };
 
   //*/===> WINDOW RESIZE!
   p5.windowResized = () => {
     SK.handleWindowResize();
+    SK.cam.handleCanvasResizeAdjustPerspective();
   };
 
   //*/===> PROPS UPDATE!
@@ -42,13 +43,16 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
     if (SK.settingsMenuShown() !== state.showSettingsMenu) {
       //==> Keeps track of settings menu being shown to prevent unintended interaction
       SK.setSettingsMenuShown(state.showSettingsMenu);
+      return;
     }
 
-    const { graphsetData } = state;
+    const { graphsetData, cameraSettings, sketchSettings } = state;
     SK.data.setGraphsetData(graphsetData.graphset);
     SK.data.setSelectedVertex(graphsetData.selectedVertex);
     SK.data.setHoveredVertex(graphsetData.hoveredVertex);
 
+    SK.cam.setCameraSettings(cameraSettings);
+    SK.setSketchSettings(sketchSettings);
     console.log("sketch.updateWithProps()");
   };
 
@@ -63,11 +67,10 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
       return;
     }
 
-    if (hoverTarget && SK.data.hoveredVertex()?.id === hoverTarget.data.id) {
+    if (hoverTarget && SK.data.hoveredVertex()?.id === hoverTarget.id) {
       // Current Target Already Hovered... Do Nothing
       return;
     }
-
     // Else... Update Current Hovered State to Target
     SK.dispatcher.setHoveredVertex(hoverTarget);
   };
@@ -85,7 +88,8 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
       // Vertex already selected, deselect!
       SK.dispatcher.setSelectedVertex(null);
     } else {
-      // Vertex not selected, select!
+      // Vertex not selected, select, and remove from hovered!
+      SK.dispatcher.setHoveredVertex(null);
       SK.dispatcher.setSelectedVertex(clickTarget);
     }
   };

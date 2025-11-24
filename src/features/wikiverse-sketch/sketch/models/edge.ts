@@ -1,11 +1,17 @@
 import { EdgeData } from "../../../../types";
 import { Vertex } from "./vertex";
 
-export class Edge {
-  private data: EdgeData;
+export class Edge implements EdgeData {
+  readonly sourceID: string;
+  readonly targetID: string;
+  readonly propertyID: string;
+  readonly statementID: string;
 
   constructor(edge: EdgeData) {
-    this.data = edge;
+    this.sourceID = edge.sourceID;
+    this.targetID = edge.targetID;
+    this.propertyID = edge.propertyID;
+    this.statementID = edge.statementID;
   }
 
   /**
@@ -14,7 +20,7 @@ export class Edge {
    * @returns True if the vertex is the source, false otherwise.
    */
   isSource(vert: Vertex): boolean {
-    return this.data.sourceID === vert.data.id;
+    return this.sourceID === vert.id;
   }
 
   /**
@@ -23,15 +29,24 @@ export class Edge {
    * @returns True if the vertex is the target, false otherwise.
    */
   isTarget(vert: Vertex): boolean {
-    return this.data.targetID === vert.data.id;
+    return this.targetID === vert.id;
   }
 
   /**
-   * Checks if the label of the edge matches the label of the given vertex.
-   * @param vert - The vertex whose label to compare.
-   * @returns True if the edge label matches the vertex label, false otherwise.
+   * Returns the parallel (bidirectional) edge in the given array, if it exists.
+   *
+   * A "parallel" edge in this context means another edge with the same property ID
+   * but the source and target vertices reversed (i.e., an edge in the opposite direction).
+   *
+   * @param relatedEdges - Array of Edge objects to check against this edge.
+   * @returns {Edge | undefined} The matching parallel edge if it exists, otherwise undefined.
    */
-  isLabelMatch(vert: Vertex): boolean {
-    return this.data.label === vert.data.label;
+  hasParallelEdge(relatedEdges: Edge[]): Edge | undefined {
+    return relatedEdges.find(
+      edge =>
+        edge.propertyID === this.propertyID &&
+        edge.sourceID === this.targetID &&
+        edge.targetID === this.sourceID
+    );
   }
 }

@@ -3,14 +3,26 @@ import { P5CanvasInstance } from "@p5-wrapper/react";
 import { Point, VertexData, SketchUpdateProps } from "../../../../types";
 import { Camera, Font } from "p5";
 
-export class Vertex {
-  data: VertexData;
+export class Vertex implements VertexData {
+  readonly id: string;
+  readonly label: string;
+  readonly description: string;
+  readonly url: string;
+  readonly fetched: boolean;
+  position: Point;
+  locked: boolean;
   private prevPosition: Point | null = null;
   private positionUpdateKeyframe = 0;
   private readonly radius = 20;
 
   constructor(vert: VertexData) {
-    this.data = vert;
+    this.id = vert.id;
+    this.label = vert.label;
+    this.description = vert.description;
+    this.url = vert.url;
+    this.position = { ...vert.position };
+    this.locked = vert.locked ?? false;
+    this.fetched = vert.fetched ?? false;
   }
 
   /**
@@ -40,11 +52,7 @@ export class Vertex {
       // }
     } else {
       // vertex is stationary
-      p5.translate(
-        this.data.position.x,
-        this.data.position.y,
-        this.data.position.z
-      );
+      p5.translate(this.position.x, this.position.y, this.position.z);
     }
 
     p5.strokeWeight(1.2);
@@ -70,18 +78,23 @@ export class Vertex {
    * @param font - The font to use when rendering the label text.
    * @param cam - The camera instance, used to transform the label so it faces the camera.
    */
-  drawLabel(p5: P5CanvasInstance, font: Font, cam: Camera) {
-    // if (this.fetched) {
-    const { x, y, z } = this.data.position;
-    const labelStr = `${this.data.label}`;
+  drawLabel(
+    p5: P5CanvasInstance<SketchUpdateProps>,
+    font: Font | undefined,
+    cam: Camera | undefined
+  ) {
+    if (font !== undefined || cam !== undefined) {
+      const { x, y, z } = this.position;
+      const labelStr = `${this.label}`;
 
-    p5.push();
-    p5.translate(x, y, z);
-    this.applyLabelPositionTransforms(p5, cam);
-    this.applyLabelTextSetup(p5, font);
-    p5.text(labelStr, 0, 0);
-    p5.pop();
-    // }
+      p5.push();
+      p5.translate(x, y, z);
+      // Undefined initializers caught above
+      this.applyLabelPositionTransforms(p5, cam!);
+      this.applyLabelTextSetup(p5, font!);
+      p5.text(labelStr, 0, 0);
+      p5.pop();
+    }
   }
 
   /**
@@ -143,7 +156,7 @@ export class Vertex {
       worldMat[1] / perspDiv,
       worldMat[2] / perspDiv,
     ];
-    const { x, y, z } = { ...this.data.position };
+    const { x, y, z } = { ...this.position };
     const rayLength = p5.dist(cam.eyeX, cam.eyeY, cam.eyeZ, x, y, z!);
     const phi = p5.atan2(
       worldVec[1] - cam.eyeY,
@@ -168,7 +181,10 @@ export class Vertex {
   /**
    * Helper to apply all the required formatting calls for p5.js to put formatted text on screen. Sets up size, color, alignment and a position for the label.
    */
-  private applyLabelTextSetup(p5: P5CanvasInstance, font: Font) {
+  private applyLabelTextSetup(
+    p5: P5CanvasInstance<SketchUpdateProps>,
+    font: Font
+  ) {
     p5.textSize(8);
     p5.fill("rgb(245, 245, 245)");
     p5.textFont(font);
@@ -179,7 +195,10 @@ export class Vertex {
   /**
    * Faces the text for the label towards the camera by transforming it based on camera position and relative angles, uses the { @see calcCamerasAngles } for underlying math.
    */
-  private applyLabelPositionTransforms(p5: P5CanvasInstance, cam: Camera) {
+  private applyLabelPositionTransforms(
+    p5: P5CanvasInstance<SketchUpdateProps>,
+    cam: Camera
+  ) {
     const { pan, tilt } = this.calcCamerasAngles(p5, cam);
 
     p5.rotateY(-pan); //rotate to face camera horizon
@@ -191,7 +210,10 @@ export class Vertex {
   /**
    * Calculate needed transformation pan and tilt for showing the text label to the camera in 3D.
    */
-  private calcCamerasAngles(p5: P5CanvasInstance, cam: Camera) {
+  private calcCamerasAngles(
+    p5: P5CanvasInstance<SketchUpdateProps>,
+    cam: Camera
+  ) {
     const { ex, ey, ez } = { ...{ ex: cam.eyeX, ey: cam.eyeY, ez: cam.eyeZ } };
     const { fx, fy, fz } = {
       ...{ fx: cam.centerX, fy: cam.centerY, fz: cam.centerZ },

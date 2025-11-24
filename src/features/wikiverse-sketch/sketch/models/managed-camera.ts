@@ -1,13 +1,17 @@
 import { Camera } from "p5";
 import { P5CanvasInstance } from "@p5-wrapper/react";
-import { SketchUpdateProps } from "../../../../types";
+import { CameraSettingsState, SketchUpdateProps } from "../../../../types";
 
 export class ManagedCamera {
   private p5: P5CanvasInstance<SketchUpdateProps>;
   private p5cam: Camera | undefined;
+  // State Settings...
   private _fieldOfView: number = 800;
   private _minDrawDistance: number = 1;
   private _maxDrawDistance: number = 5000;
+  private _xSensitivity: number = 1;
+  private _ySensitivity: number = 1;
+  private _zSensitivity: number = 1;
 
   constructor(p5: P5CanvasInstance<SketchUpdateProps>) {
     this.p5 = p5;
@@ -15,6 +19,18 @@ export class ManagedCamera {
 
   P5CAM() {
     return this.p5cam;
+  }
+
+  get xSensitivity() {
+    return this._xSensitivity;
+  }
+
+  get ySensitivity() {
+    return this._ySensitivity;
+  }
+
+  get zSensitivity() {
+    return this._zSensitivity;
   }
 
   /**
@@ -31,33 +47,59 @@ export class ManagedCamera {
   }
 
   /**
+   * Initialize all of the camera settings state called on the first .updateWithProps() from the sketch
+   */
+  setCameraSettings(cameraSettings: CameraSettingsState) {
+    const {
+      xSensitivity,
+      ySensitivity,
+      zSensitivity,
+      fieldOfView,
+      maxDrawDistance,
+      minDrawDistance,
+    } = cameraSettings;
+    this._xSensitivity = xSensitivity.value;
+    this._ySensitivity = ySensitivity.value;
+    this._zSensitivity = zSensitivity.value;
+
+    if (this._fieldOfView !== fieldOfView.value) {
+      this._fieldOfView = fieldOfView.value;
+    }
+
+    let updated = false;
+    if (this._maxDrawDistance !== maxDrawDistance.value) {
+      this._maxDrawDistance = maxDrawDistance.value;
+      updated = true;
+    }
+
+    if (this._minDrawDistance !== minDrawDistance.value) {
+      this._minDrawDistance = minDrawDistance.value;
+      updated = true;
+    }
+
+    // Only allow calling this update for the right renderer and if things have been updated...
+    if (updated && this.p5.webglVersion === this.p5.WEBGL2) {
+      this.p5.perspective(
+        this.getFovInRadians(),
+        this.getAspectRatio(),
+        this._minDrawDistance,
+        this._maxDrawDistance
+      );
+    }
+  }
+
+  /**
    * Updates the camera's perspective matrix to account for changes in the canvas size or aspect ratio.
    *
    * This method should be called whenever the canvas is resized to ensure the camera's perspective
    * projection is recalculated using the current field of view and aspect ratio.
    */
   handleCanvasResizeAdjustPerspective() {
-    this.p5.perspective(this.getFovInRadians(), this.getAspectRatio());
-  }
-
-  /**
-   * Updates the minimum and maximum draw (clipping) distances for the camera's perspective projection.
-   *
-   * The near and far clipping planes define the range of distances from the camera at which objects are rendered.
-   * Objects closer than `min` or farther than `max` will not be visible.
-   * This method updates the camera settings and recalculates the perspective projection matrix accordingly.
-   *
-   * @param {number} min - The minimum draw distance (near clipping plane).
-   * @param {number} max - The maximum draw distance (far clipping plane).
-   */
-  updateDrawDistances(min: number, max: number) {
-    this._maxDrawDistance = max;
-    this._minDrawDistance = min;
     this.p5.perspective(
       this.getFovInRadians(),
       this.getAspectRatio(),
-      min,
-      max
+      this._minDrawDistance,
+      this._maxDrawDistance
     );
   }
 
@@ -101,7 +143,7 @@ export class ManagedCamera {
    *
    * @returns {number} The field of view in radians.
    */
-  private getFovInRadians() {
+  private getFovInRadians(): number {
     return 2 * this.p5.atan(this.p5.height / 2 / this._fieldOfView);
   }
 }
