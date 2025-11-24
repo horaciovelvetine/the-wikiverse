@@ -1,13 +1,22 @@
 import { Link } from "@tanstack/react-router";
 
 import { Dispatch, SetStateAction, useCallback } from "react";
-import { SearchResultData, WikiverseLanguageCodes } from "../../types";
+import {
+  GraphsetRequest,
+  SearchResultData,
+  WikiverseLanguageCodes,
+} from "../../types";
 import { H1TextSizing, H5TextSizing } from "../../assets";
 import { LandingPageSearchInput } from "./components/landing-page-search-input";
 import { ToggleSwitch } from "./components/toggle-switch";
 import { useWikiverseService } from "../../hooks";
+import { buildGraphsetResponse } from "../../config/initialize-origin-response";
 
 interface LandingPageProps {
+  serviceOnline: boolean; // indicates the WikiverseAPI is online
+  handleSketchInitializationSetup: (
+    originRequestData: GraphsetRequest | null
+  ) => void;
   setSketchQuery: Dispatch<SetStateAction<string>>;
   wikiLangTarget: WikiverseLanguageCodes;
   setWikiLangTarget: Dispatch<SetStateAction<WikiverseLanguageCodes>>;
@@ -27,26 +36,36 @@ interface LandingPageProps {
  * @param {Dispatch<SetStateAction<boolean>>} props.setPrefers3D - Function to toggle 3D view preference.
  */
 export function LandingPage({
+  serviceOnline,
+  handleSketchInitializationSetup,
   wikiLangTarget,
   setWikiLangTarget,
   prefers3D,
   setPrefers3D,
 }: LandingPageProps) {
-  const { fetchInitialGraphsetData } = useWikiverseService();
+  const { fetchGraphsetOriginData } = useWikiverseService();
+
   /**
    * Takes in the user selected result, and should send a request and get everything rolling
    */
   const handleSelectSearchResultSubmit = useCallback(
     async (searchResult: SearchResultData) => {
-      const results = await fetchInitialGraphsetData(
-        searchResult.entityID,
-        wikiLangTarget,
-        prefers3D
+      handleSketchInitializationSetup(
+        await fetchGraphsetOriginData(
+          searchResult.entityID,
+          wikiLangTarget,
+          prefers3D
+        )
       );
     },
-    [fetchInitialGraphsetData, prefers3D, wikiLangTarget]
+    [
+      fetchGraphsetOriginData,
+      handleSketchInitializationSetup,
+      prefers3D,
+      wikiLangTarget,
+    ]
   );
-
+  if (!serviceOnline) return <></>;
   return (
     <div className="">
       <div className="glass-card glass-padding-lg mx-auto text-gray-900">

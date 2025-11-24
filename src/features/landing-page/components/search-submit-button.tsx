@@ -44,6 +44,7 @@ export function SearchSubmitButton({
       type="submit"
       className="btn-primary btn-modern transition-colors px-4 py-2 flex items-center justify-center border-0 outline-none"
       onClick={handleSearchRequestSubmit}
+      onSubmit={handleSearchRequestSubmit}
     >
       <SearchIcon styles={`text-white ${IconSizing}`} />
     </button>
