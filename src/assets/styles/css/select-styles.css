@@ -1,0 +1,121 @@
+/*
+ * Select Styles
+ * -------------
+ * Cohesive styles for native <select> elements to match glass/modern inputs.
+ * Mirrors tone and interaction from range slider styles.
+ */
+
+/* Glassmorphic select */
+.select-glass {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  padding: 0.5rem 2.25rem 0.5rem 0.75rem; /* leave space for caret */
+  color: theme("colors.gray.100");
+  background-color: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  outline: none;
+  box-shadow: var(--shadow-glass);
+  transition: all var(--def-transition) ease;
+}
+
+.select-glass:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+.select-glass:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+/* Add a custom caret using background SVG */
+.select-glass {
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 8l4 4 4-4' stroke='%23ffffff' stroke-opacity='0.75' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  background-size: 1.1rem 1.1rem;
+}
+
+/* Remove default arrow on some browsers */
+.select-glass::-ms-expand {
+  display: none;
+}
+
+/* Options */
+.select-glass option {
+  color: theme("colors.gray.900");
+  background: theme("colors.gray.50");
+}
+
+/* Modern variant */
+.select-modern {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+  color: theme("colors.gray.100");
+  /* Layered backgrounds: caret icon on top, gradient underneath */
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 8l4 4 4-4' stroke='%23ffffff' stroke-opacity='0.85' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"),
+    linear-gradient(
+      90deg,
+      rgba(59, 130, 246, 0.25) 0%,
+      rgba(255, 255, 255, 0.08) 100%
+    );
+  background-repeat: no-repeat, no-repeat;
+  background-position:
+    right 0.6rem center,
+    0 0;
+  background-size:
+    1.1rem 1.1rem,
+    auto;
+  border: none;
+  border-radius: 0.375rem;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+  transition: all var(--def-transition) ease;
+}
+
+.select-modern:hover {
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 8l4 4 4-4' stroke='%23ffffff' stroke-opacity='0.85' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"),
+    linear-gradient(
+      90deg,
+      rgba(59, 130, 246, 0.35) 0%,
+      rgba(255, 255, 255, 0.12) 100%
+    );
+  background-repeat: no-repeat, no-repeat;
+  background-position:
+    right 0.6rem center,
+    0 0;
+  background-size:
+    1.1rem 1.1rem,
+    auto;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.select-modern:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+}
+
+/* caret layering configured in base/hover rules above */
+
+.select-modern option {
+  color: theme("colors.gray.900");
+  background: theme("colors.gray.50");
+}
+
+/* Size variants */
+.select-sm {
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 0.875rem;
+}
+.select-lg {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  font-size: 1rem;
+}

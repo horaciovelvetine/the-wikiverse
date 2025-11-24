@@ -217,22 +217,6 @@
 }
 
 /*
- * .range-label
- * Label styling for range sliders to match the design system.
- */
-.range-label {
-  font-size: 0.875rem; /* text-sm */
-  font-weight: 500; /* font-medium */
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
-.range-label:hover {
-  color: var(--text-secondary);
-}
-
-/*
  * .range-container
  * Container for range slider and label with proper spacing.
  */
