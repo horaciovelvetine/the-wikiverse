@@ -1,23 +1,11 @@
 import { useState } from "react";
 import { ReactP5Wrapper } from "@p5-wrapper/react";
-
-import { WikiverseP5Sketch } from "../sketch/wikiverse-p5-sketch";
-
-import {
-  CameraSettingsState,
-  GraphsetDataState,
-  LayoutSettingsState,
-  SketchSettingsState,
-} from "../../../types/sketch";
+// TYPES
+import { WikiverseSketchContainerProps } from "../../../types/sketch";
+// SUB COMPONENTS
 import { HUD } from "./hud/hud";
 import { SettingsMenu } from "./settings-menu/settings-menu";
-
-interface SketchContainerProps {
-  graphsetData: GraphsetDataState;
-  sketchSettings: SketchSettingsState;
-  layoutSettings: LayoutSettingsState;
-  cameraSettings: CameraSettingsState;
-}
+import { WikiverseP5Sketch } from "../sketch/wikiverse-p5-sketch";
 
 /**
  * The main container for the Wikiverse Sketch visualization, including the interactive HUD,
@@ -29,7 +17,7 @@ export function WikiverseSketchContainer({
   sketchSettings,
   layoutSettings,
   cameraSettings,
-}: SketchContainerProps) {
+}: Omit<WikiverseSketchContainerProps, "showSettingsMenu">) {
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
   return (
     <div
@@ -42,7 +30,6 @@ export function WikiverseSketchContainer({
         {...{
           graphsetData,
           sketchSettings,
-          layoutSettings,
           cameraSettings,
           showSettingsMenu,
         }}
