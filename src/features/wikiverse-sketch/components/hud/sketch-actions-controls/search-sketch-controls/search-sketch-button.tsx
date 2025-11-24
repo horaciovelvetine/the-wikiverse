@@ -1,10 +1,10 @@
 import { IconSizing, SearchIcon } from "../../../../../../assets";
-import { SearchResult } from "../../../../../../types";
+import { SearchResultData } from "../../../../../../types";
 
 interface SearchSketchButtonProps {
   highlightedResultTargetIndex: number;
-  searchResults: SearchResult[];
-  handleSearchSketchResultSelected: (result: SearchResult) => void;
+  searchResults: SearchResultData[];
+  handleSearchSketchResultSelected: (result: SearchResultData) => void;
 }
 
 /**
@@ -40,7 +40,7 @@ export function SearchSketchButton({
   return (
     <button
       type="submit"
-      className="btn-primary btn-modern transition-colors px-4 py-2 flex items-center justify-center border-0 outline-none"
+      className="btn-glass-ghost btn-modern transition-colors px-4 py-0.5 flex items-center justify-center border-0 outline-none"
       onClick={handleSearchRequestSubmit}
     >
       <SearchIcon styles={`text-white ${IconSizing}`} />

@@ -9,14 +9,11 @@ export function InteractionHistoryDisplay({
 }: InteractionHistoryDisplayProps) {
   return (
     <>
-      {history.length > 0 && (
-        <div>
-          <ol>
-            <li>History 1</li>
-            <li>History 2</li>
-          </ol>
-        </div>
-      )}
+      <div id="interaction-history-dispaly">
+        <ol>
+          <li>History 1</li>
+        </ol>
+      </div>
     </>
   );
 }

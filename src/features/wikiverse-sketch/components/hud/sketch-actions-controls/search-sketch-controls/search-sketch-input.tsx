@@ -1,21 +1,21 @@
 import { Input } from "@headlessui/react";
 import { Dispatch, SetStateAction, useCallback } from "react";
-import { SearchResult } from "../../../../../../types";
+import { SearchResultData } from "../../../../../../types";
 
 interface SearchSketchInputProps {
-  searchSketchQuery: string;
-  setSearchSketchQuery: Dispatch<SetStateAction<string>>;
+  sketchSearchQuery: string;
+  setSketchSearchQuery: Dispatch<SetStateAction<string>>;
   showResultsDropdown: boolean;
   setShowResultsDropdown: Dispatch<SetStateAction<boolean>>;
   setHighlightedResultTargetIndex: Dispatch<SetStateAction<number>>;
   highlightedResultTargetIndex: number;
-  searchResults: SearchResult[];
-  handleSearchSketchResultSelected: (result: SearchResult) => void;
+  searchResults: SearchResultData[];
+  handleSearchSketchResultSelected: (result: SearchResultData) => void;
 }
 
 export function SearchSketchInput({
-  searchSketchQuery,
-  setSearchSketchQuery,
+  sketchSearchQuery,
+  setSketchSearchQuery,
   showResultsDropdown,
   setShowResultsDropdown,
   highlightedResultTargetIndex,
@@ -24,7 +24,7 @@ export function SearchSketchInput({
   handleSearchSketchResultSelected,
 }: SearchSketchInputProps) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchSketchQuery(e.target.value);
+    setSketchSearchQuery(e.target.value);
   };
 
   /**
@@ -81,9 +81,10 @@ export function SearchSketchInput({
   return (
     <Input
       type="text"
-      value={searchSketchQuery}
+      value={sketchSearchQuery}
       onChange={handleInputChange}
       onKeyDown={handleKeyDown}
+      className="outline-none px-1"
     />
   );
 }

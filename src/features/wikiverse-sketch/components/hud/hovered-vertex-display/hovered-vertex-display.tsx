@@ -1,24 +1,32 @@
+import { SolidCubeIcon } from "../../../../../assets";
 import { pointString } from "../../../../../functions";
-import { Vertex } from "../../../../../types";
+import { VertexData } from "../../../../../types";
 
 interface HoveredVertexDisplayProps {
-  hoveredVertex: Vertex | null;
+  hoveredVertex: VertexData | null;
 }
 
 export function HoveredVertexDisplay({
   hoveredVertex,
 }: HoveredVertexDisplayProps) {
   return (
-    <>
-      {hoveredVertex && (
-        <div>
-          <div>
-            <h2>{hoveredVertex.label}</h2>
-            <p>{pointString(hoveredVertex.position)}</p>
+    <div className="flex-1">
+      <div
+        className={`flex items-center gap-2 transition-opacity duration-300 ${hoveredVertex ? "opacity-100" : "opacity-0"}`}
+      >
+        <SolidCubeIcon styles="size-9" />
+        <div id="hovered-vertex-display" className="leading-6">
+          <div className="flex gap-1">
+            <h2 className="font-bold tracking-wide">
+              {hoveredVertex?.label || ""}
+            </h2>
+            <p className="font-light">{pointString(hoveredVertex?.position)}</p>
           </div>
-          <p>{hoveredVertex.description}</p>
+          <p className="text-nowrap font-semibold">
+            {hoveredVertex?.description || ""}
+          </p>
         </div>
-      )}
-    </>
+      </div>
+    </div>
   );
 }

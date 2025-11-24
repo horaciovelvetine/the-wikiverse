@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from "react";
-import { UserInteraction, Vertex } from "../../../../types";
 
 // Sub-Components
 import { HoveredVertexDisplay } from "./hovered-vertex-display";
@@ -7,29 +6,33 @@ import { RelatedEdgesDisplay } from "./related-edges-display";
 import { SelectedVertexDisplay } from "./selected-vertex-display";
 import { SketchActionsControls } from "./sketch-actions-controls";
 import { InteractionHistoryDisplay } from "./interaction-history-display";
+import { GraphsetDataState } from "../../../../types/sketch";
 
 interface HUDLayoutProps {
-  selectedVertex: Vertex | null;
-  hoveredVertex: Vertex | null;
+  graphsetData: GraphsetDataState;
   setShowSettingsMenu: Dispatch<SetStateAction<boolean>>;
-  interactionHistory: UserInteraction[];
 }
 
-export function HUD({
-  selectedVertex,
-  hoveredVertex,
-  setShowSettingsMenu,
-  interactionHistory,
-}: HUDLayoutProps) {
+export function HUD({ graphsetData, setShowSettingsMenu }: HUDLayoutProps) {
   return (
-    <div>
-      <HoveredVertexDisplay hoveredVertex={hoveredVertex} />
-      <SketchActionsControls setShowSettingsMenu={setShowSettingsMenu} />
-      <div>
-        <InteractionHistoryDisplay history={interactionHistory} />
-        <SelectedVertexDisplay selectedVertex={selectedVertex} />
+    <div className="absolute h-full w-full">
+      <div className="flex flex-col h-full justify-between text-white text-lg">
+        {/* !TOP CONTAINER! */}
+        <div className="flex w-full justify-between p-2">
+          <HoveredVertexDisplay hoveredVertex={graphsetData.hoveredVertex} />
+          <SketchActionsControls setShowSettingsMenu={setShowSettingsMenu} />
+        </div>
+        {/* !BOTTOM CONTAINER! */}
+        <div className="flex w-full justify-between p-2">
+          <div>
+            {/* <InteractionHistoryDisplay history={interactionHistory} /> */}
+            <SelectedVertexDisplay
+              selectedVertex={graphsetData.selectedVertex}
+            />
+          </div>
+          {/* <RelatedEdgesDisplay selectedVertex={selectedVertex} /> */}
+        </div>
       </div>
-      <RelatedEdgesDisplay selectedVertex={selectedVertex} />
     </div>
   );
 }

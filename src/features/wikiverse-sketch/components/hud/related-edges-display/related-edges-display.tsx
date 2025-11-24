@@ -1,7 +1,7 @@
-import { Vertex } from "../../../../../types";
+import { VertexData } from "../../../../../types";
 
 interface RelatedEdgesDisplayProps {
-  selectedVertex: Vertex | null;
+  selectedVertex: VertexData | null;
 }
 
 export function RelatedEdgesDisplay({
@@ -10,7 +10,7 @@ export function RelatedEdgesDisplay({
   return (
     <>
       {selectedVertex && (
-        <div>
+        <div id="related-edges-display" className="flex w-full justify-end">
           <ol>
             <li>Edge Item</li>
             <li>Edge Item 2</li>
