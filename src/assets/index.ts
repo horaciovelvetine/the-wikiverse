@@ -8,6 +8,8 @@ export { ChevronDownIcon } from "./icons/chevron-down-icon";
 export { ToggleSwitchIcon } from "./icons/toggle-switch-icon";
 export { HyperlinkIcon } from "./icons/hyperlink-icon";
 export { SettingsIcon } from "./icons/settings-icon";
+export { CollapseArrowIcon } from "./icons/collapse-arrows-icon";
+export { ExpandArrowsIcon } from "./icons/expand-arrows-icon";
 
 // TailwindCSS Style String Const's
 export {
