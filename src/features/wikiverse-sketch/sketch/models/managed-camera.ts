@@ -1,23 +1,32 @@
-import { Camera } from "p5";
+import { Camera, Vector } from "p5";
 import { P5CanvasInstance } from "@p5-wrapper/react";
-import { CameraSettingsState, SketchUpdateProps } from "../../../../types";
+import {
+  CameraSettingsState,
+  Point,
+  SketchUpdateProps,
+} from "../../../../types";
 
 export class ManagedCamera {
   private p5: P5CanvasInstance<SketchUpdateProps>;
   private p5cam: Camera | undefined;
   // State Settings...
-  private _fieldOfView: number = 800;
   private _minDrawDistance: number = 1;
   private _maxDrawDistance: number = 5000;
   private _xSensitivity: number = 1;
   private _ySensitivity: number = 1;
   private _zSensitivity: number = 1;
+  private _focusOnSelected: boolean = true;
+
+  private _currentFocusTarget: Point = new Point();
+  private _currentFocusStart: Point | null = null;
+  private _currentFocusAnimationLength = 100;
+  private _currentFocusKeyFrame: number = 0;
 
   constructor(p5: P5CanvasInstance<SketchUpdateProps>) {
     this.p5 = p5;
   }
 
-  P5CAM() {
+  get P5CAM() {
     return this.p5cam;
   }
 
@@ -31,6 +40,18 @@ export class ManagedCamera {
 
   get zSensitivity() {
     return this._zSensitivity;
+  }
+
+  get currentFocus() {
+    return this._currentFocusTarget;
+  }
+
+  get currentFocusAnimationLength() {
+    return this._currentFocusAnimationLength;
+  }
+
+  get focusOnSelected() {
+    return this._focusOnSelected;
   }
 
   /**
@@ -54,16 +75,33 @@ export class ManagedCamera {
       xSensitivity,
       ySensitivity,
       zSensitivity,
-      fieldOfView,
       maxDrawDistance,
       minDrawDistance,
+      currentFocus,
+      currentFocusAnimationLength,
+      focusOnSelected,
     } = cameraSettings;
     this._xSensitivity = xSensitivity.value;
     this._ySensitivity = ySensitivity.value;
     this._zSensitivity = zSensitivity.value;
 
-    if (this._fieldOfView !== fieldOfView.value) {
-      this._fieldOfView = fieldOfView.value;
+    if (this._focusOnSelected !== focusOnSelected.value) {
+      this._focusOnSelected = focusOnSelected.value;
+    }
+
+    // Update the cameras lookat target and restart animation when it changes.
+    // Normalize currentFocus to a Point instance if it's a plain object
+    const normalizedFocus = this.normalizeToPoint(currentFocus);
+    if (!this._currentFocusTarget.equals(normalizedFocus)) {
+      this._currentFocusTarget = normalizedFocus;
+      this.resetFocusAnimationState();
+    }
+
+    // Update how long it takes the camera to lookat target.
+    if (
+      this._currentFocusAnimationLength !== currentFocusAnimationLength.value
+    ) {
+      this._currentFocusAnimationLength = currentFocusAnimationLength.value;
     }
 
     let updated = false;
@@ -103,20 +141,9 @@ export class ManagedCamera {
     );
   }
 
-  /**
-   * Sets the field of view distance used for the camera's perspective projection.
-   *
-   * The field of view (FOV) determines how wide the camera's viewing angle is. Smaller values zoom in (narrow FOV),
-   * and larger values zoom out (wider FOV). This value is typically used as the "distance to canvas plane" in
-   * radians calculation for p5's perspective method.
-   *
-   * After calling this method, you should update the camera's perspective matrix
-   * (e.g., by calling `handleResizePerspective`) to reflect the change visually.
-   *
-   * @param {number} value - The distance value to use in the field of view calculation.
-   */
-  setFieldOfView(value: number) {
-    this._fieldOfView = value;
+  handleAdvanceCanimation() {
+    this.advanceLookAtAnimation();
+    // TODO: this.advanceCameraMoveAnimation();
   }
 
   //! PRIVATE METHODS
@@ -144,6 +171,121 @@ export class ManagedCamera {
    * @returns {number} The field of view in radians.
    */
   private getFovInRadians(): number {
-    return 2 * this.p5.atan(this.p5.height / 2 / this._fieldOfView);
+    return 2 * this.p5.atan(this.p5.height / 2 / 800);
+  }
+
+  /**
+   * Advances the "look at" animation for the camera's focus transition.
+   *
+   * This method should be called on each animation frame while a camera focus transition is in progress.
+   * It interpolates the camera's look-at position between the current focus and the target focus,
+   * smoothly animating the camera's direction of view.
+   *
+   * When the animation completes (i.e., the key frame exceeds the animation length),
+   * it resets the animation state.
+   *
+   * @private
+   */
+
+  private advanceLookAtAnimation() {
+    if (this.p5cam === undefined) return;
+    // if (this._currentFocusActual === null) return;
+    // if (this._currentFocusKeyFrame === 0) return;
+
+    const { x, y, z } = this.getLookAtChangeVector();
+    this.p5cam.lookAt(x, y, z);
+
+    if (this._currentFocusKeyFrame < this.currentFocusAnimationLength) {
+      this._currentFocusKeyFrame += 1;
+    } else {
+      this._currentFocusKeyFrame = 0;
+      this._currentFocusStart = new Point(
+        this._currentFocusTarget.x,
+        this._currentFocusTarget.y,
+        this._currentFocusTarget.z || 0
+      );
+    }
+  }
+
+  /**
+   * Calculates the current "look at" vector used for animating the camera's focus transition.
+   *
+   * This method computes the interpolated look-at vector (x, y, z) between the current camera
+   * center and the target focus point, based on the current animation frame and total animation length.
+   * It uses linear interpolation (lerp) to create a smooth transition during camera re-focusing animations.
+   *
+   * If the camera instance (`p5cam`) is undefined, returns a zero vector.
+   *
+   * @returns {Vector} The interpolated look-at vector for the current animation frame.
+   */
+  private getLookAtChangeVector(): Vector {
+    if (this.p5cam === undefined) return this.p5.createVector(0, 0, 0);
+
+    const start =
+      this._currentFocusStart ||
+      new Point(
+        this.p5cam.centerX,
+        this.p5cam.centerY,
+        this.p5cam.centerZ || 0
+      );
+    const progress = this.getFocusAnimationProgress();
+
+    return this.p5.createVector(
+      this.p5.lerp(start.x, this._currentFocusTarget.x, progress),
+      this.p5.lerp(start.y, this._currentFocusTarget.y, progress),
+      this.p5.lerp(start.z || 0, this._currentFocusTarget.z || 0, progress)
+    );
+  }
+
+  /**
+   * Calculates the current normalized progress value for the focus animation.
+   * Keeps the lerp factor between 0 and 1 even when animation length is 0.
+   */
+  private getFocusAnimationProgress(): number {
+    if (this.currentFocusAnimationLength <= 0) return 1;
+
+    const progress =
+      this._currentFocusKeyFrame / this.currentFocusAnimationLength;
+
+    return this.p5.constrain(progress, 0, 1);
+  }
+
+  /**
+   * Normalizes a Point-like value to a Point instance.
+   * If the input is already a Point instance, returns it as-is.
+   * If it's a plain object with x, y, z properties, creates a new Point instance.
+   *
+   * @param pointLike - Either a Point instance or a plain object with x, y, z properties
+   * @returns A Point instance
+   */
+  private normalizeToPoint(pointLike: Point): Point {
+    // If it's already a Point instance (has the equals method), return it
+    if (pointLike && typeof pointLike.equals === "function") {
+      return pointLike;
+    }
+    // Otherwise, create a new Point instance from the plain object
+    return new Point(pointLike.x ?? 0, pointLike.y ?? 0, pointLike.z ?? 0);
+  }
+
+  /**
+   * Captures the current camera lookAt point so the next focus animation knows
+   * where it is starting from. Falls back to the target when a camera does not
+   * yet exist.
+   */
+  private resetFocusAnimationState() {
+    this._currentFocusKeyFrame = 0;
+    if (this.p5cam) {
+      this._currentFocusStart = new Point(
+        this.p5cam.centerX,
+        this.p5cam.centerY,
+        this.p5cam.centerZ || 0
+      );
+    } else {
+      this._currentFocusStart = new Point(
+        this._currentFocusTarget.x,
+        this._currentFocusTarget.y,
+        this._currentFocusTarget.z || 0
+      );
+    }
   }
 }
