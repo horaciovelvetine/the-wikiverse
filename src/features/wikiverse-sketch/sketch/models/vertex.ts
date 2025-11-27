@@ -20,7 +20,11 @@ export class Vertex implements VertexData {
     this.label = vert.label;
     this.description = vert.description;
     this.url = vert.url;
-    this.position = { ...vert.position };
+    this.position = new Point(
+      vert.position.x,
+      vert.position.y,
+      vert.position.z
+    );
     this.locked = vert.locked ?? false;
     this.fetched = vert.fetched ?? false;
   }
