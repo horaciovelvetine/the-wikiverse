@@ -1,6 +1,6 @@
 import { HyperlinkIcon, SolidCubeIcon } from "../../../../../assets";
-import { pointString } from "../../../../../functions";
 import { VertexData } from "../../../../../types";
+import { PreventBubbledEventsWrapper } from "../../prevent-bubbled-events-wrapper/prevent-bubbled-events-wrapper";
 
 interface SelectedVertexDisplayProps {
   selectedVertex: VertexData | null;
@@ -11,38 +11,33 @@ export function SelectedVertexDisplay({
   return (
     <>
       {selectedVertex && (
-        <div
-          id="selected-vertex-display"
-          className="flex text-xl items-center gap-1.5"
-        >
-          <SolidCubeIcon styles="size-10 text-yellow-300" />
-          <div className="">
-            <div className="flex gap-1">
-              <h2 className="text-nowrap font-bold">{selectedVertex.label}</h2>
-              <p className="text-nowrap font-semibold">
-                {pointString(selectedVertex.position)}
-              </p>
-              <a href={selectedVertex.url} target="_blank">
-                <HyperlinkIcon />
-              </a>
-            </div>
-            <p className="font-light">{selectedVertex.description}</p>
-            <div className="flex gap-1">
-              <button
-                type="button"
-                className="text-sm btn-modern btn-glass rounded-sm"
-              >
-                Group
-              </button>
-              <button
-                type="button"
-                className="text-sm btn-modern btn-glass rounded-sm"
-              >
-                Options
-              </button>
+        <PreventBubbledEventsWrapper>
+          <div
+            id="selected-vertex-display"
+            className="flex text-sm sm:text-base md:text-lg lg:text-xl items-center gap-1 sm:gap-1.5 md:gap-2"
+          >
+            <div className="flex items-center rounded-md sm:rounded-lg border border-gray-300/50 bg-stone-900/60 backdrop-blur px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2.5 gap-2 sm:gap-2.5 md:gap-3">
+              <SolidCubeIcon styles="text-yellow-300 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 flex-shrink-0" />
+              <div className="flex-col w-full min-w-0">
+                <div className="flex gap-1 sm:gap-1.5 items-center">
+                  <h2 className="text-nowrap font-bold select-none text-xs sm:text-sm md:text-base lg:text-lg truncate">
+                    {selectedVertex.label}
+                  </h2>
+                  <a
+                    href={selectedVertex.url}
+                    target="_blank"
+                    className="flex-shrink-0"
+                  >
+                    <HyperlinkIcon />
+                  </a>
+                </div>
+                <p className="font-light select-none text-xs sm:text-sm md:text-base lg:text-lg line-clamp-2 sm:line-clamp-3 leading-tight">
+                  {selectedVertex.description}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        </PreventBubbledEventsWrapper>
       )}
     </>
   );

@@ -2,10 +2,13 @@ import { useState } from "react";
 import { ReactP5Wrapper } from "@p5-wrapper/react";
 // TYPES
 import { WikiverseSketchContainerProps } from "../../../types/sketch";
+// HOOKS
+import { useTaggingDataState } from "../../../hooks/sketch/use-tagging-data-state";
 // SUB COMPONENTS
 import { HUD } from "./hud/hud";
 import { SettingsMenu } from "./settings-menu/settings-menu";
 import { WikiverseP5Sketch } from "../sketch/wikiverse-p5-sketch";
+import { PreventBubbledEventsWrapper } from "./prevent-bubbled-events-wrapper/prevent-bubbled-events-wrapper";
 
 /**
  * The main container for the Wikiverse Sketch visualization, including the interactive HUD,
@@ -17,8 +20,9 @@ export function WikiverseSketchContainer({
   sketchSettings,
   layoutSettings,
   cameraSettings,
-}: Omit<WikiverseSketchContainerProps, "showSettingsMenu">) {
+}: Omit<WikiverseSketchContainerProps, "showSettingsMenu" | "taggingData">) {
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
+  const taggingData = useTaggingDataState();
   return (
     <div
       id="wikiverse-sketch-container"
@@ -38,16 +42,20 @@ export function WikiverseSketchContainer({
       <HUD
         setShowSettingsMenu={setShowSettingsMenu}
         graphsetData={graphsetData}
-      />
-      {/* SETTINGS MENU */}
-      <SettingsMenu
-        showSettingsMenu={showSettingsMenu}
-        setShowSettingsMenu={setShowSettingsMenu}
-        graphsetData={graphsetData}
-        sketchSettings={sketchSettings}
-        layoutSettings={layoutSettings}
         cameraSettings={cameraSettings}
       />
+      {/* SETTINGS MENU */}
+      <PreventBubbledEventsWrapper>
+        <SettingsMenu
+          showSettingsMenu={showSettingsMenu}
+          setShowSettingsMenu={setShowSettingsMenu}
+          graphsetData={graphsetData}
+          sketchSettings={sketchSettings}
+          layoutSettings={layoutSettings}
+          cameraSettings={cameraSettings}
+          taggingData={taggingData}
+        />
+      </PreventBubbledEventsWrapper>
     </div>
   );
 }
