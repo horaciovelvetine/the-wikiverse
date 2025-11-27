@@ -21,11 +21,12 @@ export type {
   LayoutRequest,
   GraphsetRequest,
   PropertyData,
+  PointData,
 } from "./api";
 
 //?/==> MODELS
 export type { Dimensions } from "./models/dimensions";
-export type { Point } from "./models/point";
+export { Point } from "./models/point";
 
 //?/==> SITE
 export type { NavigationItem } from "./site/navigation-item";
@@ -36,9 +37,11 @@ export type { SettingsTabItem } from "./site/settings-tab-item";
 export type { SettingsTabs } from "./site/settings-tabs";
 export type { MinMaxSet } from "./site/min-max-set";
 export type { MinMaxValues } from "./site/min-max-values";
+export type { TaggingViews } from "./site/tagging-views";
 
 //?/==> SKETCH
 export type {
+  GraphsetDataState,
   SelectLanguageSetting,
   ToggleItemSetting,
   NumberRangeSetting,
@@ -49,4 +52,7 @@ export type {
   UserInteraction,
   SketchUpdateProps,
   WikiverseSketchContainerProps,
+  VertexTag,
+  TaggingDataState,
+  TagState,
 } from "./sketch";
