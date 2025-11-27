@@ -108,7 +108,7 @@ export class WikiverseSketchManager {
    * allowing selected vertices to be colored.
    */
   drawVertices() {
-    this.data.vertices().forEach(vert => {
+    this.data.vertices.forEach(vert => {
       vert.draw(this.p5, this.data.isSelected(vert));
     });
   }
@@ -124,15 +124,15 @@ export class WikiverseSketchManager {
    * If no vertex is currently selected, this method does nothing.
    */
   drawSelectedVertexUI() {
-    if (!this.data.setlectedVertex()) return;
+    if (!this.data.selectedVertex) return;
 
-    const selected = this.data
-      .vertices()
-      .find(v => v.id === this.data.setlectedVertex()?.id);
+    const selected = this.data.vertices.find(
+      v => v.id === this.data.selectedVertex?.id
+    );
 
     if (!selected) return;
 
-    selected.drawLabel(this.p5, this.p5Font, this.cam.P5CAM());
+    selected.drawLabel(this.p5, this.p5Font, this.cam.P5CAM);
     this.drawRelatedEdgesUI(selected);
   }
 
@@ -147,15 +147,15 @@ export class WikiverseSketchManager {
    * Does nothing if there is no hovered vertex.
    */
   drawHoveredVertexUI() {
-    if (!this.data.hoveredVertex()) return;
+    if (!this.data.hoveredVertex) return;
 
-    const hovered = this.data
-      .vertices()
-      .find(v => v.id === this.data.hoveredVertex()?.id);
+    const hovered = this.data.vertices.find(
+      v => v.id === this.data.hoveredVertex?.id
+    );
 
     if (!hovered) return;
 
-    hovered!.drawLabel(this.p5, this.p5Font, this.cam.P5CAM());
+    hovered!.drawLabel(this.p5, this.p5Font, this.cam.P5CAM);
     this.drawRelatedEdgesUI(hovered);
   }
 
@@ -165,8 +165,8 @@ export class WikiverseSketchManager {
   mousePositionedOnVertex(): Vertex | null {
     let target: Vertex | null = null;
 
-    for (const v of this.data.vertices()) {
-      if (v.traceRay(this.p5, this.cam.P5CAM())) target = v;
+    for (const v of this.data.vertices) {
+      if (v.traceRay(this.p5, this.cam.P5CAM)) target = v;
     }
 
     return target;
@@ -225,8 +225,10 @@ export class WikiverseSketchManager {
 
     relatedEdges.forEach(edge => {
       const otherVertex = this.data.getAlternateVertex(edge, vertex);
+      // If no other vertex, dont display the edge
       if (!otherVertex) return;
-
+      // If no property, don't display the edge
+      if (!this.data.properties.find(p => p.id === edge.propertyID)) return;
       const parallelEdge = edge.hasParallelEdge(relatedEdges);
 
       // For parallel (bidirectional) edges, only draw one:
@@ -241,7 +243,6 @@ export class WikiverseSketchManager {
       const { x: x1, y: y1, z: z1 } = vertex.position;
       const { x: x2, y: y2, z: z2 } = otherVertex.position;
 
-      this.p5.push();
       this.setEdgeStrokeColor(vertex, edge, Boolean(parallelEdge));
 
       // Draw a 3D or 2D line, depending on whether z-coordinates are present
@@ -251,8 +252,6 @@ export class WikiverseSketchManager {
       } else {
         this.p5.line(x1, y1, x2, y2);
       }
-
-      this.p5.pop();
     });
   }
 
@@ -273,8 +272,8 @@ export class WikiverseSketchManager {
     } else if (e.isSource(v1)) {
       // * OUTWARD EDGE
       this.p5.stroke("red");
-      // * INWARD EDGE
     } else {
+      // * INWARD EDGE
       this.p5.stroke("blue");
     }
   }
@@ -291,12 +290,10 @@ export class WikiverseSketchManager {
    */
   private displayBoundingBoxUI(minMax: MinMaxSet) {
     if (this._showBoundingBox) {
-      this.p5.push();
       this.p5.noFill();
       this.p5.strokeWeight(5);
       this.p5.stroke("rgba(255,255,255,0.5)");
       this.p5.box(minMax.x.diff, minMax.y.diff, minMax.z.diff);
-      this.p5.pop();
     }
   }
 

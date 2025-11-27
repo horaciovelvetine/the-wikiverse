@@ -24,7 +24,7 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
     SK.drawVertices();
     SK.drawSelectedVertexUI();
     SK.drawHoveredVertexUI();
-    // SK.advanceCamAnimations();
+    SK.cam.handleAdvanceCanimation();
   };
 
   //*/===> WINDOW RESIZE!
@@ -35,7 +35,7 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
 
   //*/===> PROPS UPDATE!
   p5.updateWithProps = state => {
-    if (!SK.dispatcher.allSettersAssigned()) {
+    if (!SK.dispatcher.allSettersAssigned) {
       //==> Initial Setter Assignment for first update...
       SK.dispatcher.assignAllSetters(state);
     }
@@ -47,13 +47,10 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
     }
 
     const { graphsetData, cameraSettings, sketchSettings } = state;
-    SK.data.setGraphsetData(graphsetData.graphset);
-    SK.data.setSelectedVertex(graphsetData.selectedVertex);
-    SK.data.setHoveredVertex(graphsetData.hoveredVertex);
-
+    SK.data.setGraphsetData(graphsetData);
     SK.cam.setCameraSettings(cameraSettings);
     SK.setSketchSettings(sketchSettings);
-    console.log("sketch.updateWithProps()");
+    // console.log({ src: "updateWithProps()" });
   };
 
   //*/===> MOUSE MOVED (HOVER)!
@@ -62,12 +59,12 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
     if (SK.settingsMenuShown()) return;
 
     const hoverTarget = SK.mousePositionedOnVertex();
-    if (!hoverTarget && !SK.data.hoveredVertex()) {
+    if (!hoverTarget && !SK.data.hoveredVertex) {
       // No Target, State Already Null... Do Nothing
       return;
     }
 
-    if (hoverTarget && SK.data.hoveredVertex()?.id === hoverTarget.id) {
+    if (hoverTarget && SK.data.hoveredVertex?.id === hoverTarget.id) {
       // Current Target Already Hovered... Do Nothing
       return;
     }
@@ -91,6 +88,10 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
       // Vertex not selected, select, and remove from hovered!
       SK.dispatcher.setHoveredVertex(null);
       SK.dispatcher.setSelectedVertex(clickTarget);
+      // Only focus the camera if setting is enables
+      if (SK.cam.focusOnSelected) {
+        SK.dispatcher.setCurrentFocus(clickTarget.position);
+      }
     }
   };
 
