@@ -10,6 +10,9 @@ export { HyperlinkIcon } from "./icons/hyperlink-icon";
 export { SettingsIcon } from "./icons/settings-icon";
 export { CollapseArrowIcon } from "./icons/collapse-arrows-icon";
 export { ExpandArrowsIcon } from "./icons/expand-arrows-icon";
+export { ArrowBothIcon } from "./icons/arrow-both-icon";
+export { ArrowLeftIcon } from "./icons/arrow-left-icon";
+export { ArrowRightIcon } from "./icons/arrow-right-icon";
 
 // TailwindCSS Style String Const's
 export {
