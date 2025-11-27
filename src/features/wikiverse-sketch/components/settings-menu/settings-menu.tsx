@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { SettingsTabs, WikiverseSketchContainerProps } from "../../../../types";
 
 // SUB-COMPONENTS
@@ -6,6 +6,7 @@ import { TabNavigationSelector } from "./tabs/tab-navigation-selector/tab-naviga
 import { CameraSettingsTab } from "./tabs/camera-settings/camera-settings-tab";
 import { LayoutSettingsTab } from "./tabs/layout-settings/layout-settings-tab";
 import { SketchSettingsTab } from "./tabs/sketch-settings/sketch-settings-tab";
+import { TaggingSettingsTab } from "./tabs/tagging-settings/tagging-settings-tab";
 
 interface SettingsMenuProps extends WikiverseSketchContainerProps {
   setShowSettingsMenu: Dispatch<SetStateAction<boolean>>;
@@ -17,8 +18,27 @@ export function SettingsMenu({
   sketchSettings,
   cameraSettings,
   layoutSettings,
+  taggingData,
+  graphsetData,
 }: SettingsMenuProps) {
   const [activeTab, setActiveTab] = useState<SettingsTabs>("sketch");
+
+  // Handle Escape key to close menu
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && showSettingsMenu) {
+        setShowSettingsMenu(false);
+      }
+    };
+
+    if (showSettingsMenu) {
+      window.addEventListener("keydown", handleEscape);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [showSettingsMenu, setShowSettingsMenu]);
 
   if (!showSettingsMenu) return null;
 
@@ -31,9 +51,9 @@ export function SettingsMenu({
       />
 
       {/* Settings Card */}
-      <div className="relative w-full max-w-2xl mx-4 glass-card card-modern">
+      <div className="relative w-full max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl 2xl:max-w-6xl max-h-[95vh] mx-4 md:mx-6 lg:mx-8 glass-card card-modern flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/10">
+        <div className="flex items-center justify-between p-4 md:p-6 lg:p-8 border-b border-white/10 flex-shrink-0">
           <h2 className="text-xl font-semibold text-white">Settings</h2>
           <button
             onClick={() => setShowSettingsMenu(false)}
@@ -56,13 +76,15 @@ export function SettingsMenu({
         </div>
 
         {/* TAB NAVIGATION */}
-        <TabNavigationSelector
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-        />
+        <div className="flex-shrink-0">
+          <TabNavigationSelector
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+        </div>
 
         {/* TAB CONTENT */}
-        <div className="p-6">
+        <div className="p-4 md:p-6 lg:p-8 overflow-y-auto flex-1 min-h-0">
           {/* TABS */}
           {/* SKETCH SETTINGS TAB */}
           <SketchSettingsTab
@@ -80,6 +102,13 @@ export function SettingsMenu({
           <LayoutSettingsTab
             activeTab={activeTab}
             layoutSettings={layoutSettings}
+          />
+
+          {/* TAGGING SETTINGS TAB */}
+          <TaggingSettingsTab
+            activeTab={activeTab}
+            taggingData={taggingData}
+            graphsetData={graphsetData}
           />
         </div>
       </div>

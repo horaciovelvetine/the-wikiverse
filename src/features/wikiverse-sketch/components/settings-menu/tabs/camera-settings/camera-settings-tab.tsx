@@ -1,6 +1,12 @@
 import { CameraSettingsState, SettingsTabs } from "../../../../../../types";
 import { SettingsTabsMap } from "../../config/settings-tabs-map";
-import { RangeSliderInput, SettingsMenuHeader } from "../components";
+import {
+  AxisSensitivityInput,
+  RangeSliderInput,
+  SettingsMenuHeader,
+  SettingsSection,
+  ToggleSettingInput,
+} from "../components";
 
 interface CameraSettingsTabProps {
   activeTab: SettingsTabs;
@@ -26,12 +32,44 @@ export function CameraSettingsTab({
       {activeTab === "camera" && (
         <div className="space-y-6">
           <SettingsMenuHeader label={tab.label} />
-          <RangeSliderInput setting={cameraSettings.fieldOfView} />
-          <RangeSliderInput setting={cameraSettings.minDrawDistance} />
-          <RangeSliderInput setting={cameraSettings.maxDrawDistance} />
-          <RangeSliderInput setting={cameraSettings.xSensitivity} />
-          <RangeSliderInput setting={cameraSettings.ySensitivity} />
-          <RangeSliderInput setting={cameraSettings.zSensitivity} />
+
+          <SettingsSection
+            title="Focus Behavior"
+            description="Control automatic focus and animation when selecting vertices"
+          >
+            <ToggleSettingInput setting={cameraSettings.focusOnSelected} />
+            <RangeSliderInput
+              setting={cameraSettings.currentFocusAnimationLength}
+            />
+          </SettingsSection>
+
+          <SettingsSection
+            title="Draw Distance"
+            description="Set the minimum and maximum rendering distance for objects"
+          >
+            <RangeSliderInput setting={cameraSettings.minDrawDistance} />
+            <RangeSliderInput setting={cameraSettings.maxDrawDistance} />
+          </SettingsSection>
+
+          <SettingsSection
+            title="Movement Sensitivity"
+            description="Adjust camera movement responsiveness along each axis"
+          >
+            <AxisSensitivityInput
+              xSensitivity={cameraSettings.xSensitivity}
+              ySensitivity={cameraSettings.ySensitivity}
+              zSensitivity={cameraSettings.zSensitivity}
+            />
+          </SettingsSection>
+
+          <SettingsSection
+            title="Animation"
+            description="Control the duration of camera movement animations"
+          >
+            <RangeSliderInput
+              setting={cameraSettings.cameraMoveAnimationLength}
+            />
+          </SettingsSection>
         </div>
       )}
     </>

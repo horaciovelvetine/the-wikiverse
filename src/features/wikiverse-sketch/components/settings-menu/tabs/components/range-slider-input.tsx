@@ -15,24 +15,33 @@ export function RangeSliderInput({ setting }: { setting: NumberRangeSetting }) {
     setting.setter(Number(e.target.value));
   };
   return (
-    <Field as="div" className="range-container">
-      <Label className="inline-flex gap-1 text-sm text-gray-300">
-        <span className="font-extrabold">{setting.label}: </span>{" "}
-        <span className="font-semibold">{setting.value}</span>
-      </Label>
-      <Description className="text-sm text-gray-300">
-        {setting.description}
-      </Description>
+    <Field as="div" className="w-full space-y-2">
+      <div className="flex flex-col gap-1.5">
+        <Label className="text-xs sm:text-sm font-medium text-gray-300">
+          {setting.label}
+        </Label>
+        {setting.description && (
+          <Description className="text-xs sm:text-sm font-light text-gray-300/65">
+            {setting.description}
+          </Description>
+        )}
+      </div>
 
-      <Input
-        type="range"
-        min={setting.min}
-        max={setting.max}
-        step={setting.step}
-        value={setting.value}
-        onChange={handleOnchange}
-        className="range-glass range-modern w-full"
-      />
+      <div className="flex flex-col items-center w-full gap-1">
+        <span className="text-sm font-semibold text-white w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl text-right">
+          {setting.value}
+        </span>
+        <Input
+          type="range"
+          min={setting.min}
+          max={setting.max}
+          step={setting.step}
+          value={setting.value}
+          onChange={handleOnchange}
+          className="range-glass range-modern w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
+          aria-label={setting.label}
+        />
+      </div>
     </Field>
   );
 }

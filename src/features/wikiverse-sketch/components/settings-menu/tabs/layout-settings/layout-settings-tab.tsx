@@ -3,6 +3,7 @@ import { SettingsTabsMap } from "../../config/settings-tabs-map";
 import {
   RangeSliderInput,
   SettingsMenuHeader,
+  SettingsSection,
   ToggleSettingInput,
 } from "../components";
 
@@ -32,15 +33,33 @@ export function LayoutSettingsTab({
       {activeTab === "layout" && (
         <div className="space-y-6">
           <SettingsMenuHeader label={tab.label} />
-          <ToggleSettingInput setting={layoutSettings.prefers3D} />
-          <RangeSliderInput setting={layoutSettings.attractionMultiplier} />
-          <RangeSliderInput setting={layoutSettings.repulsionMultiplier} />
-          <RangeSliderInput setting={layoutSettings.vertexDensity} />
-          <RangeSliderInput setting={layoutSettings.maxIterationMovement} />
-          <RangeSliderInput setting={layoutSettings.maxLayoutIterations} />
-          <RangeSliderInput
-            setting={layoutSettings.temperatureCurveMultiplier}
-          />
+
+          <SettingsSection
+            title="Dimensional Preference"
+            description="Choose between 2D and 3D layout rendering"
+          >
+            <ToggleSettingInput setting={layoutSettings.prefers3D} />
+          </SettingsSection>
+
+          <SettingsSection
+            title="Force Parameters"
+            description="Control the attraction and repulsion forces between vertices"
+          >
+            <RangeSliderInput setting={layoutSettings.attractionMultiplier} />
+            <RangeSliderInput setting={layoutSettings.repulsionMultiplier} />
+          </SettingsSection>
+
+          <SettingsSection
+            title="Layout Control"
+            description="Fine-tune the layout algorithm behavior and performance"
+          >
+            <RangeSliderInput setting={layoutSettings.vertexDensity} />
+            <RangeSliderInput setting={layoutSettings.maxLayoutIterations} />
+            <RangeSliderInput setting={layoutSettings.maxIterationMovement} />
+            <RangeSliderInput
+              setting={layoutSettings.temperatureCurveMultiplier}
+            />
+          </SettingsSection>
         </div>
       )}
     </>

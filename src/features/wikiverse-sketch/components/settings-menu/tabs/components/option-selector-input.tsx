@@ -42,11 +42,11 @@ export function OptionSelectorInput({
     setting.setter(e.target.value as typeof setting.value);
   };
   return (
-    <Field>
-      <Label className="block text-sm font-medium text-gray-300">
+    <Field className="w-full">
+      <Label className="block text-xs sm:text-sm font-medium text-gray-300">
         {setting.label}
       </Label>
-      <Description className="text-sm font-light text-gray-300/65 mb-1">
+      <Description className="text-xs sm:text-sm font-light text-gray-300/65 mt-1 sm:mt-1.5">
         {setting.description}
       </Description>
       <Select
@@ -54,7 +54,7 @@ export function OptionSelectorInput({
         aria-label="Language Data Target"
         value={setting.value}
         onChange={handleSelectionChange}
-        className="select-glass select-sm"
+        className="select-glass select-sm w-full mt-2 sm:mt-3"
       >
         {map.map(opt => (
           <option key={opt.code} value={opt.code}>

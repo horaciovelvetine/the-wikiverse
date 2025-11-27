@@ -1,0 +1,395 @@
+/*
+ * Table Styles
+ * ------------
+ * This file contains custom styles for table components, focusing on modern UI patterns
+ * and smooth transitions. The styles here are designed to be used alongside the glass morphism
+ * system for a cohesive look and feel.
+ *
+ * Classes:
+ *   .table-glass        - Glassmorphic table container with blur effects and subtle borders.
+ *   .table-glass-header - Header row styling with enhanced glass effect.
+ *   .table-glass-row    - Table row styling with hover effects and smooth transitions.
+ *   .table-glass-cell   - Table cell styling with proper spacing and borders.
+ *
+ * Usage:
+ *   Wrap tables in a container with "table-glass" class for glassmorphic appearance.
+ *   Apply "table-glass-header" to <thead> or header rows.
+ *   Apply "table-glass-row" to <tr> elements for hover effects.
+ *   Apply "table-glass-cell" to <td> or <th> elements for consistent cell styling.
+ */
+
+/*
+ * .table-glass
+ * Glassmorphic table container with backdrop blur and subtle transparency.
+ * Matches the design system's glass card aesthetic.
+ */
+.table-glass {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: rgba(41, 37, 36, 0.6); /* stone-900 with 60% opacity */
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.35rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-glass);
+  transition: all var(--def-transition) ease;
+}
+
+/*
+ * .table-glass-header
+ * Header row styling with enhanced glass effect and stronger background.
+ */
+.table-glass-header {
+  background: rgba(15, 23, 42, 0.8); /* slate-900 with 80% opacity */
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.table-glass-header .table-glass-cell {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.75rem 1rem;
+}
+
+/*
+ * .table-glass-row
+ * Table row styling with hover effects and smooth transitions.
+ * Provides visual feedback on interaction.
+ */
+.table-glass-row {
+  transition: all var(--def-transition) ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.table-glass-row:last-child {
+  border-bottom: none;
+}
+
+.table-glass-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(2px);
+  box-shadow: inset 2px 0 0 rgba(59, 130, 246, 0.4); /* blue-500 accent */
+}
+
+/*
+ * .table-glass-cell
+ * Table cell styling with proper spacing, borders, and text alignment.
+ * Includes responsive text truncation for long content.
+ */
+.table-glass-cell {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  vertical-align: middle;
+  color: var(--text-primary);
+  transition: all var(--def-transition) ease;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.table-glass-row:hover .table-glass-cell {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/*
+ * .table-glass-cell-truncate
+ * Utility class for truncating long text with ellipsis.
+ */
+.table-glass-cell-truncate {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*
+ * .table-glass-cell-wrap
+ * Utility class for allowing text to wrap in cells.
+ */
+.table-glass-cell-wrap {
+  white-space: normal;
+  word-break: break-word;
+}
+
+/*
+ * .table-glass-cell-nowrap
+ * Utility class for preventing text wrapping while allowing column to be flexible.
+ */
+.table-glass-cell-nowrap {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*
+ * Column width utilities
+ * Control column sizing for flexible layouts.
+ */
+.table-glass-col-id {
+  width: auto;
+  min-width: 120px;
+  max-width: 200px;
+}
+
+.table-glass-col-label {
+  width: auto;
+  min-width: 150px;
+}
+
+.table-glass-col-tags {
+  width: 100%;
+  min-width: 200px;
+}
+
+/*
+ * Vertex list specific sizing helpers
+ * Keeps table height consistent with viewport and ensures wide label column.
+ */
+.vertex-table-shell {
+  max-height: calc(100vh - 8rem);
+}
+
+.vertex-table-container {
+  min-height: 22rem;
+  max-height: calc(100vh - 8rem);
+}
+
+.vertex-table-col-label {
+  width: 24rem;
+  max-width: 28rem;
+  min-width: 20rem;
+  white-space: normal;
+}
+
+.vertex-table-col-tags {
+  width: 100%;
+  min-width: 20rem;
+}
+
+.vertex-tag-pill {
+  cursor: pointer;
+  background: transparent;
+  color: inherit;
+  transition:
+    transform var(--def-transition) ease,
+    box-shadow var(--def-transition) ease,
+    border-color var(--def-transition) ease;
+}
+
+.vertex-tag-pill:hover,
+.vertex-tag-pill:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.4);
+}
+
+.vertex-tag-pill:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.8);
+  outline-offset: 2px;
+}
+
+.vertex-tag-edit-row {
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.vertex-tag-edit-cell {
+  padding: 1.25rem;
+  background: transparent;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.vertex-tag-edit-panel {
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--shadow-glass);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.85);
+}
+
+/*
+ * .table-glass-container
+ * Container wrapper for the table with scrollable overflow and max height.
+ * Provides consistent spacing and scrollbar styling.
+ * Handles both vertical and horizontal scrolling for responsive design.
+ */
+.table-glass-container {
+  border-radius: 0.35rem;
+  overflow: hidden;
+  max-height: 24rem; /* max-h-96 equivalent */
+  overflow-y: auto;
+  overflow-x: auto;
+  background: rgba(41, 37, 36, 0.6); /* stone-900 with 60% opacity */
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-glass);
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Custom scrollbar styling for table container */
+.table-glass-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-glass-container::-webkit-scrollbar-track {
+  background: rgba(41, 37, 36, 0.3); /* stone-900 with low opacity */
+  border-radius: 4px;
+}
+
+.table-glass-container::-webkit-scrollbar-thumb {
+  background: rgba(120, 113, 108, 0.6); /* stone-600 with medium opacity */
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.table-glass-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(
+    120,
+    113,
+    108,
+    0.8
+  ); /* stone-600 with higher opacity on hover */
+}
+
+/* Firefox scrollbar styling */
+.table-glass-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 113, 108, 0.6) rgba(41, 37, 36, 0.3);
+}
+
+/*
+ * Responsive adjustments
+ * Adjusts padding, font sizes, and layout on different screen sizes for optimal readability.
+ */
+
+/* Tablet and below (768px) */
+@media (max-width: 768px) {
+  .table-glass-cell {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+  }
+
+  .table-glass-header .table-glass-cell {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.7rem;
+  }
+
+  .table-glass-container {
+    max-height: 22rem;
+  }
+
+  .table-glass-cell-truncate {
+    max-width: 150px;
+  }
+
+  .table-glass-col-id {
+    min-width: 100px;
+    max-width: 150px;
+  }
+
+  .table-glass-col-label {
+    min-width: 120px;
+  }
+
+  .table-glass-col-tags {
+    min-width: 150px;
+  }
+}
+
+/* Mobile (640px and below) */
+@media (max-width: 640px) {
+  .table-glass-cell {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .table-glass-header .table-glass-cell {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.65rem;
+  }
+
+  .table-glass-container {
+    max-height: 20rem;
+  }
+
+  .table-glass-cell-truncate {
+    max-width: 120px;
+  }
+
+  .table-glass-col-id {
+    min-width: 80px;
+    max-width: 120px;
+  }
+
+  .table-glass-col-label {
+    min-width: 100px;
+  }
+
+  .table-glass-col-tags {
+    min-width: 120px;
+  }
+
+  /* Make table scroll horizontally on very small screens */
+  .table-glass {
+    min-width: 600px; /* Minimum width to maintain readability */
+  }
+}
+
+/* Small mobile (480px and below) */
+@media (max-width: 480px) {
+  .table-glass-cell {
+    padding: 0.5rem 0.625rem;
+    font-size: 0.75rem;
+  }
+
+  .table-glass-header .table-glass-cell {
+    padding: 0.5rem 0.625rem;
+    font-size: 0.6rem;
+  }
+
+  .table-glass-container {
+    max-height: 18rem;
+  }
+
+  .table-glass-cell-truncate {
+    max-width: 100px;
+  }
+
+  .table-glass-col-id {
+    min-width: 70px;
+    max-width: 100px;
+  }
+
+  .table-glass-col-label {
+    min-width: 80px;
+  }
+
+  .table-glass-col-tags {
+    min-width: 100px;
+  }
+
+  .table-glass {
+    min-width: 500px;
+  }
+}
+
+/* Large screens - adjust max height for better use of space */
+@media (min-width: 1024px) {
+  .table-glass-container {
+    max-height: 28rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .table-glass-container {
+    max-height: 32rem;
+  }
+}

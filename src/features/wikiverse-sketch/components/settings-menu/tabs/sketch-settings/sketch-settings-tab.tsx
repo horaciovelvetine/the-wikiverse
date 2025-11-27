@@ -4,6 +4,7 @@ import { SettingsTabsMap } from "../../config/settings-tabs-map";
 import {
   OptionSelectorInput,
   SettingsMenuHeader,
+  SettingsSection,
   ToggleSettingInput,
 } from "../components";
 interface SketchSettingsTabProps {
@@ -39,13 +40,31 @@ export function SketchSettingsTab({
       {activeTab === "sketch" && (
         <div className="space-y-6">
           <SettingsMenuHeader label={tab.label} />
-          <OptionSelectorInput
-            setting={sketchSettings.wikiLangTarget}
-            map={WikiverseLanguageCodesMap}
-          />
-          <ToggleSettingInput setting={sketchSettings.clickToFetch} />
-          <ToggleSettingInput setting={sketchSettings.showBoundingBox} />
-          <ToggleSettingInput setting={sketchSettings.showOrientationAxis} />
+
+          <SettingsSection
+            title="Language & Data"
+            description="Configure the language for Wikipedia data retrieval"
+          >
+            <OptionSelectorInput
+              setting={sketchSettings.wikiLangTarget}
+              map={WikiverseLanguageCodesMap}
+            />
+          </SettingsSection>
+
+          <SettingsSection
+            title="Interaction"
+            description="Control how you interact with the sketch"
+          >
+            <ToggleSettingInput setting={sketchSettings.clickToFetch} />
+          </SettingsSection>
+
+          <SettingsSection
+            title="Visual Display"
+            description="Toggle visual aids and debugging helpers"
+          >
+            <ToggleSettingInput setting={sketchSettings.showBoundingBox} />
+            <ToggleSettingInput setting={sketchSettings.showOrientationAxis} />
+          </SettingsSection>
         </div>
       )}
     </>
