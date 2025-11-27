@@ -1,4 +1,7 @@
+import { Dispatch, SetStateAction } from "react";
+import { Point } from "../../models/point";
 import { NumberRangeSetting } from "../data/number-range-setting";
+import { ToggleItemSetting } from "../data/toggle-item-setting";
 
 /**
  * State used to control the camera settings in the sketch application.
@@ -14,7 +17,13 @@ import { NumberRangeSetting } from "../data/number-range-setting";
  * @property zSensitivity - The sensitivity of camera movement along the Z axis.
  */
 export interface CameraSettingsState {
-  fieldOfView: NumberRangeSetting;
+  currentFocus: Point;
+  setCurrentFocus: Dispatch<SetStateAction<Point>>;
+  cameraPosition: Point;
+  setCameraPosition: Dispatch<SetStateAction<Point>>;
+  focusOnSelected: ToggleItemSetting;
+  cameraMoveAnimationLength: NumberRangeSetting;
+  currentFocusAnimationLength: NumberRangeSetting;
   minDrawDistance: NumberRangeSetting;
   maxDrawDistance: NumberRangeSetting;
   xSensitivity: NumberRangeSetting;

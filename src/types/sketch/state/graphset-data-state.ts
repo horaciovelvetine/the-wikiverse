@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { GraphsetData, VertexData } from "../../api";
-import { UserInteraction } from "../data/user-interaction";
+import { EdgeData, GraphsetData, VertexData } from "../../api";
 
 export interface GraphsetDataState {
   selectedVertex: VertexData | null;
@@ -9,6 +8,5 @@ export interface GraphsetDataState {
   setHoveredVertex: Dispatch<SetStateAction<VertexData | null>>;
   graphset: GraphsetData | null;
   setGraphset: Dispatch<SetStateAction<GraphsetData | null>>;
-  interactionHistory: UserInteraction[];
-  setInteractionHistory: Dispatch<SetStateAction<UserInteraction[]>>;
+  relatedEdges: EdgeData[];
 }
