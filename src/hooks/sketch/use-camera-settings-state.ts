@@ -1,25 +1,60 @@
 import { useState } from "react";
-import { CameraSettingsState } from "../../types";
+import { CameraSettingsState, Point } from "../../types";
+import { Description } from "@headlessui/react";
 
 export function useCameraSettingsState(): CameraSettingsState {
-  const [fieldOfView, setFieldOfView] = useState(800);
+  //?/==> Sketch Internal Camera State
+  const [currentFocus, setCurrentFocus] = useState<Point>(new Point());
+  const [cameraPosition, setCameraPosition] = useState<Point>(new Point());
+  const [currentFocusAnimationLength, setCurrentFocusAnimationLength] =
+    useState(35);
+  const [cameraMoveAnimationLength, setCameraMoveAnimationLength] =
+    useState(50);
+
+  //?/==> Camera Behavior Settings
+  const [focusOnSelected, setFocusOnSelected] = useState(true);
+
   //?/==>  Drawing Distance(s)
   const [minDrawDistance, setMinDrawDistance] = useState(1);
   const [maxDrawDistance, setMaxDrawDistance] = useState(8000);
+
   //?/==> Mouse Sensitivity
   const [xSensitivity, setXSensitivity] = useState(1);
   const [ySensitivity, setYSensitivity] = useState(1);
   const [zSensitivity, setZSensitivity] = useState(1);
 
   return {
-    fieldOfView: {
-      label: "Field Of View",
-      description: "",
-      min: 100,
-      max: 1500,
-      step: 100,
-      setter: setFieldOfView,
-      value: fieldOfView,
+    currentFocus,
+    setCurrentFocus,
+    cameraPosition,
+    setCameraPosition,
+    focusOnSelected: {
+      label: "Focus on Selected",
+      description:
+        "On selecting a Vertex the camera will 'focus' (center on) on that Vertex.",
+      value: focusOnSelected,
+      setter: setFocusOnSelected,
+    },
+    currentFocusAnimationLength: {
+      label: "Camera Focus Animation",
+      description:
+        "How long the camera takes to focus on a new target (in frames)",
+      min: 4,
+      max: 100,
+      step: 5,
+      setter: setCurrentFocusAnimationLength,
+      value: currentFocusAnimationLength,
+    },
+
+    cameraMoveAnimationLength: {
+      label: "Camera Movement Animation",
+      description:
+        "How long the camera takes getting from point A to point B when moved (in frames)",
+      min: 4,
+      max: 100,
+      step: 5,
+      setter: setCameraMoveAnimationLength,
+      value: cameraMoveAnimationLength,
     },
 
     minDrawDistance: {
