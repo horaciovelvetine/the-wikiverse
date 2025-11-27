@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { VertexData, SketchUpdateProps } from "../../../../types";
+import { Point, VertexData, SketchUpdateProps } from "../../../../types";
 import { Vertex } from "./vertex";
 
 /**
@@ -9,7 +9,7 @@ import { Vertex } from "./vertex";
  * originating inside the p5 sketch to React's state setters.
  *
  * It holds references to React setters for sketch state such as selected vertex,
- * hovered vertex, and click-to-fetch toggle, enabling imperative updates
+ * hovered vertex, click-to-fetch toggle, and camera focus, enabling imperative updates
  * to the React state from non-React (imperative/OO) code in the sketch models.
  *
  * Use this class to assign the relevant React state setters through `assignAllSetters`,
@@ -18,7 +18,7 @@ import { Vertex } from "./vertex";
  *
  * Typical Usage:
  *   - Assign React state setters with `assignAllSetters(state)`
- *   - Call `setSelectedVertex`, `setHoveredVertex`, or `toggleClickToFetch` from within sketch model events
+ *   - Call `setSelectedVertex`, `setHoveredVertex`, `setCurrentFocus`, or `toggleClickToFetch` from within sketch model events
  *   - Acts as a bridge between p5-based logic and React state
  */
 
@@ -30,12 +30,14 @@ export class ReactDispatcher {
     SetStateAction<VertexData | null>
   > | null = null;
   private clickToFetchSetter: Dispatch<SetStateAction<boolean>> | null = null;
+  private currentFocusSetter: Dispatch<SetStateAction<Point>> | null = null;
 
-  allSettersAssigned() {
+  get allSettersAssigned() {
     return (
       this.hoveredVertexSetterAssigned() &&
       this.selectedVertexSetterAssigned() &&
-      this.clickToFetchSetterAssigned()
+      this.clickToFetchSetterAssigned() &&
+      this.currentFocusSetterAssigned()
     );
   }
 
@@ -43,6 +45,7 @@ export class ReactDispatcher {
     this.selectedVertexSetter = state.graphsetData.setSelectedVertex;
     this.hoveredVertexSetter = state.graphsetData.setHoveredVertex;
     this.clickToFetchSetter = state.sketchSettings.clickToFetch.setter;
+    this.currentFocusSetter = state.cameraSettings.setCurrentFocus;
   }
 
   setSelectedVertex(v: Vertex | null) {
@@ -55,6 +58,10 @@ export class ReactDispatcher {
 
   toggleClickToFetch() {
     if (this.clickToFetchSetter) this.clickToFetchSetter(prev => !prev);
+  }
+
+  setCurrentFocus(focus: Point) {
+    if (this.currentFocusSetter) this.currentFocusSetter(focus);
   }
 
   //! PRIVATE METHODS
@@ -71,5 +78,9 @@ export class ReactDispatcher {
 
   private clickToFetchSetterAssigned() {
     return this.clickToFetchSetter !== null;
+  }
+
+  private currentFocusSetterAssigned() {
+    return this.currentFocusSetter !== null;
   }
 }
