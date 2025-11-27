@@ -1,16 +1,16 @@
-import { GraphsetData, MinMaxSet, VertexData } from "../../../../types";
+import { GraphsetDataState, MinMaxSet, VertexData } from "../../../../types";
 import { Edge } from "./edge";
 import { Property } from "./property";
 import { Vertex } from "./vertex";
 
 export class Graphset {
   //==> Data
-  private verts: Vertex[] = [];
-  private eds: Edge[] = [];
-  private props: Property[] = [];
+  private _verticess: Vertex[] = [];
+  private _edges: Edge[] = [];
+  private _properties: Property[] = [];
   //==> Sketch Specific
-  private selVertex: VertexData | null = null;
-  private hovVertex: VertexData | null = null;
+  private _selectedVertex: VertexData | null = null;
+  private _hoveredVertex: VertexData | null = null;
 
   /**
    * Sets up the internal data for each piece of Graphset instance using the given data objects.
@@ -21,42 +21,43 @@ export class Graphset {
    * @param graphsetData - An object containing arrays of VertexData, EdgeData, and PropertyData,
    * which will be used to populate the corresponding elements of the Graphset.
    */
-  setGraphsetData(graphset: GraphsetData | null) {
+  setGraphsetData(graphsetData: GraphsetDataState) {
     // exit if there is no graphset...
-    if (!graphset) return;
-    this.verts = graphset.vertices.map(v => new Vertex(v));
-    this.eds = graphset.edges.map(e => new Edge(e));
-    this.props = graphset.properties.map(p => new Property(p));
+    if (graphsetData.graphset) {
+      this._verticess = graphsetData.graphset.vertices.map(v => new Vertex(v));
+      this._edges = graphsetData.graphset.edges.map(e => new Edge(e));
+      this._properties = graphsetData.graphset.properties.map(
+        p => new Property(p)
+      );
+    }
 
-    this.hovVertex = this.verts[0];
+    if (this._selectedVertex !== graphsetData.selectedVertex) {
+      this._selectedVertex = graphsetData.selectedVertex;
+    }
+
+    if (this._hoveredVertex !== graphsetData.hoveredVertex) {
+      this._hoveredVertex = graphsetData.hoveredVertex;
+    }
   }
 
-  vertices() {
-    return this.verts;
+  get vertices(): Vertex[] {
+    return this._verticess;
   }
 
-  edges() {
-    return this.eds;
+  get edges(): Edge[] {
+    return this._edges;
   }
 
-  properties() {
-    return this.props;
+  get properties(): Property[] {
+    return this._properties;
   }
 
-  setlectedVertex() {
-    return this.selVertex;
+  get selectedVertex(): VertexData | null {
+    return this._selectedVertex;
   }
 
-  hoveredVertex() {
-    return this.hovVertex;
-  }
-
-  setSelectedVertex(v: VertexData | null) {
-    this.selVertex = v;
-  }
-
-  setHoveredVertex(v: VertexData | null) {
-    this.hovVertex = v;
+  get hoveredVertex(): VertexData | null {
+    return this._hoveredVertex;
   }
 
   /**
@@ -66,7 +67,7 @@ export class Graphset {
    * @returns True if the given vertex matches the currently selected vertex (by id), otherwise false.
    */
   isSelected(v: Vertex) {
-    return this.selVertex?.id === v.id;
+    return this.selectedVertex?.id === v.id;
   }
 
   /**
@@ -80,7 +81,7 @@ export class Graphset {
    * @returns An array of Edge objects related to the given vertex.
    */
   getRelatedEdges(v: Vertex): Edge[] {
-    return this.edges().filter(e => e.isSource(v) || e.isTarget(v));
+    return this.edges.filter(e => e.isSource(v) || e.isTarget(v));
   }
 
   /**
@@ -96,7 +97,7 @@ export class Graphset {
    */
   getAlternateVertex(e: Edge, v: Vertex) {
     const altID = e.isSource(v) ? e.targetID : e.sourceID;
-    return this.vertices().find(v => v.id === altID);
+    return this.vertices.find(v => v.id === altID);
   }
 
   /**
@@ -122,7 +123,7 @@ export class Graphset {
     let yMax = -Infinity;
     let zMax = -Infinity;
 
-    this.vertices().forEach(v => {
+    this.vertices.forEach(v => {
       if (v.position.x < xMin) xMin = v.position.x;
       if (v.position.y < yMin) yMin = v.position.y;
       if (v.position.x > xMax) xMax = v.position.x;
