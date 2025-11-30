@@ -13,6 +13,8 @@ export { ExpandArrowsIcon } from "./icons/expand-arrows-icon";
 export { ArrowBothIcon } from "./icons/arrow-both-icon";
 export { ArrowLeftIcon } from "./icons/arrow-left-icon";
 export { ArrowRightIcon } from "./icons/arrow-right-icon";
+export { LockIcon } from "./icons/lock-icon";
+export { UnlockIcon } from "./icons/unlock-icon";
 
 // TailwindCSS Style String Const's
 export {
