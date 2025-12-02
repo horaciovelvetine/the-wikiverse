@@ -12,6 +12,8 @@ export type { GraphsetData } from "./data/graphset-data";
 export type { EdgeData } from "./data/edge-data";
 export type { ClaimData } from "./data/claim-data";
 export type { PointData } from "./data/point-data";
+export type { TagData } from "./data/tag-data";
+export type { FilterData } from "./data/filter-data";
 
 // REQUEST RELATED INTERFACING
 export type { WikiverseServiceErrors } from "./requests/wikiverse-service-errors";
