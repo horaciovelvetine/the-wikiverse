@@ -16,4 +16,3 @@ export function EllipsisVerticalIcon({ styles = "size-6" }: IconProps) {
     </svg>
   );
 }
-
