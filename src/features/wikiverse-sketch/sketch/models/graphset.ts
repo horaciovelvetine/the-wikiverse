@@ -1,4 +1,9 @@
-import { GraphsetDataState, MinMaxSet, VertexData } from "../../../../types";
+import {
+  MinMaxSet,
+  SketchDataState,
+  TagData,
+  VertexData,
+} from "../../../../types";
 import { Edge } from "./edge";
 import { Property } from "./property";
 import { Vertex } from "./vertex";
@@ -8,6 +13,7 @@ export class Graphset {
   private _verticess: Vertex[] = [];
   private _edges: Edge[] = [];
   private _properties: Property[] = [];
+  private _tags: TagData[] = [];
   //==> Sketch Specific
   private _selectedVertex: VertexData | null = null;
   private _hoveredVertex: VertexData | null = null;
@@ -21,22 +27,18 @@ export class Graphset {
    * @param graphsetData - An object containing arrays of VertexData, EdgeData, and PropertyData,
    * which will be used to populate the corresponding elements of the Graphset.
    */
-  setGraphsetData(graphsetData: GraphsetDataState) {
-    // exit if there is no graphset...
-    if (graphsetData.graphset) {
-      this._verticess = graphsetData.graphset.vertices.map(v => new Vertex(v));
-      this._edges = graphsetData.graphset.edges.map(e => new Edge(e));
-      this._properties = graphsetData.graphset.properties.map(
-        p => new Property(p)
-      );
+  setGraphsetData(sketchData: SketchDataState) {
+    this._verticess = sketchData.vertices.map(v => new Vertex(v));
+    this._edges = sketchData.edges.map(e => new Edge(e));
+    this._properties = sketchData.properties.map(p => new Property(p));
+    this._tags = sketchData.tags;
+
+    if (this._selectedVertex !== sketchData.selectedVertex) {
+      this._selectedVertex = sketchData.selectedVertex;
     }
 
-    if (this._selectedVertex !== graphsetData.selectedVertex) {
-      this._selectedVertex = graphsetData.selectedVertex;
-    }
-
-    if (this._hoveredVertex !== graphsetData.hoveredVertex) {
-      this._hoveredVertex = graphsetData.hoveredVertex;
+    if (this._hoveredVertex !== sketchData.hoveredVertex) {
+      this._hoveredVertex = sketchData.hoveredVertex;
     }
   }
 
@@ -50,6 +52,10 @@ export class Graphset {
 
   get properties(): Property[] {
     return this._properties;
+  }
+
+  get tags(): TagData[] {
+    return this._tags;
   }
 
   get selectedVertex(): VertexData | null {
