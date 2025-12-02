@@ -22,6 +22,8 @@ export type {
   GraphsetRequest,
   PropertyData,
   PointData,
+  TagData,
+  FilterData,
 } from "./api";
 
 //?/==> MODELS
@@ -41,7 +43,7 @@ export type { TaggingViews } from "./site/tagging-views";
 
 //?/==> SKETCH
 export type {
-  GraphsetDataState,
+  SketchDataState,
   SelectLanguageSetting,
   ToggleItemSetting,
   NumberRangeSetting,
@@ -52,7 +54,7 @@ export type {
   UserInteraction,
   SketchUpdateProps,
   WikiverseSketchContainerProps,
-  VertexTag,
-  TaggingDataState,
   TagState,
+  TaggingState,
+  FilteringState,
 } from "./sketch";
