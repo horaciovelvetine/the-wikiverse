@@ -27,11 +27,6 @@ interface OptionSelectorInputProps {
  * - A label describing the option.
  * - An optional description.
  * - A select input where users can choose their preferred language option.
- *
- * @example:
- * ```
- * <OptionSelectorInput setting={someSelectLanguageSetting} map={languagesList} />
- * ```
  */
 
 export function OptionSelectorInput({
@@ -42,26 +37,33 @@ export function OptionSelectorInput({
     setting.setter(e.target.value as typeof setting.value);
   };
   return (
-    <Field className="w-full">
-      <Label className="block text-xs sm:text-sm font-medium text-gray-300">
-        {setting.label}
-      </Label>
-      <Description className="text-xs sm:text-sm font-light text-gray-300/65 mt-1 sm:mt-1.5">
-        {setting.description}
-      </Description>
-      <Select
-        name="wikidata-language-target"
-        aria-label="Language Data Target"
-        value={setting.value}
-        onChange={handleSelectionChange}
-        className="select-glass select-sm w-full mt-2 sm:mt-3"
-      >
-        {map.map(opt => (
-          <option key={opt.code} value={opt.code}>
-            {opt.name}
-          </option>
-        ))}
-      </Select>
+    <Field as="div" className="w-full space-y-2">
+      <div className="flex flex-col gap-1.5">
+        <Label className="text-xs sm:text-sm font-medium text-gray-300">
+          {setting.label}
+        </Label>
+        {setting.description && (
+          <Description className="text-xs sm:text-sm font-light text-gray-300/65">
+            {setting.description}
+          </Description>
+        )}
+      </div>
+
+      <div className="flex flex-col items-center w-full">
+        <Select
+          name="wikidata-language-target"
+          aria-label={setting.label}
+          value={setting.value}
+          onChange={handleSelectionChange}
+          className="select-glass select-modern select-sm w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
+        >
+          {map.map(opt => (
+            <option key={opt.code} value={opt.code}>
+              {opt.name}
+            </option>
+          ))}
+        </Select>
+      </div>
     </Field>
   );
 }
