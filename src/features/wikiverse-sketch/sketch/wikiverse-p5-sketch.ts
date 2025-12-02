@@ -46,8 +46,8 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
       return;
     }
 
-    const { graphsetData, cameraSettings, sketchSettings } = state;
-    SK.data.setGraphsetData(graphsetData);
+    const { sketchDataState, cameraSettings, sketchSettings } = state;
+    SK.data.setGraphsetData(sketchDataState);
     SK.cam.setCameraSettings(cameraSettings);
     SK.setSketchSettings(sketchSettings);
     // console.log({ src: "updateWithProps()" });
@@ -114,7 +114,7 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
         break;
 
       default:
-        console.log("keypressed: ", p5.key);
+      // console.log("keypressed: ", p5.key);
     }
   };
 }
