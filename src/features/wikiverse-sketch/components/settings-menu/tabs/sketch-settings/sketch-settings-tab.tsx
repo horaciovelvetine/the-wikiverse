@@ -1,6 +1,7 @@
 import { WikiverseLanguageCodesMap } from "../../../../../../config/wikiverse-language-codes-map";
 import { SettingsTabs, SketchSettingsState } from "../../../../../../types";
-import { SettingsTabsMap } from "../../config/settings-tabs-map";
+import { SettingsTabsMap } from "../../settings-tabs-map";
+
 import {
   OptionSelectorInput,
   SettingsMenuHeader,

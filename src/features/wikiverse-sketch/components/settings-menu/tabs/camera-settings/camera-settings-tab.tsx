@@ -1,5 +1,5 @@
 import { CameraSettingsState, SettingsTabs } from "../../../../../../types";
-import { SettingsTabsMap } from "../../config/settings-tabs-map";
+import { SettingsTabsMap } from "../../settings-tabs-map";
 import {
   AxisSensitivityInput,
   RangeSliderInput,
