@@ -1,52 +1,73 @@
 import { useCallback, useMemo, useState } from "react";
 import { Field, Input, Label } from "@headlessui/react";
 import {
-  GraphsetData,
+  SketchDataState,
   TagState,
   VertexData,
 } from "../../../../../../../../types";
+import { XMarkIcon } from "../../../../../../../../assets";
 
 type TagsVerticesFieldProps = {
-  graphset: GraphsetData;
+  sketchDataState: SketchDataState;
 } & Pick<TagState, "vertices" | "addVertex" | "addVertices" | "removeVertex">;
 
 const MAX_SUGGESTIONS = 8;
 
+/**
+ * TagsVerticesField
+ *
+ * A controlled field component for selecting and managing vertices associated with a tag.
+ * Provides:
+ *   - An input field for searching and selecting vertices to add to the tag.
+ *   - Autocomplete suggestions based on the user's query.
+ *   - Display of currently selected vertices, each with a remove button.
+ *
+ * Props:
+ * - sketchDataState: SketchDataState
+ *     The global sketch state, used to access the available vertices for suggestion and lookup.
+ * - vertices: string[]
+ *     The list of currently selected vertex IDs for the tag.
+ * - addVertex: (v: string) => void
+ *     Callback to add a vertex to the tag.
+ * - addVertices: (v: string[]) => void
+ *     Callback to add multiple vertices to the tag.
+ * - removeVertex: (v: string) => void
+ *     Callback to remove a vertex from the tag.
+ *
+ * UI:
+ *   - Shows suggestions as the user types (limited to MAX_SUGGESTIONS).
+ *   - Prevents duplicate vertex selection.
+ *   - Allows removing vertices from the current selection.
+ *
+ * Used in the create/edit tag form UI for per-tag vertex membership management.
+ *
+ * TODO: Refactor for clarity and to not be overwhelming
+ */
+
 export function TagsVerticesField({
-  graphset,
-  vertices,
+  sketchDataState,
+  vertices, // vertexIDs from tag...
   addVertex,
-  addVertices,
   removeVertex,
 }: TagsVerticesFieldProps) {
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-
-  const vertexList = useMemo(() => graphset?.vertices ?? [], [graphset]);
-
-  const vertexLookup = useMemo(() => {
-    const lookup = new Map<string, VertexData>();
-    vertexList.forEach(vertex => {
-      lookup.set(vertex.id, vertex);
-    });
-    return lookup;
-  }, [vertexList]);
 
   const normalizedQuery = query.trim().toLowerCase();
   const hasQuery = normalizedQuery.length > 0;
 
   const filteredVertices = useMemo(() => {
     if (!normalizedQuery) {
-      return vertexList.slice(0, MAX_SUGGESTIONS);
+      return sketchDataState.vertices.slice(0, MAX_SUGGESTIONS);
     }
-    return vertexList
+    return sketchDataState.vertices
       .filter(vertex => {
         const label = vertex.label?.toLowerCase() || "";
         const id = vertex.id.toLowerCase();
         return label.includes(normalizedQuery) || id.includes(normalizedQuery);
       })
       .slice(0, MAX_SUGGESTIONS);
-  }, [normalizedQuery, vertexList]);
+  }, [normalizedQuery, sketchDataState.vertices]);
 
   const handleVertexSelect = useCallback(
     (vertexId: string) => {
@@ -60,43 +81,6 @@ export function TagsVerticesField({
     [addVertex, vertices]
   );
 
-  const handleBatchAdd = useCallback(() => {
-    const tokens = query
-      .split(",")
-      .map(token => token.trim())
-      .filter(Boolean);
-
-    if (tokens.length < 2) {
-      return false;
-    }
-
-    const matchedVertexIds: string[] = [];
-
-    tokens.forEach(token => {
-      const normalizedToken = token.toLowerCase();
-      const match = vertexList.find(
-        vertex =>
-          vertex.id.toLowerCase() === normalizedToken ||
-          vertex.label?.toLowerCase() === normalizedToken
-      );
-      if (
-        match &&
-        !vertices.includes(match.id) &&
-        !matchedVertexIds.includes(match.id)
-      ) {
-        matchedVertexIds.push(match.id);
-      }
-    });
-
-    if (matchedVertexIds.length === 0) {
-      return false;
-    }
-
-    addVertices(matchedVertexIds);
-    setQuery("");
-    return true;
-  }, [addVertices, query, vertexList, vertices]);
-
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key !== "Enter") return;
@@ -104,14 +88,11 @@ export function TagsVerticesField({
         return;
       }
       event.preventDefault();
-      if (handleBatchAdd()) {
-        return;
-      }
       if (filteredVertices.length > 0) {
         handleVertexSelect(filteredVertices[0].id);
       }
     },
-    [filteredVertices, handleBatchAdd, handleVertexSelect, hasQuery]
+    [filteredVertices, handleVertexSelect, hasQuery]
   );
 
   const showSuggestions = isFocused && hasQuery && filteredVertices.length > 0;
@@ -178,11 +159,11 @@ export function TagsVerticesField({
       {vertices.length > 0 && (
         <div className="flex flex-wrap gap-1.5 pt-1.5">
           {vertices.map(vertexId => {
-            const vertex = vertexLookup.get(vertexId);
+            const vertex = sketchDataState.getVertexByID(vertexId);
             return (
               <span
                 key={vertexId}
-                className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-blue-500/20 border border-blue-500/40 text-blue-100"
+                className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-blue-500/20 border border-blue-500/40 text-white font-semibold"
                 title={vertex?.description || vertexId}
               >
                 <span className="truncate max-w-[9rem]">
@@ -190,11 +171,11 @@ export function TagsVerticesField({
                 </span>
                 <button
                   type="button"
-                  className="text-blue-100/80 hover:text-white focus:outline-none"
+                  className="text-white hover:text-red-500 transition-all duration-150 focus:outline-none "
                   onClick={() => removeVertex(vertexId)}
                   aria-label={`Remove ${vertex?.label || vertexId}`}
                 >
-                  ×
+                  <XMarkIcon styles="size-4" />
                 </button>
               </span>
             );
