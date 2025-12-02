@@ -3,10 +3,6 @@ import { Point } from "../types";
 /**
  * Returns a readable string representation of a Point object.
  *
- * Example outputs:
- *   [x: 5, y: 10]
- *   [x: 5, y: 10, z: 4]
- *
  * @param p - The point object, possibly undefined.
  * @returns String describing the rounded coordinates, or an empty string if undefined.
  */
