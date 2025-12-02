@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { CameraSettingsState, Point } from "../../types";
-import { Description } from "@headlessui/react";
+import { useCallback, useState } from "react";
+import { CameraSettingsState, Point, PointData, VertexData } from "../../types";
 
 export function useCameraSettingsState(): CameraSettingsState {
   //?/==> Sketch Internal Camera State
@@ -23,9 +22,49 @@ export function useCameraSettingsState(): CameraSettingsState {
   const [ySensitivity, setYSensitivity] = useState(1);
   const [zSensitivity, setZSensitivity] = useState(1);
 
+  /**
+   * Imperatively focuses the camera on the given vertex.
+   *
+   * This function updates the internal camera focus state to match the position of the supplied vertex,
+   * if the target position is different from the current focus point. Used to programmatically center
+   * the camera on a vertex within the graph.
+   *
+   * @param {VertexData} v - The vertex whose position should become the camera's new focus.
+   *
+   * @example
+   *   focusCameraOnVertex(vertex);
+   */
+  const focusCameraOnVertex = useCallback(
+    (v: VertexData) => {
+      // already focused on vertex
+      if (currentFocus.equals(v.position)) return;
+      setCurrentFocus(v.position);
+    },
+    [currentFocus]
+  );
+
+  /**
+   * Imperatively focuses the camera on the given Point.
+   *
+   * This callback updates the internal camera focus state if the
+   * provided point is different from the current focus point.
+   * Used to programmatically center the view on a specific PointData
+   * (such as a spatial coordinate or object position in the graph).
+   *
+   * @param {PointData} p - The point to focus the camera on.
+   */
+  const focusCameraOnPoint = useCallback(
+    (p: PointData) => {
+      if (currentFocus.equals(p)) return;
+      setCurrentFocus(new Point(p.x, p.y, p.z));
+    },
+    [currentFocus]
+  );
+
   return {
     currentFocus,
-    setCurrentFocus,
+    focusCameraOnVertex,
+    focusCameraOnPoint,
     cameraPosition,
     setCameraPosition,
     focusOnSelected: {
