@@ -39,7 +39,11 @@ export function useCreateTagPopoverPosition({
   popoverRef,
   POPOVER_OFFSET,
   POPOVER_WIDTH,
-}: PopoverPositioningArgs) {
+}: PopoverPositioningArgs): {
+  position: { top: number; left: number };
+  isPositioned: boolean;
+  markUnpositioned: () => void;
+} {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [isPositioned, setIsPositioned] = useState(false);
 
