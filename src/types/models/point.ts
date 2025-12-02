@@ -54,7 +54,7 @@ export class Point implements PointData {
    * @param {Point} other - The other Point instance to compare to.
    * @returns {boolean} True if both points have the same x, y, and z values; otherwise, false.
    */
-  equals(other: Point): boolean {
+  equals(other: PointData): boolean {
     return this.x === other.x && this.y === other.y && this.z === other.z;
   }
 
