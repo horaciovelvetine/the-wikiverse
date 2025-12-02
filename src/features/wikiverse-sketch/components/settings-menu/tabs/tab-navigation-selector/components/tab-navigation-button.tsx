@@ -28,7 +28,7 @@ export function TabNavigationButton({
     <Button
       key={tab.id}
       onClick={() => onClick(tab.id)}
-      className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
+      className={`flex-shrink-0 min-w-fit px-4 sm:px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap ${
         isActive
           ? "text-white border-b-2 border-blue-400 bg-white/5"
           : "text-gray-400 hover:text-white hover:bg-white/5"

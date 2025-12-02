@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
-import { SettingsTabsMap } from "../../config/settings-tabs-map";
 import { TabNavigationButton } from "./components/tab-navigation-button";
 import { SettingsTabs } from "../../../../../../types";
+import { SettingsTabsMap } from "../../settings-tabs-map";
 
 interface TabNavigationSelectorProps {
   activeTab: SettingsTabs;
@@ -23,7 +23,7 @@ export function TabNavigationSelector({
   setActiveTab,
 }: TabNavigationSelectorProps) {
   return (
-    <div className="flex border-b border-white/10">
+    <div className="flex border-b border-white/10 overflow-x-auto">
       {SettingsTabsMap.map(tab => (
         <TabNavigationButton
           key={`${tab.id}`}
