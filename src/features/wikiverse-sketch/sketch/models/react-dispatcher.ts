@@ -1,5 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
-import { Point, VertexData, SketchUpdateProps } from "../../../../types";
+import {
+  Point,
+  VertexData,
+  SketchUpdateProps,
+  PointData,
+} from "../../../../types";
 import { Vertex } from "./vertex";
 
 /**
@@ -23,14 +28,14 @@ import { Vertex } from "./vertex";
  */
 
 export class ReactDispatcher {
-  private selectedVertexSetter: Dispatch<
-    SetStateAction<VertexData | null>
+  private selectedVertexIDSetter: Dispatch<
+    SetStateAction<string | null>
   > | null = null;
-  private hoveredVertexSetter: Dispatch<
-    SetStateAction<VertexData | null>
+  private hoveredVertexIDSetter: Dispatch<
+    SetStateAction<string | null>
   > | null = null;
   private clickToFetchSetter: Dispatch<SetStateAction<boolean>> | null = null;
-  private currentFocusSetter: Dispatch<SetStateAction<Point>> | null = null;
+  private focusCameraOnPoint: ((p: PointData) => void) | undefined;
 
   get allSettersAssigned() {
     return (
@@ -42,18 +47,19 @@ export class ReactDispatcher {
   }
 
   assignAllSetters(state: SketchUpdateProps) {
-    this.selectedVertexSetter = state.graphsetData.setSelectedVertex;
-    this.hoveredVertexSetter = state.graphsetData.setHoveredVertex;
+    this.selectedVertexIDSetter = state.sketchDataState.setSelectedVertexID;
+    this.hoveredVertexIDSetter = state.sketchDataState.setHoveredVertexID;
     this.clickToFetchSetter = state.sketchSettings.clickToFetch.setter;
-    this.currentFocusSetter = state.cameraSettings.setCurrentFocus;
+    this.focusCameraOnPoint = state.cameraSettings.focusCameraOnPoint;
   }
 
   setSelectedVertex(v: Vertex | null) {
-    if (this.selectedVertexSetter) this.selectedVertexSetter(v ? v : null);
+    if (this.selectedVertexIDSetter)
+      this.selectedVertexIDSetter(v ? v.id : null);
   }
 
   setHoveredVertex(v: Vertex | null) {
-    if (this.hoveredVertexSetter) this.hoveredVertexSetter(v ? v : null);
+    if (this.hoveredVertexIDSetter) this.hoveredVertexIDSetter(v ? v.id : null);
   }
 
   toggleClickToFetch() {
@@ -61,7 +67,7 @@ export class ReactDispatcher {
   }
 
   setCurrentFocus(focus: Point) {
-    if (this.currentFocusSetter) this.currentFocusSetter(focus);
+    if (this.focusCameraOnPoint) this.focusCameraOnPoint(focus);
   }
 
   //! PRIVATE METHODS
@@ -69,11 +75,11 @@ export class ReactDispatcher {
   //!=================================================================>
 
   private selectedVertexSetterAssigned() {
-    return this.selectedVertexSetter !== null;
+    return this.selectedVertexIDSetter !== null;
   }
 
   private hoveredVertexSetterAssigned() {
-    return this.hoveredVertexSetter !== null;
+    return this.hoveredVertexIDSetter !== null;
   }
 
   private clickToFetchSetterAssigned() {
@@ -81,6 +87,6 @@ export class ReactDispatcher {
   }
 
   private currentFocusSetterAssigned() {
-    return this.currentFocusSetter !== null;
+    return this.focusCameraOnPoint !== null;
   }
 }
