@@ -1,0 +1,280 @@
+/*
+ * Checkbox Styles
+ * --------------
+ * This file defines reusable checkbox classes for consistent, modern UI checkboxes.
+ * The styles follow the same design patterns as the toggle and button styles for consistency.
+ * 
+ * Classes:
+ *   .checkbox-modern     - Base checkbox style with smooth transitions and glassmorphic effects.
+ *   .checkbox-primary    - Primary checkbox variant with monochromatic colors and enhanced shadows.
+ *   .checkbox-glass      - Glassmorphic checkbox variant using glass system variables.
+ *   .checkbox-ghost      - Ultra-transparent ghost checkbox with minimal background.
+ *   .tag-toggle          - Specific styling for tag toggle checkboxes in the tag display.
+ */
+
+/*
+ * .checkbox-modern
+ * Base checkbox style with rounded corners, smooth transitions, and glassmorphic effects.
+ */
+.checkbox-modern,
+.tag-toggle {
+  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 1rem; /* 16px */
+  height: 1rem; /* 16px */
+  border-radius: 0.25rem; /* rounded */
+  border: 1px solid rgba(107, 114, 128, 0.4); /* gray-500 with 40% opacity */
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all var(--def-transition) ease;
+  outline: none;
+  flex-shrink: 0;
+}
+
+/*
+ * .checkbox-modern::before
+ * Adds a subtle animated shine effect that appears on hover.
+ */
+.checkbox-modern::before,
+.tag-toggle::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity var(--def-transition) ease;
+  border-radius: 0.25rem;
+  pointer-events: none;
+}
+
+/*
+ * .checkbox-modern:hover::before
+ * Triggers the shine animation on hover.
+ */
+.checkbox-modern:hover::before,
+.tag-toggle:hover::before {
+  opacity: 1;
+}
+
+/*
+ * .checkbox-modern:focus
+ * Adds focus ring for accessibility.
+ */
+.checkbox-modern:focus,
+.tag-toggle:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(75, 85, 99, 0.5); /* gray-600 with 50% opacity */
+}
+
+/*
+ * .checkbox-modern:checked
+ * Checked state styling with checkmark indicator.
+ */
+.checkbox-modern:checked,
+.tag-toggle:checked {
+  background: linear-gradient(
+    135deg,
+    #374151 0%,
+    /* gray-700 */ #1f2937 100% /* gray-800 */
+  );
+  border-color: rgba(75, 85, 99, 0.6); /* gray-600 with 60% opacity */
+  box-shadow: var(--shadow-flat-md);
+}
+
+.checkbox-modern:checked::after,
+.tag-toggle:checked::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.375rem; /* 6px */
+  height: 0.625rem; /* 10px */
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -60%) rotate(45deg);
+  opacity: 0.95;
+}
+
+/*
+ * .checkbox-modern:hover
+ * Hover state with enhanced shadow and slight transform.
+ */
+.checkbox-modern:hover,
+.tag-toggle:hover {
+  border-color: rgba(107, 114, 128, 0.6); /* gray-500 with 60% opacity */
+  box-shadow: var(--shadow-flat-md);
+  transform: translateY(-1px);
+}
+
+.checkbox-modern:checked:hover,
+.tag-toggle:checked:hover {
+  background: linear-gradient(
+    135deg,
+    #1f2937 0%,
+    /* gray-800 */ #111827 100% /* gray-900 */
+  );
+  box-shadow: var(--shadow-flat-lg);
+  transform: translateY(-1px);
+}
+
+/*
+ * .checkbox-primary
+ * Primary checkbox variant with monochromatic gradient background and enhanced shadows.
+ */
+.checkbox-primary {
+  background: rgba(229, 231, 235, 0.3); /* gray-200 with 30% opacity */
+  border-color: rgba(209, 213, 219, 0.5); /* gray-300 with 50% opacity */
+}
+
+.checkbox-primary:checked {
+  background: linear-gradient(
+    135deg,
+    #374151 0%,
+    /* gray-700 */ #1f2937 100% /* gray-800 */
+  );
+  border-color: rgba(75, 85, 99, 0.6);
+  box-shadow: var(--shadow-flat-md);
+}
+
+.checkbox-primary:hover {
+  background: rgba(209, 213, 219, 0.4); /* gray-300 with 40% opacity */
+  border-color: rgba(156, 163, 175, 0.6); /* gray-400 with 60% opacity */
+}
+
+.checkbox-primary:checked:hover {
+  background: linear-gradient(
+    135deg,
+    #1f2937 0%,
+    /* gray-800 */ #111827 100% /* gray-900 */
+  );
+  box-shadow: var(--shadow-flat-lg);
+}
+
+/*
+ * .checkbox-glass
+ * Glassmorphic checkbox variant using glass system variables for background and blur.
+ */
+.checkbox-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-flat);
+}
+
+.checkbox-glass:hover {
+  background: var(--glass-bg-hover);
+  box-shadow: var(--shadow-flat-md);
+  transform: translateY(-1px);
+}
+
+.checkbox-glass:checked {
+  background: rgba(75, 85, 99, 0.3); /* gray-600 with 30% opacity */
+  border-color: rgba(75, 85, 99, 0.4);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+.checkbox-glass:checked:hover {
+  background: rgba(75, 85, 99, 0.4); /* gray-600 with 40% opacity */
+  box-shadow: var(--shadow-flat-lg);
+}
+
+/*
+ * .checkbox-ghost
+ * Ultra-transparent ghost checkbox with minimal background and strong blur.
+ */
+.checkbox-ghost {
+  background: rgba(255, 255, 255, 0.05); /* very transparent white */
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-flat);
+}
+
+.checkbox-ghost:hover {
+  background: rgba(255, 255, 255, 0.1); /* slightly more opaque */
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  box-shadow: var(--shadow-flat-md);
+  transform: translateY(-1px);
+}
+
+.checkbox-ghost:checked {
+  background: rgba(75, 85, 99, 0.2); /* gray-600 with 20% opacity */
+  border-color: rgba(75, 85, 99, 0.3);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+}
+
+.checkbox-ghost:checked:hover {
+  background: rgba(75, 85, 99, 0.3); /* gray-600 with 30% opacity */
+  box-shadow: var(--shadow-flat-lg);
+}
+
+/*
+ * .checkbox-label
+ * Label styling for checkboxes to match the design system.
+ */
+.checkbox-label,
+.tag-toggle-label {
+  font-size: 0.75rem; /* text-xs */
+  font-weight: 600; /* font-semibold */
+  color: rgba(
+    255,
+    255,
+    255,
+    0.8
+  ); /* white with 80% opacity for dark backgrounds */
+  user-select: none;
+  transition: color var(--def-transition) ease;
+  cursor: pointer;
+}
+
+.checkbox-label:hover,
+.tag-toggle-label:hover {
+  color: rgba(255, 255, 255, 0.95); /* white with 95% opacity */
+}
+
+/*
+ * .checkbox-container
+ * Container for checkbox and label with proper spacing.
+ * Reuses the existing .toggle-container class for consistency.
+ */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* gap-2 */
+}
+
+/*
+ * Disabled state for checkboxes
+ */
+.checkbox-modern:disabled,
+.tag-toggle:disabled,
+.checkbox-primary:disabled,
+.checkbox-glass:disabled,
+.checkbox-ghost:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.checkbox-modern:disabled:hover,
+.tag-toggle:disabled:hover,
+.checkbox-primary:disabled:hover,
+.checkbox-glass:disabled:hover,
+.checkbox-ghost:disabled:hover {
+  transform: none;
+  box-shadow: var(--shadow-flat);
+}

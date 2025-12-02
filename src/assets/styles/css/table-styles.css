@@ -217,8 +217,7 @@
 /*
  * .table-glass-container
  * Container wrapper for the table with scrollable overflow and max height.
- * Provides consistent spacing and scrollbar styling.
- * Handles both vertical and horizontal scrolling for responsive design.
+ * Provides consistent spacing and handles both vertical and horizontal scrolling for responsive design.
  */
 .table-glass-container {
   border-radius: 0.35rem;
@@ -232,37 +231,6 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: var(--shadow-glass);
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-}
-
-/* Custom scrollbar styling for table container */
-.table-glass-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.table-glass-container::-webkit-scrollbar-track {
-  background: rgba(41, 37, 36, 0.3); /* stone-900 with low opacity */
-  border-radius: 4px;
-}
-
-.table-glass-container::-webkit-scrollbar-thumb {
-  background: rgba(120, 113, 108, 0.6); /* stone-600 with medium opacity */
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.table-glass-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(
-    120,
-    113,
-    108,
-    0.8
-  ); /* stone-600 with higher opacity on hover */
-}
-
-/* Firefox scrollbar styling */
-.table-glass-container {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(120, 113, 108, 0.6) rgba(41, 37, 36, 0.3);
 }
 
 /*
