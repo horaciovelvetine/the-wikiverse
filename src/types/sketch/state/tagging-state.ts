@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
-import { VertexTag } from "../data/vertex-tag";
+import { TagData, VertexData } from "../../api";
 
-export interface TaggingDataState {
-  tags: VertexTag[];
+export interface TaggingState {
+  tags: TagData[];
   createNewTag: (
     label: string,
     color: string,
     vertices: string[],
     notes?: string
   ) => void;
-  updateTag: (key: number, updates: Partial<Omit<VertexTag, "key">>) => void;
+  updateTag: (key: number, updates: Partial<Omit<TagData, "key">>) => void;
   deleteTag: (key: number) => void;
   addExistingVertexToTag: (
     vertexID: string,
@@ -17,4 +17,6 @@ export interface TaggingDataState {
     key: string | undefined
   ) => void;
   clearAllTags: () => void;
+  getTagsByVertex: (v: VertexData | null) => TagData[];
+  getTagByKey: (key: number) => TagData | undefined;
 }

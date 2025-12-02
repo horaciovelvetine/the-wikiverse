@@ -9,6 +9,13 @@ export interface TagState {
   notes: string;
   setNotes: Dispatch<SetStateAction<string>>;
   vertices: string[];
+  showBoundingBox: boolean;
+  setShowBoundingBox: Dispatch<SetStateAction<boolean>>;
+  showTagEdges: boolean;
+  setShowTagEdges: Dispatch<SetStateAction<boolean>>;
+  showTagColorVertexOutline: boolean;
+  setShowTagColorVertexOutline: Dispatch<SetStateAction<boolean>>;
+  // State Helper Methods
   addVertex: (v: string) => void;
   addVertices: (v: string[]) => void;
   clearVertices: () => void;

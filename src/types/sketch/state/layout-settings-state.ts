@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { NumberRangeSetting } from "../data/number-range-setting";
 import { LayoutSettingsData } from "../../api";
 import { ToggleItemSetting } from "../data/toggle-item-setting";

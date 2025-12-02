@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { Dispatch, SetStateAction } from "react";
 import { Point } from "../../models/point";
 import { NumberRangeSetting } from "../data/number-range-setting";
 import { ToggleItemSetting } from "../data/toggle-item-setting";
+import { PointData, VertexData } from "../../api";
 
 /**
  * State used to control the camera settings in the sketch application.
@@ -18,7 +20,8 @@ import { ToggleItemSetting } from "../data/toggle-item-setting";
  */
 export interface CameraSettingsState {
   currentFocus: Point;
-  setCurrentFocus: Dispatch<SetStateAction<Point>>;
+  focusCameraOnVertex: (v: VertexData) => void;
+  focusCameraOnPoint: (p: PointData) => void;
   cameraPosition: Point;
   setCameraPosition: Dispatch<SetStateAction<Point>>;
   focusOnSelected: ToggleItemSetting;
