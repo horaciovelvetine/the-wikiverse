@@ -2,8 +2,10 @@ import { useState } from "react";
 import { ReactP5Wrapper } from "@p5-wrapper/react";
 // TYPES
 import { WikiverseSketchContainerProps } from "../../../types/sketch";
+
 // HOOKS
-import { useTaggingDataState } from "../../../hooks/sketch/use-tagging-data-state";
+import { useKeyboardShortcutListerner } from "../../../hooks";
+
 // SUB COMPONENTS
 import { HUD } from "./hud/hud";
 import { SettingsMenu } from "./settings-menu/settings-menu";
@@ -16,13 +18,19 @@ import { PreventBubbledEventsWrapper } from "./prevent-bubbled-events-wrapper/pr
  * and configuration components for the sketch viewport.
  */
 export function WikiverseSketchContainer({
-  graphsetData,
+  sketchDataState,
   sketchSettings,
   layoutSettings,
   cameraSettings,
-}: Omit<WikiverseSketchContainerProps, "showSettingsMenu" | "taggingData">) {
+}: Omit<WikiverseSketchContainerProps, "showSettingsMenu">) {
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
-  const taggingData = useTaggingDataState();
+  const [showSearchWindow, setShowSearchWindow] = useState(false);
+
+  // Listen for Command+, (Mac) or Ctrl+, (Windows/Linux) to open settings window
+  useKeyboardShortcutListerner(() => setShowSettingsMenu(prev => !prev), ",");
+  // Listen for Command+K (Mac) or Ctrl+K (Windows/Linux) to open search window
+  useKeyboardShortcutListerner(() => setShowSearchWindow(prev => !prev), "k");
+
   return (
     <div
       id="wikiverse-sketch-container"
@@ -31,17 +39,15 @@ export function WikiverseSketchContainer({
       {/* SKETCH MAIN */}
       <ReactP5Wrapper
         sketch={WikiverseP5Sketch}
-        {...{
-          graphsetData,
-          sketchSettings,
-          cameraSettings,
-          showSettingsMenu,
-        }}
+        sketchDataState={sketchDataState}
+        sketchSettings={sketchSettings}
+        cameraSettings={cameraSettings}
+        showSettingMenu={showSettingsMenu}
       />
       {/* SKETCH HUD */}
       <HUD
         setShowSettingsMenu={setShowSettingsMenu}
-        graphsetData={graphsetData}
+        sketchDataState={sketchDataState}
         cameraSettings={cameraSettings}
       />
       {/* SETTINGS MENU */}
@@ -49,11 +55,10 @@ export function WikiverseSketchContainer({
         <SettingsMenu
           showSettingsMenu={showSettingsMenu}
           setShowSettingsMenu={setShowSettingsMenu}
-          graphsetData={graphsetData}
+          sketchDataState={sketchDataState}
           sketchSettings={sketchSettings}
           layoutSettings={layoutSettings}
           cameraSettings={cameraSettings}
-          taggingData={taggingData}
         />
       </PreventBubbledEventsWrapper>
     </div>
