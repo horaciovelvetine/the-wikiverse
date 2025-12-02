@@ -1,9 +1,5 @@
-import {
-  GraphsetDataState,
-  TaggingDataState,
-} from "../../../../../../../types";
+import { SketchDataState } from "../../../../../../../types";
 
 export interface TaggingViewProps {
-  taggingData: TaggingDataState;
-  graphsetData: GraphsetDataState;
+  sketchDataState: SketchDataState;
 }
