@@ -1,53 +1,59 @@
-import { GraphsetData } from "../../../../../../../types";
+import { SketchDataState } from "../../../../../../../types";
 import { useTagState } from "../hooks/use-tag-state";
-import { TaggingViewProps } from "../views/tagging-views-props";
-import { CreateNewTagForm } from "./create-new-tag-form";
+import { CreateNewTagForm } from "./create-new-tag-form/create-new-tag-form";
 
 type InlineCreateTagButtonProps = {
-  taggingData: TaggingViewProps["taggingData"];
-  graphset: GraphsetData;
+  sketchDataState: SketchDataState;
   defaultVertexId?: string;
 };
 
+/**
+ * Inline component for creating a new tag with a popover form.
+ *
+ * This component manages the tag creation form state and handles the submission
+ * logic, validating that the tag has a non-empty label before creating it.
+ */
 export function InlineCreateTagButton({
-  taggingData,
-  graphset,
+  sketchDataState,
   defaultVertexId,
 }: InlineCreateTagButtonProps) {
-  const newTag = useTagState();
+  const tagFormState = useTagState();
 
-  const handleCreateTag = () => {
-    if (!newTag.label.trim()) {
-      return false;
+  /**
+   * Validates and creates a new tag from the current form state.
+   *
+   * @returns An object indicating success status and optional error message
+   */
+  const handleCreateTag = (): { success: boolean; errorMessage?: string } => {
+    const trimmedLabel = tagFormState.label.trim();
+
+    if (!trimmedLabel) {
+      return {
+        success: false,
+        errorMessage: "Tag label cannot be empty.",
+      };
     }
 
-    taggingData.createNewTag(
-      newTag.label.trim(),
-      newTag.color,
-      newTag.vertices,
-      newTag.notes
+    sketchDataState.createNewTag(
+      trimmedLabel,
+      tagFormState.color,
+      tagFormState.vertices,
+      tagFormState.notes
     );
 
-    return true;
+    return { success: true };
   };
+
+  // Convert single vertex ID to array format expected by CreateNewTagForm
+  const defaultVertices = defaultVertexId ? [defaultVertexId] : undefined;
 
   return (
     <div className="flex-shrink-0">
       <CreateNewTagForm
-        {...newTag}
-        graphset={graphset}
-        defaultVertices={defaultVertexId ? [defaultVertexId] : undefined}
-        handleCreateTag={() => {
-          const success = handleCreateTag();
-          if (success) {
-            return { success: true };
-          } else {
-            return {
-              success: false,
-              errorMessage: "Tag label cannot be empty.",
-            };
-          }
-        }}
+        {...tagFormState}
+        sketchDataState={sketchDataState}
+        defaultVertices={defaultVertices}
+        handleCreateTag={handleCreateTag}
       />
     </div>
   );
