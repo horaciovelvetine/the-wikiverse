@@ -1,4 +1,4 @@
-import { SettingsTabs } from "../../../../../types";
+import { SettingsTabs } from "../../../../types";
 
 export const SettingsTabsMap = [
   { id: "search" as SettingsTabs, label: "Search", icon: "🔍" },

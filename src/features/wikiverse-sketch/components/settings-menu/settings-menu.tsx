@@ -7,6 +7,7 @@ import { CameraSettingsTab } from "./tabs/camera-settings/camera-settings-tab";
 import { LayoutSettingsTab } from "./tabs/layout-settings/layout-settings-tab";
 import { SketchSettingsTab } from "./tabs/sketch-settings/sketch-settings-tab";
 import { TaggingSettingsTab } from "./tabs/tagging-settings/tagging-settings-tab";
+import { SearchTab } from "./tabs/searching-tab/searching-tab";
 
 interface SettingsMenuProps extends WikiverseSketchContainerProps {
   setShowSettingsMenu: Dispatch<SetStateAction<boolean>>;
@@ -18,10 +19,9 @@ export function SettingsMenu({
   sketchSettings,
   cameraSettings,
   layoutSettings,
-  taggingData,
-  graphsetData,
+  sketchDataState,
 }: SettingsMenuProps) {
-  const [activeTab, setActiveTab] = useState<SettingsTabs>("sketch");
+  const [activeTab, setActiveTab] = useState<SettingsTabs>("search");
 
   // Handle Escape key to close menu
   useEffect(() => {
@@ -86,6 +86,12 @@ export function SettingsMenu({
         {/* TAB CONTENT */}
         <div className="p-4 md:p-6 lg:p-8 overflow-y-auto flex-1 min-h-0">
           {/* TABS */}
+          <SearchTab
+            activeTab={activeTab}
+            sketchDataState={sketchDataState}
+            layoutSettings={layoutSettings}
+            sketchSettings={sketchSettings}
+          />
           {/* SKETCH SETTINGS TAB */}
           <SketchSettingsTab
             activeTab={activeTab}
@@ -107,8 +113,7 @@ export function SettingsMenu({
           {/* TAGGING SETTINGS TAB */}
           <TaggingSettingsTab
             activeTab={activeTab}
-            taggingData={taggingData}
-            graphsetData={graphsetData}
+            sketchDataState={sketchDataState}
           />
         </div>
       </div>
