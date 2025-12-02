@@ -21,10 +21,12 @@ export function ResizeHandle({
   const startHeightRef = useRef<number>(0);
   const currentHeightRef = useRef<number>(initialHeight);
 
-  // Keep ref in sync with initial height
+  // Keep ref in sync with initial height (but not during active resize)
   useEffect(() => {
-    currentHeightRef.current = initialHeight;
-  }, [initialHeight]);
+    if (!isResizing) {
+      currentHeightRef.current = initialHeight;
+    }
+  }, [initialHeight, isResizing]);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent | PointerEvent) => {

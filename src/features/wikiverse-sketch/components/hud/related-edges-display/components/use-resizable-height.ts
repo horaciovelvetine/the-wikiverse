@@ -1,55 +1,73 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { getRelatedEdgesHeightBounds } from "../functions/get-related-edges-height-bounds";
 
-interface UseResizableHeightOptions {
-  storageKey: string;
+/**
+ * useResizableHeight
+ *
+ * Custom React hook for managing a resizable numeric height value for the related edges display.
+ *
+ * - Computes dynamic min and max height bounds based on the number of related edges in the view.
+ * - Stores and updates the current height value using internal state (not persisted beyond session/lifecycle).
+ * - Ensures the returned height is always clamped within [minHeight, maxHeight].
+ *
+ * @param {number} edgeCount
+ *   The number of related edges, used to dynamically determine valid height bounds.
+ * @returns {{
+ *   minHeight: number,    // Computed minimum allowed height (px)
+ *   maxHeight: number,    // Computed maximum allowed height (px)
+ *   height: number,       // Current clamped height value (px)
+ *   setHeight: (height: number) => void // Setter to update height
+ * }}
+ */
+export function useResizableHeight(edgeCount: number): {
   minHeight: number;
   maxHeight: number;
-}
-/**
- * React hook to manage a resizable height value that persists across sessions.
- *
- * Stores the height in localStorage by the given `storageKey`. Height is clamped
- * within given min and max bounds. Returns the height (clamped) and a setter function.
- *
- * @param {Object} options
- * @param {string} options.storageKey - Unique key for localStorage persistence.
- * @param {number} options.minHeight - Minimum allowed height.
- * @param {number} options.maxHeight - Maximum allowed height.
- * @returns {{
- *   height: number,
- *   setHeight: (height: number) => void
- * }}
- *
- * @example
- * const { height, setHeight } = useResizableHeight({
- *   storageKey: 'my-component-height',
- *   minHeight: 120,
- *   maxHeight: 400,
- * });
- */
-
-export function useResizableHeight({
-  storageKey,
-  minHeight,
-  maxHeight,
-}: UseResizableHeightOptions): {
   height: number;
   setHeight: (height: number) => void;
 } {
-  const [height, setHeight] = useState(() => {
-    const stored = localStorage.getItem(storageKey);
-    return stored ? parseInt(stored, 10) : minHeight;
-  });
+  // Start with minHeight; do not try to read or store to localStorage
+  const { minHeight, maxHeight } = getRelatedEdgesHeightBounds(edgeCount);
+  const [height, setHeightState] = useState(() => minHeight);
+  const boundsRef = useRef({ minHeight, maxHeight });
+  const prevBoundsRef = useRef({ minHeight, maxHeight });
 
-  // Save to localStorage whenever height changes
+  // Keep bounds ref in sync with current values
   useEffect(() => {
-    localStorage.setItem(storageKey, height.toString());
-  }, [height, storageKey]);
+    boundsRef.current = { minHeight, maxHeight };
+  }, [minHeight, maxHeight]);
 
-  // Clamp height to min/max bounds
+  // Sync height when bounds change (clamp if outside new bounds)
+  useEffect(() => {
+    const prevBounds = prevBoundsRef.current;
+    // Only sync if bounds actually changed
+    if (
+      prevBounds.minHeight !== minHeight ||
+      prevBounds.maxHeight !== maxHeight
+    ) {
+      setHeightState(currentHeight => {
+        const clampedHeight = Math.max(
+          minHeight,
+          Math.min(maxHeight, currentHeight)
+        );
+        return clampedHeight;
+      });
+      prevBoundsRef.current = { minHeight, maxHeight };
+    }
+  }, [minHeight, maxHeight]);
+
+  // Wrapper to ensure setHeight always clamps the value using latest bounds from ref
+  const setHeight = useCallback((newHeight: number) => {
+    const { minHeight: currentMin, maxHeight: currentMax } = boundsRef.current;
+    const clampedHeight = Math.max(currentMin, Math.min(currentMax, newHeight));
+    setHeightState(clampedHeight);
+  }, []);
+
+  // Clamp height to min/max bounds for return value
   const clampedHeight = Math.max(minHeight, Math.min(maxHeight, height));
 
   return {
+    minHeight,
+    maxHeight,
     height: clampedHeight,
     setHeight,
   };
