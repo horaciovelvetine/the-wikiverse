@@ -2,9 +2,9 @@ import { useCallback } from "react";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { SketchDataState } from "../../../../../../types";
 import { Tooltip } from "../../../../../../features";
-import { PreventBubbledEventsWrapper } from "../../../prevent-bubbled-events-wrapper";
 import { SelectedVertexAddTagPopover } from "./selected-vertex-add-tag-popover";
 import { SelectedVertexTagPopoverDisplay } from "./selected-vertex-tag-popover-display";
+import { PreventBubbledEventsWrapper } from "../../../../../prevent-bubbled-events-wrapper";
 
 interface SelectedVertexTagsDisplayProps {
   sketchDataState: SketchDataState;

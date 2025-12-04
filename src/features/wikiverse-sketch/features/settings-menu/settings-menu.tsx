@@ -10,6 +10,7 @@ import { CameraSettingsTab } from "./features/camera-settings-tab/camera-setting
 import { LayoutSettingsTab } from "./features/layout-settings-tab/layout-settings-tab";
 import { SketchSettingsTab } from "./features/sketch-settings-tab/sketch-settings-tab";
 import { TaggingSettingsTab } from "./features/tagging-settings-tab/tagging-settings-tab";
+import { ShowHideSettingsTab } from "./features/show-hide-settings-tab/show-hide-settings-tab";
 import { ExclusionsSettingsTab } from "./features/exclusions-settings-tab/exclusions-settings-tab";
 
 interface SettingsMenuProps extends WikiverseSketchContainerProps {
@@ -95,6 +96,12 @@ export function SettingsMenu({
 
             {/* TAGGING SETTINGS TAB */}
             <TaggingSettingsTab
+              activeTab={activeTab}
+              sketchDataState={sketchDataState}
+            />
+
+            {/* SHOW/HIDE SETTINGS TAB */}
+            <ShowHideSettingsTab
               activeTab={activeTab}
               sketchDataState={sketchDataState}
             />

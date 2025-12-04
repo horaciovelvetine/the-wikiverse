@@ -1,8 +1,8 @@
 import { TaggingViewProps } from "../types/tagging-views-props";
 import { useTagState } from "../hooks/use-tag-state";
 import { useTagEditingHelpers } from "../hooks/use-tag-editing-helpers";
-import { SettingsSection } from "../../components/settings-section";
 import { TagsListHeader, TagsListEmptyState, TagCard } from "../components";
+import { SettingsSection } from "../../../components";
 
 /**
  * TagsListOverview

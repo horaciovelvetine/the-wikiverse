@@ -4,8 +4,9 @@ import { TaggingViewProps } from "../types/tagging-views-props";
 import { useTagEditingHelpers } from "../hooks/use-tag-editing-helpers";
 
 // Sub-Components
-import { SettingsSection } from "../../components/settings-section";
+
 import { VertexTableDispaly } from "../components/vertex-table-display";
+import { SettingsSection } from "../../../components";
 
 /**
  * VertexListOverview

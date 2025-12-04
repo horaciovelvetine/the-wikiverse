@@ -1,7 +1,6 @@
 import { SettingsMenuTabs } from "./settings-menu-tabs";
 // TAB COMPONENTS
 import { CameraSettingsTab } from "../features/camera-settings-tab";
-import { FilterSettingsTab } from "../features/filter-settings-tab";
 import { LayoutSettingsTab } from "../features/layout-settings-tab";
 import { TaggingSettingsTab } from "../features/tagging-settings-tab";
 import { ShowHideSettingsTab } from "../features/show-hide-settings-tab";
@@ -42,11 +41,7 @@ export const SettingsMenuTabsMap = [
     label: "Tagging",
     Component: TaggingSettingsTab,
   },
-  {
-    id: "filtering" as SettingsMenuTabs,
-    label: "Filtering",
-    Component: FilterSettingsTab,
-  },
+
   {
     id: "show-hide" as SettingsMenuTabs,
     label: "Show/Hide",

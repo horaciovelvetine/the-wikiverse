@@ -7,9 +7,9 @@ import {
 import { pointString } from "../../../../../functions";
 import { SketchDataState } from "../../../../../types";
 import { Tooltip } from "../../../../../features";
-import { PreventBubbledEventsWrapper } from "../../prevent-bubbled-events-wrapper";
 import { SelectedVertexPopoverOptionsMenu } from "./components/selected-vertex-popover-options-menu";
 import { SelectedVertexTagsDisplay } from "./components/selected-vertex-tags-display";
+import { PreventBubbledEventsWrapper } from "../../../../prevent-bubbled-events-wrapper";
 
 interface SelectedVertexDisplayProps {
   sketchDataState: SketchDataState;
