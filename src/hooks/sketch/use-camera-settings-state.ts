@@ -1,10 +1,18 @@
 import { useCallback, useState } from "react";
-import { CameraSettingsState, Point, PointData, VertexData } from "../../types";
+import { CameraSettingsState, PointData, VertexData } from "../../types";
 
 export function useCameraSettingsState(): CameraSettingsState {
   //?/==> Sketch Internal Camera State
-  const [currentFocus, setCurrentFocus] = useState<Point>(new Point());
-  const [cameraPosition, setCameraPosition] = useState<Point>(new Point());
+  const [currentFocus, setCurrentFocus] = useState<PointData>({
+    x: 0,
+    y: 0,
+    z: 0,
+  });
+  const [cameraPosition, setCameraPosition] = useState<PointData>({
+    x: 0,
+    y: 0,
+    z: 0,
+  });
   const [currentFocusAnimationLength, setCurrentFocusAnimationLength] =
     useState(35);
   const [cameraMoveAnimationLength, setCameraMoveAnimationLength] =
@@ -30,18 +38,10 @@ export function useCameraSettingsState(): CameraSettingsState {
    * the camera on a vertex within the graph.
    *
    * @param {VertexData} v - The vertex whose position should become the camera's new focus.
-   *
-   * @example
-   *   focusCameraOnVertex(vertex);
    */
-  const focusCameraOnVertex = useCallback(
-    (v: VertexData) => {
-      // already focused on vertex
-      if (currentFocus.equals(v.position)) return;
-      setCurrentFocus(v.position);
-    },
-    [currentFocus]
-  );
+  const focusCameraOnVertex = useCallback((v: VertexData) => {
+    setCurrentFocus(v.position);
+  }, []);
 
   /**
    * Imperatively focuses the camera on the given Point.
@@ -53,13 +53,11 @@ export function useCameraSettingsState(): CameraSettingsState {
    *
    * @param {PointData} p - The point to focus the camera on.
    */
-  const focusCameraOnPoint = useCallback(
-    (p: PointData) => {
-      if (currentFocus.equals(p)) return;
-      setCurrentFocus(new Point(p.x, p.y, p.z));
-    },
-    [currentFocus]
-  );
+  const focusCameraOnPoint = useCallback((p: PointData) => {
+    // Always update focus when explicitly called, even if position is the same
+    // This ensures the animation resets and the camera focuses properly
+    setCurrentFocus(p);
+  }, []);
 
   return {
     currentFocus,
