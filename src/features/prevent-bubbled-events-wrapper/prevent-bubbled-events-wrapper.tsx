@@ -33,7 +33,6 @@ export function PreventBubbledEventsWrapper({
       onTouchMove={stopEvent}
       onTouchEnd={stopEvent}
       onContextMenu={stopEvent}
-      onScroll={stopEvent}
       className="prevent-bubble-wrapper"
     >
       {React.cloneElement(children, { ...restProps })}
