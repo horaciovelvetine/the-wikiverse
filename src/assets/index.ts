@@ -19,7 +19,7 @@ export { EllipsisVerticalIcon } from "./icons/ellipsis-vertical-icon";
 export { PlusIcon } from "./icons/plus-icon";
 export { ShowIcon } from "./icons/show-icon";
 export { HideIcon } from "./icons/hide-icon";
-
+export { ExcludeBoxIcon } from "./icons/exclude-box-icon";
 // TailwindCSS Style String Const's
 export {
   IconSizing,
