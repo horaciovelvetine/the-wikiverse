@@ -37,11 +37,18 @@ export function RelatedEdgeItem({
 
   if (missingSourceData) return <></>;
 
-  // Alternate Vertex has Filter ignore this edge
-  if (sketchDataState.getFilterData(alternateVertex.id)) return <></>;
+  // Alternate Vertex Excluded ignore this edge
+  if (
+    sketchDataState.getExclusionData(alternateVertex.id) ||
+    alternateVertex.hidden
+  ) {
+    return <></>;
+  }
 
-  // Property has Filter ignore this edge
-  if (sketchDataState.getFilterData(property.id)) return <></>;
+  // Property Excluded ignore this edge
+  if (sketchDataState.getExclusionData(property.id) || property.hidden) {
+    return <></>;
+  }
 
   const parallelEdge = hasParallelEdgeInSet(edge, sketchDataState.relatedEdges);
 
