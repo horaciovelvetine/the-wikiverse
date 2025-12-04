@@ -3,7 +3,7 @@ import { SketchDataState } from "../../types";
 // Data
 import { useGraphsetState } from "./use-graphset-state";
 import { useTaggingState } from "./use-tagging-state";
-import { useFilteringState } from "./use-filtering-state";
+import { useExclusionsSettingsState } from "./use-exclusions-settings-state";
 // TODO: Remove useEffect IMPORTS
 import { useWikiverseService } from "../api/use-wikiverse-service";
 import { initializeDataResponse } from "../../config/initialize-data-response";
@@ -31,6 +31,8 @@ export function useSketchDataState(): SketchDataState {
     toggleVertexLocked,
     getVerticesByIDs,
     getVertexByID,
+    searchVertexData,
+    toggleVertexHidden,
   } = useGraphsetState();
 
   // * TAG DATA RELATED STATE
@@ -46,13 +48,15 @@ export function useSketchDataState(): SketchDataState {
   } = useTaggingState();
 
   const {
-    vertexFilters,
-    propertyFilters,
-    createNewFilter,
-    updateFilter,
-    deleteFilter,
-    getFilterData,
-  } = useFilteringState();
+    excludedVertices,
+    excludedProperties,
+    createNewExclusion,
+    updateExclusion,
+    deleteExclusion,
+    getExclusionData,
+    deleteAllPropertyExclusions,
+    deleteAllVertexExclusions,
+  } = useExclusionsSettingsState();
 
   // TODO - Remove data setup useEffect
   useEffect(() => {
@@ -79,8 +83,10 @@ export function useSketchDataState(): SketchDataState {
     setHoveredVertexID,
     updateGraphsetData,
     toggleVertexLocked,
+    toggleVertexHidden,
     getVerticesByIDs,
     getVertexByID,
+    searchVertexData,
     getTagByKey,
     vertexCount,
     edgeCount,
@@ -92,11 +98,13 @@ export function useSketchDataState(): SketchDataState {
     deleteTag,
     clearAllTags,
     getTagsByVertex,
-    vertexFilters,
-    propertyFilters,
-    createNewFilter,
-    updateFilter,
-    deleteFilter,
-    getFilterData,
+    excludedVertices,
+    excludedProperties,
+    createNewExclusion,
+    updateExclusion,
+    deleteExclusion,
+    getExclusionData,
+    deleteAllPropertyExclusions,
+    deleteAllVertexExclusions,
   };
 }

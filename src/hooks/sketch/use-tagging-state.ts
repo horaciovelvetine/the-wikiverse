@@ -12,12 +12,21 @@ export function useTaggingState(): TaggingState {
    * @param {string} color - The color associated with the tag (hex or color string).
    * @param {string[]} vertices - An array of vertex IDs to associate with the tag.
    * @param {string} [notes] - Optional notes for the tag.
+   * @param {boolean} [displayBoundingBox] - Whether to display a bounding box around tag members.
+   * @param {boolean} [displayConnectingEdges] - Whether to display edges between tag members.
    *
    * This function generates a unique key for the new tag, constructs the tag object,
    * and appends it to the tags array in the state.
    */
   const createNewTag = useCallback(
-    (label: string, color: string, vertices: string[], notes?: string) => {
+    (
+      label: string,
+      color: string,
+      vertices: string[],
+      notes?: string,
+      displayBoundingBox?: boolean,
+      displayConnectingEdges?: boolean
+    ) => {
       setTags(prev => {
         const newKey =
           prev.length > 0 ? Math.max(...prev.map(t => t.key)) + 1 : 1;
@@ -27,9 +36,8 @@ export function useTaggingState(): TaggingState {
           color,
           vertexIDs: [...vertices],
           notes: notes || "",
-          displayBoundingBox: false,
-          displayConnectingEdges: false,
-          displayGroupColorAsVertexOutline: false,
+          displayBoundingBox: displayBoundingBox ?? false,
+          displayConnectingEdges: displayConnectingEdges ?? false,
         };
         return [...prev, newTag];
       });
