@@ -1,7 +1,8 @@
 import { multiply, inv } from "mathjs";
 import { P5CanvasInstance } from "@p5-wrapper/react";
-import { Point, VertexData, SketchUpdateProps } from "../../../../types";
+import { VertexData, SketchUpdateProps } from "../../../types";
 import { Camera, Font } from "p5";
+import { Point } from "./point";
 
 export class Vertex implements VertexData {
   readonly id: string;
@@ -11,9 +12,8 @@ export class Vertex implements VertexData {
   readonly fetched: boolean;
   position: Point;
   locked: boolean;
-  private prevPosition: Point | null = null;
-  private positionUpdateKeyframe = 0;
-  private readonly radius = 20;
+  hidden: boolean;
+  private readonly _radius = 20;
 
   constructor(vert: VertexData) {
     this.id = vert.id;
@@ -25,8 +25,13 @@ export class Vertex implements VertexData {
       vert.position.y,
       vert.position.z
     );
+    this.hidden = vert.hidden;
     this.locked = vert.locked ?? false;
     this.fetched = vert.fetched ?? false;
+  }
+
+  get radius(): number {
+    return this._radius;
   }
 
   /**
@@ -45,19 +50,7 @@ export class Vertex implements VertexData {
    */
   draw(p5: P5CanvasInstance<SketchUpdateProps>, isSelected: boolean) {
     p5.push();
-    if (this.prevPosition) {
-      // vertices is currently in motion to a new position
-      // const drawCoords = this.calcCoordUpdateVectorPosition(p5);
-      // p5.translate(drawCoords.x, drawCoords.y, drawCoords.z);
-      // this.coordTransitionKeyFrm += 1;
-      // if (this.coordTransitionKeyFrm === COORD_TRANSITION_DURATION) {
-      //   this.coordTransitionKeyFrm = 1;
-      //   this.prevCoords = null;
-      // }
-    } else {
-      // vertex is stationary
-      p5.translate(this.position.x, this.position.y, this.position.z);
-    }
+    p5.translate(this.position.x, this.position.y, this.position.z);
 
     p5.strokeWeight(1.2);
     p5.stroke(1, 1, 14);

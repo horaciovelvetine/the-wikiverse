@@ -1,9 +1,10 @@
 import {
-  MinMaxSet,
+  ExclusionData,
   SketchDataState,
   TagData,
   VertexData,
-} from "../../../../types";
+} from "../../../types";
+import { MinMaxSet } from "../types";
 import { Edge } from "./edge";
 import { Property } from "./property";
 import { Vertex } from "./vertex";
@@ -14,6 +15,9 @@ export class Graphset {
   private _edges: Edge[] = [];
   private _properties: Property[] = [];
   private _tags: TagData[] = [];
+  private _excludedVertices: ExclusionData[] = [];
+  private _excludedProperties: ExclusionData[] = [];
+
   //==> Sketch Specific
   private _selectedVertex: VertexData | null = null;
   private _hoveredVertex: VertexData | null = null;
@@ -32,6 +36,8 @@ export class Graphset {
     this._edges = sketchData.edges.map(e => new Edge(e));
     this._properties = sketchData.properties.map(p => new Property(p));
     this._tags = sketchData.tags;
+    this._excludedVertices = sketchData.excludedVertices;
+    this._excludedProperties = sketchData.excludedProperties;
 
     if (this._selectedVertex !== sketchData.selectedVertex) {
       this._selectedVertex = sketchData.selectedVertex;
@@ -66,6 +72,14 @@ export class Graphset {
     return this._hoveredVertex;
   }
 
+  get excludedVertices(): ExclusionData[] {
+    return this._excludedVertices;
+  }
+
+  get excludedProperties(): ExclusionData[] {
+    return this._excludedProperties;
+  }
+
   /**
    * Checks if the given vertex is currently selected.
    *
@@ -91,6 +105,22 @@ export class Graphset {
   }
 
   /**
+   * Returns all vertices whose IDs are included in the provided list,
+   * excluding any vertex that is currently filtered.
+   *
+   * This method filters and returns the vertices whose IDs match any of the values
+   * in the targetIDs array, and that are not currently filtered (according to vertexIsFiltered).
+   *
+   * @param targetIDs - An array of vertex IDs to include.
+   * @returns An array of Vertex objects whose IDs are in the targetIDs list and are not filtered.
+   */
+  getVertices(targetIDs: string[]) {
+    return this.vertices.filter(
+      v => targetIDs.includes(v.id) && !this.vertexIsExcluded(v)
+    );
+  }
+
+  /**
    * Returns the "alternate" vertex connected by an edge, given one of the vertices.
    *
    * Given an edge and a vertex, this method returns the other vertex connected by the edge.
@@ -104,6 +134,36 @@ export class Graphset {
   getAlternateVertex(e: Edge, v: Vertex) {
     const altID = e.isSource(v) ? e.targetID : e.sourceID;
     return this.vertices.find(v => v.id === altID);
+  }
+
+  /**
+   * Checks if the given vertex is filtered by any active vertex filter.
+   *
+   * This method determines whether the provided vertex is currently filtered
+   * based on the _vertexFilters list. Returns true if any filter in the
+   * _vertexFilters array has an entID matching the vertex's id, meaning the
+   * vertex is considered filtered (e.g., hidden or excluded based on the filter logic).
+   *
+   * @param v - The Vertex to check for filtering.
+   * @returns {boolean} True if the vertex is filtered; otherwise, false.
+   */
+  vertexIsExcluded(v: Vertex): boolean {
+    return this._excludedVertices.some(exc => exc.entID === v.id);
+  }
+
+  /**
+   * Checks if the given property is filtered by any active property filter.
+   *
+   * This method determines whether the provided property is currently filtered
+   * based on the _propertyFilters list. Returns true if any filter in the
+   * _propertyFilters array has an entID matching the property's id, meaning the
+   * property is considered filtered (e.g., hidden or excluded based on the filter logic).
+   *
+   * @param p - The Property to check for filtering.
+   * @returns {boolean} True if the property is filtered; otherwise, false.
+   */
+  propertyIsExcluded(propertyID: string): boolean {
+    return this._excludedProperties.some(exc => exc.entID === propertyID);
   }
 
   /**
@@ -121,7 +181,14 @@ export class Graphset {
    *     z: { min: number, max: number }
    *   }
    */
-  getMinimumsAndMaximumsInSet(): MinMaxSet {
+  getMinimumsAndMaximumsInSet(targetIDs?: string[]): MinMaxSet {
+    // Filter vertices to process: either the target set or all vertices
+    const verticesToProcess =
+      targetIDs && targetIDs.length > 0
+        ? this.vertices.filter(v => targetIDs.includes(v.id))
+        : this.vertices;
+
+    // Initialize min/max values
     let xMin = Infinity;
     let yMin = Infinity;
     let zMin = Infinity;
@@ -129,11 +196,12 @@ export class Graphset {
     let yMax = -Infinity;
     let zMax = -Infinity;
 
-    this.vertices.forEach(v => {
+    // Calculate min/max for all vertices in the filtered set
+    verticesToProcess.forEach(v => {
       if (v.position.x < xMin) xMin = v.position.x;
-      if (v.position.y < yMin) yMin = v.position.y;
       if (v.position.x > xMax) xMax = v.position.x;
-      if (v.position.x > yMax) yMax = v.position.y;
+      if (v.position.y < yMin) yMin = v.position.y;
+      if (v.position.y > yMax) yMax = v.position.y;
 
       // If Z positions exist...
       if (v.position.z !== undefined) {
@@ -142,14 +210,16 @@ export class Graphset {
       }
     });
 
-    const xDiff = xMax - xMin;
-    const yDiff = yMax - yMin;
-    const zDiff = zMax - zMin;
+    // Calculate differences (default to 0 if no valid values found, minimum is vertex radius)
+    const radiusMinDepth = this.vertices[0].radius; // Vertex radius constant
+    const xDiff = xMax !== -Infinity && xMin !== Infinity ? xMax - xMin : 0;
+    const yDiff = yMax !== -Infinity && yMin !== Infinity ? yMax - yMin : 0;
+    const zDiff = zMax !== -Infinity && zMin !== Infinity ? zMax - zMin : 0;
 
     return {
-      x: { min: xMin, max: xMax, diff: xDiff },
-      y: { min: yMin, max: yMax, diff: yDiff },
-      z: { min: zMin, max: zMax, diff: zDiff },
+      x: { min: xMin, max: xMax, diff: xDiff + radiusMinDepth },
+      y: { min: yMin, max: yMax, diff: yDiff + radiusMinDepth },
+      z: { min: zMin, max: zMax, diff: zDiff + radiusMinDepth },
     };
   }
 }

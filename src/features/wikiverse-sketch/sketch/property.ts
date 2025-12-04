@@ -1,4 +1,4 @@
-import { PropertyData } from "../../../../types";
+import { PropertyData } from "../../../types";
 
 export class Property implements PropertyData {
   readonly id: string;

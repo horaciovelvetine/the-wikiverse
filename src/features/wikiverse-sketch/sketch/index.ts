@@ -4,3 +4,6 @@ export { ManagedCamera } from "./managed-camera";
 export { ReactDispatcher } from "./react-dispatcher";
 export { Graphset } from "./graphset";
 export { Property } from "./property";
+export { Point } from "./point";
+export { WikiverseP5Sketch } from "./wikiverse-p5-sketch";
+export { WikiverseSketchManager } from "./wikiverse-sketch-manager";

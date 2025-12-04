@@ -1,10 +1,7 @@
 import { Camera, Vector } from "p5";
 import { P5CanvasInstance } from "@p5-wrapper/react";
-import {
-  CameraSettingsState,
-  Point,
-  SketchUpdateProps,
-} from "../../../../types";
+import { CameraSettingsState, SketchUpdateProps } from "../../../types";
+import { Point } from "./point";
 
 export class ManagedCamera {
   private p5: P5CanvasInstance<SketchUpdateProps>;
@@ -21,6 +18,7 @@ export class ManagedCamera {
   private _currentFocusStart: Point | null = null;
   private _currentFocusAnimationLength = 100;
   private _currentFocusKeyFrame: number = 0;
+  private _focusInitialized: boolean = false;
 
   constructor(p5: P5CanvasInstance<SketchUpdateProps>) {
     this.p5 = p5;
@@ -92,9 +90,14 @@ export class ManagedCamera {
     // Update the cameras lookat target and restart animation when it changes.
     // Normalize currentFocus to a Point instance if it's a plain object
     const normalizedFocus = this.normalizeToPoint(currentFocus);
-    if (!this._currentFocusTarget.equals(normalizedFocus)) {
+    // Always reset animation if focus hasn't been initialized, or if the focus position has changed
+    if (
+      !this._focusInitialized ||
+      !this._currentFocusTarget.equals(normalizedFocus)
+    ) {
       this._currentFocusTarget = normalizedFocus;
       this.resetFocusAnimationState();
+      this._focusInitialized = true;
     }
 
     // Update how long it takes the camera to lookat target.

@@ -3,20 +3,15 @@ import InterTightFont from "../../../assets/fonts/InterTight-VariableFont_wght.t
 import { Font } from "p5";
 import { P5CanvasInstance } from "@p5-wrapper/react";
 // Sketch Classes
-import {
-  Vertex,
-  Graphset,
-  ReactDispatcher,
-  ManagedCamera,
-  Edge,
-} from "./models";
+import { Vertex, Graphset, ReactDispatcher, ManagedCamera, Edge } from ".";
 // Site Imports
 import {
-  MinMaxSet,
   SketchSettingsState,
   SketchUpdateProps,
+  TagData,
 } from "../../../types";
 import { getWikiverseSketchContainer } from "../../../functions";
+import { MinMaxSet } from "../types";
 
 export class WikiverseSketchManager {
   private p5: P5CanvasInstance<SketchUpdateProps>;
@@ -95,22 +90,54 @@ export class WikiverseSketchManager {
     this.p5.push();
     const minMax = this.data.getMinimumsAndMaximumsInSet();
     this.p5.translate(0, 0, 0);
-    this.displayBoundingBoxUI(minMax);
+    this.drawBoundingBox(minMax);
     this.displayOrientationAxisUI(minMax);
     this.p5.pop();
   }
 
   /**
-   * Iterates over all {@link Vertex} objects in the sketch and draws each one.
+   * Draws all visible vertices in the sketch.
    *
-   * For every vertex in the sketch, this method invokes its {@link Vertex.draw} method to render
-   * it on the canvas. The selection state for each vertex is determined and passed as an argument,
-   * allowing selected vertices to be colored.
+   * This method iterates through each {@link Vertex} in the graph, skipping any vertices that are marked as hidden
+   * or excluded (via active vertex filters). For each vertex to be drawn, it calls the vertex's {@link Vertex.draw}
+   * method, passing in the p5 instance and a boolean indicating whether the vertex is currently selected.
+   * Selected vertices are visually distinguished from others.
+   *
+   * Hidden or excluded vertices are not drawn.
    */
   drawVertices() {
-    this.data.vertices.forEach(vert => {
+    for (const vert of this.data.vertices) {
+      // Skip Hidden/Excluded Vertices
+      if (vert.hidden || this.data.vertexIsExcluded(vert)) {
+        continue;
+      }
+
       vert.draw(this.p5, this.data.isSelected(vert));
-    });
+    }
+  }
+
+  /**
+   * Iterates through all tags in the graph and draws their UI elements based on tag settings.
+   *
+   * For each tag in the graph:
+   *  - If the tag's `displayBoundingBox` is true, draws a bounding box around the vertices associated with the tag.
+   *  - If the tag's `displayConnectingEdges` is true, draws lines connecting the tag's associated vertices.
+   *
+   * This method enables grouped or highlighted visualization of vertices according to tag-based categories.
+   */
+  drawTags() {
+    for (const tag of this.data.tags) {
+      if (tag.displayBoundingBox) {
+        this.drawTagsBoundingBox(
+          this.data.getMinimumsAndMaximumsInSet(tag.vertexIDs),
+          tag
+        );
+      }
+
+      if (tag.displayConnectingEdges) {
+        this.drawTagsEdges(tag);
+      }
+    }
   }
 
   /**
@@ -229,6 +256,12 @@ export class WikiverseSketchManager {
       if (!otherVertex) return;
       // If no property, don't display the edge
       if (!this.data.properties.find(p => p.id === edge.propertyID)) return;
+
+      // If other vertex has existing filter, don't draw this edge
+      if (this.data.vertexIsExcluded(otherVertex)) return;
+      // If property has an existing filter, dont draw this edge
+      if (this.data.propertyIsExcluded(edge.propertyID)) return;
+
       const parallelEdge = edge.hasParallelEdge(relatedEdges);
 
       // For parallel (bidirectional) edges, only draw one:
@@ -288,7 +321,7 @@ export class WikiverseSketchManager {
    * @param minMax - The minimum and maximum values for x, y, and z coordinates,
    *   as calculated across all relevant vertices, which determine the dimensions of the box to draw.
    */
-  private displayBoundingBoxUI(minMax: MinMaxSet) {
+  private drawBoundingBox(minMax: MinMaxSet) {
     if (this._showBoundingBox) {
       this.p5.noFill();
       this.p5.strokeWeight(5);
@@ -327,5 +360,73 @@ export class WikiverseSketchManager {
       this.p5.noStroke();
       this.p5.pop();
     }
+  }
+
+  /**
+   * Draws connecting edges between all vertices in a tag group.
+   *
+   * This method takes the given tag, retrieves its member vertices, and draws lines between
+   * every unique pair of those vertices. The stroke color for the lines is set to the tag's color.
+   * Lines are drawn in 3D (with z-coordinates) if available, or in 2D otherwise.
+   * Edges are only drawn if there are at least two vertices in the tag.
+   *
+   * @param tag - The TagData object containing vertexIDs and color for connecting edges.
+   */
+  private drawTagsEdges(tag: TagData) {
+    const vertices = this.data.getVertices(tag.vertexIDs);
+    // No edges to draw, return
+    if (vertices.length <= 1) return;
+
+    // Set stroke color to tag color
+    this.p5.stroke(tag.color);
+    this.p5.strokeWeight(2);
+
+    // Draw lines between all pairs of vertices
+    for (let i = 0; i < vertices.length; i++) {
+      const vert1 = vertices[i];
+
+      for (let j = i + 1; j < vertices.length; j++) {
+        const vert2 = vertices[j];
+
+        const { x: x1, y: y1, z: z1 } = vert1.position;
+        const { x: x2, y: y2, z: z2 } = vert2.position;
+
+        // Draw a 3D or 2D line, depending on whether z-coordinates are present
+        const hasZCoords = z1 !== undefined && z2 !== undefined;
+        if (hasZCoords) {
+          this.p5.line(x1, y1, z1, x2, y2, z2);
+        } else {
+          this.p5.line(x1, y1, x2, y2);
+        }
+      }
+    }
+  }
+
+  /**
+   * Draws a bounding box around all vertices belonging to a given tag.
+   *
+   * This method computes the center and extents of the bounding box using the provided
+   * minimum and maximum coordinates of the tag's member vertices and renders a box in the tag's color.
+   * The bounding box helps visualize the spatial grouping of all vertices associated with the tag.
+   *
+   * @param minMax - An object specifying the minimum and maximum x, y, z coordinates for the tag's vertices.
+   *                 Also includes the difference ('diff') for each coordinate axis (e.g., minMax.x.diff).
+   * @param tag - The TagData object containing style information (e.g., color) used for rendering the bounding box.
+   */
+  private drawTagsBoundingBox(minMax: MinMaxSet, tag: TagData) {
+    // Calculate the center of the tag's vertices
+    const centerX = (minMax.x.min + minMax.x.max) / 2;
+    const centerY = (minMax.y.min + minMax.y.max) / 2;
+    const centerZ = (minMax.z.min + minMax.z.max) / 2;
+
+    this.p5.push();
+    this.p5.translate(centerX, centerY, centerZ);
+    this.p5.noFill();
+    this.p5.strokeWeight(4);
+    const colorWithAlpha = this.p5.color(tag.color);
+    colorWithAlpha.setAlpha(128); // 128/255 = 50% opacity
+    this.p5.stroke(colorWithAlpha);
+    this.p5.box(minMax.x.diff, minMax.y.diff, minMax.z.diff);
+    this.p5.pop();
   }
 }

@@ -1,4 +1,4 @@
-import { EdgeData } from "../../../../types";
+import { EdgeData } from "../../../types";
 import { Vertex } from "./vertex";
 
 export class Edge implements EdgeData {

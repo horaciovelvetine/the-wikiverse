@@ -7,6 +7,8 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
   const SK = new WikiverseSketchManager(p5);
 
   //*/===> SETUP!
+  //*/===> SETUP!
+  //*/===> SETUP!
   p5.preload = () => {
     SK.preloadFont();
   };
@@ -14,25 +16,30 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
     SK.setFont();
     SK.createCanvas();
     SK.cam.setupSketchCamera3D();
-    // SK.initCameraPositionAtOriginVertex();
-    // SK.getInitialRelatedData(postRequest);
   };
 
+  //*/===> DRAW!
+  //*/===> DRAW!
   //*/===> DRAW!
   p5.draw = () => {
     SK.drawSketchUI();
     SK.drawVertices();
     SK.drawSelectedVertexUI();
     SK.drawHoveredVertexUI();
+    SK.drawTags();
     SK.cam.handleAdvanceCanimation();
   };
 
+  //*/===> WINDOW RESIZE!
+  //*/===> WINDOW RESIZE!
   //*/===> WINDOW RESIZE!
   p5.windowResized = () => {
     SK.handleWindowResize();
     SK.cam.handleCanvasResizeAdjustPerspective();
   };
 
+  //*/===> PROPS UPDATE!
+  //*/===> PROPS UPDATE!
   //*/===> PROPS UPDATE!
   p5.updateWithProps = state => {
     if (!SK.dispatcher.allSettersAssigned) {
@@ -54,6 +61,8 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
   };
 
   //*/===> MOUSE MOVED (HOVER)!
+  //*/===> MOUSE MOVED (HOVER)!
+  //*/===> MOUSE MOVED (HOVER)!
   p5.mouseMoved = () => {
     //==> Skip if Menu Open...
     if (SK.settingsMenuShown()) return;
@@ -72,6 +81,8 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
     SK.dispatcher.setHoveredVertex(hoverTarget);
   };
 
+  //*/===> CLICK (LEFT ONLY)!
+  //*/===> CLICK (LEFT ONLY)!
   //*/===> CLICK (LEFT ONLY)!
   p5.mouseClicked = () => {
     //==> Skip if Menu Open...
@@ -96,6 +107,8 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
   };
 
   //*/===> KEYPRESSED!
+  //*/===> KEYPRESSED!
+  //*/===> KEYPRESSED!
   p5.keyPressed = () => {
     //==> Skip if Menu Open...
     if (SK.settingsMenuShown()) return;
@@ -104,6 +117,7 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
       //? Log Graphset Data to Console
       case "?":
       case "/":
+        // eslint-disable-next-line no-console
         console.log({ keypressed: p5.key, data: SK.data });
         break;
 
@@ -114,6 +128,7 @@ export function WikiverseP5Sketch(p5: P5CanvasInstance<SketchUpdateProps>) {
         break;
 
       default:
+      // Ignore the key press...
       // console.log("keypressed: ", p5.key);
     }
   };

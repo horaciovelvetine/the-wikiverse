@@ -1,11 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
-import {
-  Point,
-  VertexData,
-  SketchUpdateProps,
-  PointData,
-} from "../../../../types";
+import { SketchUpdateProps, PointData } from "../../../types";
 import { Vertex } from "./vertex";
+import { Point } from "./point";
 
 /**
  * ReactDispatcher
