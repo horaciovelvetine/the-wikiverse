@@ -1,1 +1,1 @@
-export { PendingRequestIndicator } from "./components/pending-request-indicator";
+export { PendingRequestIndicator } from "./pending-request-indicator";
