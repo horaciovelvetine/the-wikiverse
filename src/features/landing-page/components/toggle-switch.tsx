@@ -3,6 +3,7 @@ interface ToggleSwitchProps {
   onToggle: () => void;
   label?: string;
   className?: string;
+  labelClassName?: string;
   variant?: "primary" | "glass" | "ghost";
 }
 
@@ -23,6 +24,7 @@ export function ToggleSwitch({
   onToggle,
   label,
   className = "",
+  labelClassName = "",
   variant = "primary",
 }: ToggleSwitchProps) {
   const getToggleClasses = () => {
@@ -38,7 +40,9 @@ export function ToggleSwitch({
 
   return (
     <div className={`toggle-container ${className}`}>
-      {label && <span className="toggle-label">{label}</span>}
+      {label && (
+        <span className={`toggle-label ${labelClassName}`}>{label}</span>
+      )}
       <button
         onClick={onToggle}
         className={getToggleClasses()}
