@@ -1,37 +1,58 @@
 import { useEffect } from "react";
 
 /**
- * Custom hook that listens for a keyboard shortcut (Command+<key> on Mac, Ctrl+<key> on Windows/Linux)
- * and calls the provided callback function when the shortcut is detected.
+ * Custom hook that listens for a keyboard shortcut and calls the provided callback function
+ * when the shortcut is detected.
  *
  * @param {() => void} onShortcut - Callback function to execute when the shortcut is pressed.
- * @param {string} keyString - The key (e.g., "k", "s", "f") to listen for in combination with Command/Ctrl.
+ * @param {string} keyString - The key (e.g., "k", "s", "f") to listen for.
+ * @param {boolean} [useModifier=true] - If true, requires Command (Mac) or Ctrl (Windows/Linux)
+ *                                       modifier key. If false, listens for the key alone.
  *
- * Usage:
- *   useKeyboardShortcutListerner(() => { ... }, "k");
+ * @example
+ * // Listen for Command+K (Mac) or Ctrl+K (Windows/Linux)
+ * useKeyboardShortcutListerner(() => { ... }, "k");
+ *
+ * // Listen for just the "Escape" key without modifier
+ * useKeyboardShortcutListerner(() => { ... }, "Escape", false);
  *
  * The hook automatically adds and cleans up the event listener on mount/unmount.
  */
 export function useKeyboardShortcutListerner(
   onShortcut: () => void,
-  keyString: string
+  keyString: string,
+  useModifier: boolean = true
 ) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Check for Command+K (Mac) or Ctrl+K (Windows/Linux)
-      const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
-      const isModifierPressed = isMac ? event.metaKey : event.ctrlKey;
+      const isKeyMatch = event.key === keyString;
 
-      if (isModifierPressed && event.key === keyString) {
-        event.preventDefault();
-        onShortcut();
+      if (!isKeyMatch) {
+        return;
       }
+
+      // If modifier is required, check if Command (Mac) or Ctrl (Windows/Linux) is pressed
+      if (useModifier) {
+        const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+        const isModifierPressed = isMac ? event.metaKey : event.ctrlKey;
+
+        if (!isModifierPressed) {
+          return;
+        }
+      }
+
+      // Prevent default browser behavior and stop propagation to prevent Chrome's shortcuts
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      onShortcut();
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    // Use capture phase to intercept the event before Chrome handles it
+    window.addEventListener("keydown", handleKeyDown, { capture: true });
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown, { capture: true });
     };
-  }, [onShortcut, keyString]);
+  }, [onShortcut, keyString, useModifier]);
 }
