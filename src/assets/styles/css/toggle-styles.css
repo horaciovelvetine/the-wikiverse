@@ -234,6 +234,23 @@
 }
 
 /*
+ * .toggle-label-light
+ * Light variant for toggle labels used on dark backgrounds.
+ * Provides better contrast and readability in dark UI contexts.
+ */
+.toggle-label-light {
+  color: #ffffff; /* text-white */
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500; /* font-medium */
+  user-select: none;
+  transition: color var(--def-transition) ease;
+}
+
+.toggle-label-light:hover {
+  color: rgba(255, 255, 255, 0.9); /* slightly dimmed white on hover */
+}
+
+/*
  * .toggle-container
  * Container for toggle switch and label with proper spacing.
  */
