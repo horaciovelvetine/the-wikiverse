@@ -6,5 +6,4 @@ export interface TagData {
   notes: string;
   displayBoundingBox: boolean;
   displayConnectingEdges: boolean;
-  displayGroupColorAsVertexOutline: boolean;
 }

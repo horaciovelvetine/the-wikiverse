@@ -10,4 +10,5 @@ export interface VertexData {
   position: Point;
   locked: boolean;
   fetched: boolean;
+  hidden: boolean;
 }

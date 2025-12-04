@@ -7,7 +7,9 @@ export interface TaggingState {
     label: string,
     color: string,
     vertices: string[],
-    notes?: string
+    notes?: string,
+    displayBoundingBox?: boolean,
+    displayConnectingEdges?: boolean
   ) => void;
   updateTag: (key: number, updates: Partial<Omit<TagData, "key">>) => void;
   deleteTag: (key: number) => void;

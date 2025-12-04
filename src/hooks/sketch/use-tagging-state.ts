@@ -96,7 +96,7 @@ export function useTaggingState(): TaggingState {
           if (tag.key.toString() === key.toString()) {
             // Only add if not already present
             if (!tag.vertexIDs.includes(vertexID)) {
-              return { ...tag, vertices: [...tag.vertexIDs, vertexID] };
+              return { ...tag, vertexIDs: [...tag.vertexIDs, vertexID] };
             }
           }
           return tag;

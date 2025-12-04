@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Dispatch, SetStateAction } from "react";
 import { EdgeData, GraphsetData, PropertyData, VertexData } from "../../api";
+import { SearchDisplayResult } from "../../site/search-display-result";
 
 export interface GraphsetState {
   vertices: VertexData[];
@@ -18,8 +19,10 @@ export interface GraphsetState {
   updateVertexPosition: (v: VertexData) => void;
   updateGraphsetData: (graphsetData: GraphsetData) => void;
   toggleVertexLocked: (v: VertexData) => void;
+  toggleVertexHidden: (v: VertexData) => void;
   getVerticesByIDs: (IDs: string[]) => VertexData[];
   getVertexByID: (ID: string) => VertexData | undefined;
+  searchVertexData: (query: string) => SearchDisplayResult[];
   // Memoized Values
   relatedEdges: EdgeData[];
   selectedVertex: VertexData | null;
