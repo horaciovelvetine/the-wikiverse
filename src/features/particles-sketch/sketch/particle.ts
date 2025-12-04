@@ -1,5 +1,5 @@
 import { P5CanvasInstance } from "@p5-wrapper/react";
-import { Point, Velocity } from "../../../types";
+import { Vector } from "../types/vector";
 
 const MIN_RADIUS = 2;
 const MAX_RADIUS = 10;
@@ -18,9 +18,9 @@ const CONNECTION_THRESHOLD = 100;
  * Particles are initialized with random positions, radii, and velocities.
  */
 export class Particle {
-  position: Point;
+  position: Vector;
   radius: number;
-  velocity: Velocity;
+  velocity: Vector;
 
   constructor() {
     this.position = this.getRandomPosition();
@@ -108,7 +108,7 @@ export class Particle {
    *
    * @returns {Point} A random point within the specified dimensions.
    */
-  private getRandomPosition(): Point {
+  private getRandomPosition(): Vector {
     const x = Math.random() * innerWidth;
     const y = Math.random() * innerHeight;
     return { x, y };
@@ -130,7 +130,7 @@ export class Particle {
    *
    * @returns {Velocity} A velocity object with random x and y components.
    */
-  private getRandomVelocity(): Velocity {
+  private getRandomVelocity(): Vector {
     const x = Math.random() * 2 * MAX_SPEED - MAX_SPEED;
     const y = Math.random() * 2 * MAX_SPEED - MAX_SPEED;
     return { x, y };
