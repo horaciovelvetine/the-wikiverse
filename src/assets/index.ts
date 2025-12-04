@@ -16,6 +16,9 @@ export { ArrowRightIcon } from "./icons/arrow-right-icon";
 export { LockIcon } from "./icons/lock-icon";
 export { UnlockIcon } from "./icons/unlock-icon";
 export { EllipsisVerticalIcon } from "./icons/ellipsis-vertical-icon";
+export { PlusIcon } from "./icons/plus-icon";
+export { ShowIcon } from "./icons/show-icon";
+export { HideIcon } from "./icons/hide-icon";
 
 // TailwindCSS Style String Const's
 export {
