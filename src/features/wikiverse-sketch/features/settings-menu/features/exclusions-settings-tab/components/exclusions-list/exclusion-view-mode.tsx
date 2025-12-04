@@ -38,7 +38,7 @@ export function ExclusionViewMode({
   const isVertex = exclusion.entID.startsWith("Q");
   const entity = isVertex
     ? sketchDataState.getVertexByID(exclusion.entID)
-    : sketchDataState.properties.find(p => p.id === exclusion.entID);
+    : sketchDataState.getPropertyByID(exclusion.entID);
 
   const entityLabel = entity?.label || exclusion.entID;
   const entityDescription = entity?.description || "";

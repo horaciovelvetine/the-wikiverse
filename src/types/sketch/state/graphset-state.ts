@@ -20,8 +20,10 @@ export interface GraphsetState {
   updateGraphsetData: (graphsetData: GraphsetData) => void;
   toggleVertexLocked: (v: VertexData) => void;
   toggleVertexHidden: (v: VertexData) => void;
+  togglePropertyHidden: (p: PropertyData) => void;
   getVerticesByIDs: (IDs: string[]) => VertexData[];
   getVertexByID: (ID: string) => VertexData | undefined;
+  getPropertyByID: (ID: string) => PropertyData | undefined;
   searchVertexData: (query: string) => SearchDisplayResult[];
   // Memoized Values
   relatedEdges: EdgeData[];

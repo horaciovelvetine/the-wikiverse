@@ -31,8 +31,10 @@ export function useSketchDataState(): SketchDataState {
     toggleVertexLocked,
     getVerticesByIDs,
     getVertexByID,
+    getPropertyByID,
     searchVertexData,
     toggleVertexHidden,
+    togglePropertyHidden,
   } = useGraphsetState();
 
   // * TAG DATA RELATED STATE
@@ -84,7 +86,9 @@ export function useSketchDataState(): SketchDataState {
     updateGraphsetData,
     toggleVertexLocked,
     toggleVertexHidden,
+    togglePropertyHidden,
     getVerticesByIDs,
+    getPropertyByID,
     getVertexByID,
     searchVertexData,
     getTagByKey,

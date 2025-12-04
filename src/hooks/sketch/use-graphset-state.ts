@@ -93,6 +93,29 @@ export function useGraphsetState(): GraphsetState {
   }, []);
 
   /**
+   * Toggles the hidden state of a specific property.
+   *
+   * @param {PropertyData} p - The property whose hidden state should be toggled.
+   *
+   * For the property in state with the same `id` as the provided object,
+   * this function will toggle its `hidden` property (true ⇄ false).
+   * All other properties are left unchanged.
+   */
+  const togglePropertyHidden = useCallback((p: PropertyData) => {
+    setProperties(properties => {
+      return properties.map(prop => {
+        if (prop.id === p.id) {
+          return {
+            ...prop,
+            hidden: !prop.hidden,
+          };
+        }
+        return prop;
+      });
+    });
+  }, []);
+
+  /**
    * Replaces all graphset data in state (vertices, edges, properties) with the provided GraphsetData.
    *
    * @param {GraphsetData} graphsetData - The object containing new vertices, edges, and properties arrays.
@@ -179,6 +202,13 @@ export function useGraphsetState(): GraphsetState {
     [vertices]
   );
 
+  const getPropertyByID = useCallback(
+    (ID: string) => {
+      return properties.find(p => p.id === ID);
+    },
+    [properties]
+  );
+
   /**
    * Searches for vertices that match the given query string using fuzzy matching.
    *
@@ -230,7 +260,9 @@ export function useGraphsetState(): GraphsetState {
     vertexCount,
     getVerticesByIDs,
     getVertexByID,
+    getPropertyByID,
     searchVertexData,
     toggleVertexHidden,
+    togglePropertyHidden,
   };
 }
