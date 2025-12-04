@@ -253,10 +253,10 @@ export class WikiverseSketchManager {
     relatedEdges.forEach(edge => {
       const otherVertex = this.data.getAlternateVertex(edge, vertex);
       // If no other vertex, dont display the edge
-      if (!otherVertex) return;
+      if (!otherVertex || otherVertex.hidden) return;
       // If no property, don't display the edge
-      if (!this.data.properties.find(p => p.id === edge.propertyID)) return;
-
+      const property = this.data.properties.find(p => p.id === edge.propertyID);
+      if (!property || property.hidden) return;
       // If other vertex has existing filter, don't draw this edge
       if (this.data.vertexIsExcluded(otherVertex)) return;
       // If property has an existing filter, dont draw this edge

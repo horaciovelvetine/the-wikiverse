@@ -6,4 +6,5 @@ export interface PropertyData {
   label: string;
   description: string;
   fetched: boolean;
+  hidden: boolean;
 }

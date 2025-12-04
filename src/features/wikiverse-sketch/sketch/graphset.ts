@@ -116,7 +116,7 @@ export class Graphset {
    */
   getVertices(targetIDs: string[]) {
     return this.vertices.filter(
-      v => targetIDs.includes(v.id) && !this.vertexIsExcluded(v)
+      v => targetIDs.includes(v.id) && !this.vertexIsExcluded(v) && !v.hidden
     );
   }
 

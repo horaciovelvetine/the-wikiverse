@@ -5,6 +5,7 @@ export class Property implements PropertyData {
   readonly label: string;
   readonly description: string;
   readonly fetched: boolean;
+  hidden: boolean;
   private readonly WIKIDATA_URL = "https://www.wikidata.org/wiki/Property:";
 
   constructor(prop: PropertyData) {
@@ -12,6 +13,7 @@ export class Property implements PropertyData {
     this.label = prop.label;
     this.description = prop.description;
     this.fetched = prop.fetched;
+    this.hidden = prop.hidden;
   }
 
   /**
