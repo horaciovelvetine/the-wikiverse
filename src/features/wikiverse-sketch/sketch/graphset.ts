@@ -211,7 +211,7 @@ export class Graphset {
     });
 
     // Calculate differences (default to 0 if no valid values found, minimum is vertex radius)
-    const radiusMinDepth = this.vertices[0].radius; // Vertex radius constant
+    const radiusMinDepth = 20; // Vertex radius constant
     const xDiff = xMax !== -Infinity && xMin !== Infinity ? xMax - xMin : 0;
     const yDiff = yMax !== -Infinity && yMin !== Infinity ? yMax - yMin : 0;
     const zDiff = zMax !== -Infinity && zMin !== Infinity ? zMax - zMin : 0;
